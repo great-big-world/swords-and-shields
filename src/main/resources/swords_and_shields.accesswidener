@@ -1,0 +1,5 @@
+accessWidener v2 named
+accessible class net/minecraft/client/gui/hud/InGameHud$HeartType
+
+accessible method net/minecraft/client/gui/hud/InGameHud$HeartType getTexture (ZZZ)Lnet/minecraft/util/Identifier;
+accessible method net/minecraft/client/gui/hud/InGameHud drawHeart (Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/client/gui/hud/InGameHud$HeartType;IIZZZ)V

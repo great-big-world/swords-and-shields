@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "swords_and_shields",
+  "version": "${version}",
+  "name": "Swords & Shields",
+  "description": "",
+  "authors": [
+    "creoii"
+  ],
+  "contact": {},
+  "license": "All Rights Reserved",
+  "icon": "assets/swords_and_shields/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.creoii.greatbigworld.swordsandshields.SwordsAndShields"
+    ],
+    "client": [
+      "dev.creoii.greatbigworld.swordsandshields.client.SwordsAndShieldsClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  },
+  "accessWidener": "swords_and_shields.accesswidener",
+  "mixins": [
+    "swords_and_shields.mixins.json"
+  ],
+  "custom": {
+    "modmenu": {
+      "parent": {
+        "id": "great_big_world",
+        "name": "Great Big World",
+        "description": ""
+      }
+    }
+  }
+}
