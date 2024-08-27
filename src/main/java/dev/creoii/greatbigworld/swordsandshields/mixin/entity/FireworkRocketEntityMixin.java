@@ -1,4 +1,4 @@
-package dev.creoii.greatbigworld.swordsandshields.mixin;
+package dev.creoii.greatbigworld.swordsandshields.mixin.entity;
 
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.entity.projectile.FireworkRocketEntity;

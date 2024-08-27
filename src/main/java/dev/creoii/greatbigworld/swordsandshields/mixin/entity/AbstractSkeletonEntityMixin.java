@@ -1,4 +1,4 @@
-package dev.creoii.greatbigworld.swordsandshields.mixin;
+package dev.creoii.greatbigworld.swordsandshields.mixin.entity;
 
 import net.minecraft.entity.attribute.DefaultAttributeContainer;
 import net.minecraft.entity.attribute.EntityAttributes;

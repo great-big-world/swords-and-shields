@@ -1,4 +1,4 @@
-package dev.creoii.greatbigworld.swordsandshields.mixin;
+package dev.creoii.greatbigworld.swordsandshields.mixin.entity;
 
 import com.mojang.authlib.GameProfile;
 import dev.creoii.greatbigworld.swordsandshields.util.ExtendedPlayer;

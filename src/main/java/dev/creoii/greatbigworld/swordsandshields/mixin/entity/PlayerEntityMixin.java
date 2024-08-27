@@ -1,4 +1,4 @@
-package dev.creoii.greatbigworld.swordsandshields.mixin;
+package dev.creoii.greatbigworld.swordsandshields.mixin.entity;
 
 import dev.creoii.greatbigworld.swordsandshields.util.ExtendedPlayer;
 import net.minecraft.entity.player.PlayerEntity;
