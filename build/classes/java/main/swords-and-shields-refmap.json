@@ -8,12 +8,17 @@
       "setExperience": "Lnet/minecraft/class_746;method_3145(FII)V",
       "tick": "Lnet/minecraft/class_746;method_5773()V"
     },
+    "dev/creoii/greatbigworld/swordsandshields/mixin/FireworkRocketEntityMixin": {
+      "Lnet/minecraft/entity/LivingEntity;isFallFlying()Z": "Lnet/minecraft/class_1309;method_6128()Z",
+      "tick": "Lnet/minecraft/class_1671;method_5773()V"
+    },
     "dev/creoii/greatbigworld/swordsandshields/mixin/PlayerEntityMixin": {
       "Lnet/minecraft/entity/LivingEntity;eatFood(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;": "Lnet/minecraft/class_1309;method_18866(Lnet/minecraft/class_1937;Lnet/minecraft/class_1799;)Lnet/minecraft/class_1799;",
       "eatFood": "Lnet/minecraft/class_1657;method_18866(Lnet/minecraft/class_1937;Lnet/minecraft/class_1799;)Lnet/minecraft/class_1799;"
     },
-    "dev/creoii/greatbigworld/swordsandshields/mixin/client/GLXMixin": {
-      "_renderCrosshair": "Lcom/mojang/blaze3d/platform/GLX;_renderCrosshair(IZZZ)V"
+    "dev/creoii/greatbigworld/swordsandshields/mixin/WindChargeItemMixin": {
+      "Lnet/minecraft/entity/LivingEntity;eatFood(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;": "Lnet/minecraft/class_1309;method_18866(Lnet/minecraft/class_1937;Lnet/minecraft/class_1799;)Lnet/minecraft/class_1799;",
+      "eatFood": "Lnet/minecraft/class_1657;method_18866(Lnet/minecraft/class_1937;Lnet/minecraft/class_1799;)Lnet/minecraft/class_1799;"
     },
     "dev/creoii/greatbigworld/swordsandshields/mixin/client/InGameHudMixin": {
       "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V": "Lnet/minecraft/class_332;method_52706(Lnet/minecraft/class_2960;IIII)V",
@@ -43,12 +48,17 @@
         "setExperience": "Lnet/minecraft/class_746;method_3145(FII)V",
         "tick": "Lnet/minecraft/class_746;method_5773()V"
       },
+      "dev/creoii/greatbigworld/swordsandshields/mixin/FireworkRocketEntityMixin": {
+        "Lnet/minecraft/entity/LivingEntity;isFallFlying()Z": "Lnet/minecraft/class_1309;method_6128()Z",
+        "tick": "Lnet/minecraft/class_1671;method_5773()V"
+      },
       "dev/creoii/greatbigworld/swordsandshields/mixin/PlayerEntityMixin": {
         "Lnet/minecraft/entity/LivingEntity;eatFood(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;": "Lnet/minecraft/class_1309;method_18866(Lnet/minecraft/class_1937;Lnet/minecraft/class_1799;)Lnet/minecraft/class_1799;",
         "eatFood": "Lnet/minecraft/class_1657;method_18866(Lnet/minecraft/class_1937;Lnet/minecraft/class_1799;)Lnet/minecraft/class_1799;"
       },
-      "dev/creoii/greatbigworld/swordsandshields/mixin/client/GLXMixin": {
-        "_renderCrosshair": "Lcom/mojang/blaze3d/platform/GLX;_renderCrosshair(IZZZ)V"
+      "dev/creoii/greatbigworld/swordsandshields/mixin/WindChargeItemMixin": {
+        "Lnet/minecraft/entity/LivingEntity;eatFood(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;": "Lnet/minecraft/class_1309;method_18866(Lnet/minecraft/class_1937;Lnet/minecraft/class_1799;)Lnet/minecraft/class_1799;",
+        "eatFood": "Lnet/minecraft/class_1657;method_18866(Lnet/minecraft/class_1937;Lnet/minecraft/class_1799;)Lnet/minecraft/class_1799;"
       },
       "dev/creoii/greatbigworld/swordsandshields/mixin/client/InGameHudMixin": {
         "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V": "Lnet/minecraft/class_332;method_52706(Lnet/minecraft/class_2960;IIII)V",

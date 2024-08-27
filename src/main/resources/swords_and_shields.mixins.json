@@ -6,7 +6,9 @@
   "mixins": [
     "AbstractSkeletonEntityMixin",
     "ClientPlayerEntityMixin",
-    "PlayerEntityMixin"
+    "FireworkRocketEntityMixin",
+    "PlayerEntityMixin",
+    "WindChargeItemMixin"
   ],
   "client": [
     "client.InGameHudMixin"
