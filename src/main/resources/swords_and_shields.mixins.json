@@ -5,12 +5,12 @@
   "compatibilityLevel": "JAVA_17",
   "mixins": [
     "entity.AbstractSkeletonEntityMixin",
-    "entity.ClientPlayerEntityMixin",
     "entity.FireworkRocketEntityMixin",
     "entity.PlayerEntityMixin",
     "WindChargeItemMixin"
   ],
   "client": [
+    "entity.ClientPlayerEntityMixin",
     "client.InGameHudMixin"
   ],
   "injectors": {
