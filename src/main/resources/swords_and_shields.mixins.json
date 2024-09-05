@@ -10,7 +10,7 @@
     "WindChargeItemMixin"
   ],
   "client": [
-    "entity.ClientPlayerEntityMixin",
+    "client.ClientPlayerEntityMixin",
     "client.InGameHudMixin"
   ],
   "injectors": {
