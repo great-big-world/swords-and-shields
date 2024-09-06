@@ -1,0 +1,11 @@
+{
+  "values": [
+    "minecraft:health_boost",
+    "minecraft:absorption",
+    "minecraft:instant_health",
+    "minecraft:instant_damage",
+    "minecraft:regeneration",
+    "minecraft:poison",
+    "minecraft:wither"
+  ]
+}

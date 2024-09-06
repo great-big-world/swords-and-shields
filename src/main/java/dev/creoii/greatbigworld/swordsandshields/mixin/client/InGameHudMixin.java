@@ -117,5 +117,18 @@ public class InGameHudMixin {
             instance.drawGuiTexture(texture, x, y + 6, width, height);
         } else instance.drawGuiTexture(texture, x, y, width, height);
     }
+
+    @Redirect(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Lnet/minecraft/util/Identifier;IIII)V"))
+    private void gbw$repositionBubblesForHiddenExp(DrawContext instance, Identifier texture, int x, int y, int width, int height, @Local PlayerEntity playerEntity) {
+        int offset = 0;
+        if (playerEntity instanceof ExtendedPlayer extendedPlayer) {
+            if (extendedPlayer.gbw$getHideExpHud() < 0)
+                offset += 6;
+            if (extendedPlayer.gbw$getHideFoodHud() < 0)
+                offset += 10;
+        }
+
+        instance.drawGuiTexture(texture, x, y + offset, width, height);
+    }
     // endgroup
 }

@@ -2,6 +2,7 @@ package dev.creoii.greatbigworld.swordsandshields.mixin.client;
 
 import com.mojang.authlib.GameProfile;
 import dev.creoii.greatbigworld.swordsandshields.util.ExtendedPlayer;
+import dev.creoii.greatbigworld.swordsandshields.util.SwordsAndShieldsTags;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.util.math.BlockPos;
@@ -25,15 +26,20 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity implements Ex
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tick()V", shift = At.Shift.AFTER))
     private void gbw$hideHudIfNotInWater(CallbackInfo ci) {
-        if (!isSubmergedInWater()) {
+        if (getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_HEALTH_HUD) || instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_ARMOR_HUD)) && !isSubmergedInWater()) {
             if (--gbw$shouldHideStatusHud < 0)
                 gbw$shouldHideStatusHud = -1;
         } else gbw$resetHideStatusHud();
 
-        if (--gbw$shouldHideFoodHud < 0)
-            gbw$shouldHideFoodHud = -1;
-        if (--gbw$shouldHideExpHud < 0)
-            gbw$shouldHideExpHud = -1;
+        if (getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_FOOD_HUD))) {
+            if (--gbw$shouldHideFoodHud < 0)
+                gbw$shouldHideFoodHud = -1;
+        } else gbw$resetHideStatusHud();
+
+        if (getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_EXPERIENCE_HUD))) {
+            if (--gbw$shouldHideExpHud < 0)
+                gbw$shouldHideExpHud = -1;
+        } else gbw$resetHideStatusHud();
     }
 
     @Inject(method = "setExperience", at = @At("TAIL"))
