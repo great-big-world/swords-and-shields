@@ -3,6 +3,8 @@ package dev.creoii.greatbigworld.swordsandshields;
 import dev.creoii.creoapi.api.event.entity.LivingEntityEvents;
 import dev.creoii.greatbigworld.swordsandshields.util.ExtendedPlayer;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
+import net.minecraft.util.ActionResult;
 
 public class SwordsAndShields implements ModInitializer {
     public static final String NAMESPACE = "great_big_world";
@@ -14,6 +16,12 @@ public class SwordsAndShields implements ModInitializer {
                 extendedPlayer.gbw$resetHideStatusHud();
             }
             return true;
+        });
+        AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
+            if (world.isClient && player instanceof ExtendedPlayer extendedPlayer) {
+                extendedPlayer.gbw$resetHideStatusHud();
+            }
+            return ActionResult.PASS;
         });
     }
 }
