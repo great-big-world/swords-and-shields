@@ -4,10 +4,11 @@
   "package": "dev.creoii.greatbigworld.swordsandshields.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "WindChargeItemMixin",
     "entity.AbstractSkeletonEntityMixin",
     "entity.FireworkRocketEntityMixin",
     "entity.PlayerEntityMixin",
-    "WindChargeItemMixin"
+    "entity.ServerPlayerEntityMixin"
   ],
   "client": [
     "client.ClientPlayerEntityMixin",
