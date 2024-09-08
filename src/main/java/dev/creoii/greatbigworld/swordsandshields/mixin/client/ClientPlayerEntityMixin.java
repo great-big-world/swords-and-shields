@@ -26,12 +26,12 @@ public abstract class ClientPlayerEntityMixin extends PlayerEntity implements Ex
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tick()V", shift = At.Shift.AFTER))
     private void gbw$hideHudIfNotInWater(CallbackInfo ci) {
-        if (getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_HEALTH_HUD) || instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_ARMOR_HUD)) && !isSubmergedInWater()) {
+        if ((getHealth() > 6 || getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_HEALTH_HUD) || instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_ARMOR_HUD))) && !isSubmergedInWater()) {
             if (--gbw$shouldHideStatusHud < 0)
                 gbw$shouldHideStatusHud = -1;
         } else gbw$resetHideStatusHud();
 
-        if (getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_FOOD_HUD))) {
+        if (getHungerManager().getFoodLevel() > 6 || getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_FOOD_HUD))) {
             if (--gbw$shouldHideFoodHud < 0)
                 gbw$shouldHideFoodHud = -1;
         } else gbw$resetHideStatusHud();
