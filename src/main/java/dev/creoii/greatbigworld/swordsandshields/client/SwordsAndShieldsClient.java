@@ -16,9 +16,11 @@ public class SwordsAndShieldsClient implements ClientModInitializer {
             context.client().execute(() -> {
                 if (context.player() instanceof ExtendedPlayer extendedPlayer) {
                     if (health)
-                        extendedPlayer.gbw$resetHideStatusHud();
+                        extendedPlayer.gbw$resetHideHealthHud();
                     if (food)
                         extendedPlayer.gbw$resetHideFoodHud();
+                    if (armor)
+                        extendedPlayer.gbw$resetHideArmorHud();
                     if (experience)
                         extendedPlayer.gbw$resetHideExpHud();
                 }

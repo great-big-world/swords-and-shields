@@ -28,8 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(AbstractSkeletonEntity.class)
 public abstract class AbstractSkeletonEntityMixin extends HostileEntity {
     @Shadow public abstract void updateAttackType();
-    @Unique
-    private static final TrackedData<Byte> ARROWS = DataTracker.registerData(AbstractSkeletonEntity.class, TrackedDataHandlerRegistry.BYTE);
+    @Unique private static final TrackedData<Byte> ARROWS = DataTracker.registerData(AbstractSkeletonEntity.class, TrackedDataHandlerRegistry.BYTE);
 
     protected AbstractSkeletonEntityMixin(EntityType<? extends HostileEntity> entityType, World world) {
         super(entityType, world);

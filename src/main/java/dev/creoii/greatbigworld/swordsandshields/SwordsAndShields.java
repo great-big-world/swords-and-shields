@@ -1,11 +1,13 @@
 package dev.creoii.greatbigworld.swordsandshields;
 
 import dev.creoii.creoapi.api.event.entity.LivingEntityEvents;
-import dev.creoii.greatbigworld.swordsandshields.util.ExtendedPlayer;
 import dev.creoii.greatbigworld.swordsandshields.util.SyncStatusHud;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 
 public class SwordsAndShields implements ModInitializer {
@@ -16,14 +18,18 @@ public class SwordsAndShields implements ModInitializer {
         PayloadTypeRegistry.playS2C().register(SyncStatusHud.PACKET_ID, SyncStatusHud.PACKET_CODEC);
 
         LivingEntityEvents.EQUIP_STACK.register((livingEntity, slot, oldStack, newStack) -> {
-            if (livingEntity instanceof ExtendedPlayer extendedPlayer) {
-                extendedPlayer.gbw$resetHideStatusHud();
+            if (!livingEntity.getWorld().isClient) {
+                if (livingEntity instanceof ServerPlayerEntity serverPlayer && serverPlayer.interactionManager != null && serverPlayer.networkHandler != null) {
+                    ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(false, false, true, false));
+                }
             }
             return true;
         });
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
-            if (world.isClient && player instanceof ExtendedPlayer extendedPlayer) {
-                extendedPlayer.gbw$resetHideStatusHud();
+            if (!world.isClient) {
+                if ((PlayerEntity) (Object) this instanceof ServerPlayerEntity serverPlayer && serverPlayer.interactionManager != null && serverPlayer.networkHandler != null) {
+                    ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, new SyncStatusHud(true, false, false, false));
+                }
             }
             return ActionResult.PASS;
         });

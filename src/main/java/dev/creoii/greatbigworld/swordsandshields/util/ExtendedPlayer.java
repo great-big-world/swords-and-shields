@@ -1,9 +1,13 @@
 package dev.creoii.greatbigworld.swordsandshields.util;
 
 public interface ExtendedPlayer {
-    int gbw$getHideStatusHud();
+    int gbw$getHideHealthHud();
 
-    void gbw$resetHideStatusHud();
+    void gbw$resetHideHealthHud();
+
+    int gbw$getHideArmorHud();
+
+    void gbw$resetHideArmorHud();
 
     int gbw$getHideFoodHud();
 
