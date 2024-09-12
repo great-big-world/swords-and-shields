@@ -27,7 +27,7 @@ public class InGameHudMixin {
         if (player instanceof ExtendedPlayer extendedPlayer) {
             if (extendedPlayer.gbw$getHideHealthHud() <= 0 && player.getStackInHand(player.getActiveHand()).isIn(SwordsAndShieldsTags.HINTS_HEALTH_HUD)) {
                 // sin wave for opacity
-                float alpha = MathHelper.sin(.2f * client.world.getTime()) * .25f + .25f;
+                float alpha = MathHelper.sin(.2f * client.world.getTime()) * .2f + .2f;
                 context.setShaderColor(1f, 1f, 1f,  alpha);
             } else if (extendedPlayer.gbw$getHideHealthHud() < 20)
                 context.setShaderColor(1f, 1f, 1f, extendedPlayer.gbw$getHideHealthHud() / 20f);
@@ -45,7 +45,7 @@ public class InGameHudMixin {
     private void gbw$hideArmorBarPre(DrawContext context, CallbackInfo ci, @Local PlayerEntity player) {
         if (player instanceof ExtendedPlayer extendedPlayer) {
             if (extendedPlayer.gbw$getHideArmorHud() <= 0 && player.getStackInHand(Hand.MAIN_HAND).isIn(SwordsAndShieldsTags.HINTS_ARMOR_HUD)) {
-                float alpha = MathHelper.sin(.2f * client.world.getTime()) * .25f + .25f;
+                float alpha = MathHelper.sin(.2f * client.world.getTime()) * .2f + .2f;
                 context.setShaderColor(1f, 1f, 1f,  alpha);
             } else if (extendedPlayer.gbw$getHideArmorHud() < 20)
                 context.setShaderColor(1f, 1f, 1f, extendedPlayer.gbw$getHideArmorHud() / 20f);
@@ -63,7 +63,7 @@ public class InGameHudMixin {
     private void gbw$hideFoodBarPre(DrawContext context, CallbackInfo ci, @Local PlayerEntity player) {
         if (player instanceof ExtendedPlayer extendedPlayer) {
             if (extendedPlayer.gbw$getHideFoodHud() <= 0 && player.getStackInHand(Hand.MAIN_HAND).isIn(SwordsAndShieldsTags.HINTS_FOOD_HUD)) {
-                float alpha = MathHelper.sin(.2f * client.world.getTime()) * .25f + .25f;
+                float alpha = MathHelper.sin(.2f * client.world.getTime()) * .2f + .2f;
                 context.setShaderColor(1f, 1f, 1f,  alpha);
             } else if (extendedPlayer.gbw$getHideFoodHud() < 20)
                 context.setShaderColor(1f, 1f, 1f, extendedPlayer.gbw$getHideFoodHud() / 20f);
@@ -81,7 +81,7 @@ public class InGameHudMixin {
     private void gbw$hideExpBarPre(DrawContext context, float tickDelta, CallbackInfo ci) {
         if (client.player instanceof ExtendedPlayer extendedPlayer) {
             if (extendedPlayer.gbw$getHideExpHud() <= 0 && client.player.getStackInHand(Hand.MAIN_HAND).isIn(SwordsAndShieldsTags.HINTS_EXPERIENCE_HUD)) {
-                float alpha = MathHelper.sin(.2f * client.world.getTime()) * .25f + .25f;
+                float alpha = MathHelper.sin(.2f * client.world.getTime()) * .2f + .2f;
                 context.setShaderColor(1f, 1f, 1f,  alpha);
             } else if (extendedPlayer.gbw$getHideExpHud() < 20)
                 context.setShaderColor(1f, 1f, 1f, extendedPlayer.gbw$getHideExpHud() / 20f);
@@ -99,7 +99,7 @@ public class InGameHudMixin {
     private void gbw$hideExpLevelPre(DrawContext context, float tickDelta, CallbackInfo ci) {
         if (client.player instanceof ExtendedPlayer extendedPlayer) {
             if (extendedPlayer.gbw$getHideExpHud() <= 0 && client.player.getStackInHand(Hand.MAIN_HAND).isIn(SwordsAndShieldsTags.HINTS_EXPERIENCE_HUD)) {
-                float alpha = MathHelper.sin(.2f * client.world.getTime()) * .25f + .25f;
+                float alpha = MathHelper.sin(.2f * client.world.getTime()) * .2f + .2f;
                 context.setShaderColor(1f, 1f, 1f,  alpha);
             } else if (extendedPlayer.gbw$getHideExpHud() < 20)
                 context.setShaderColor(1f, 1f, 1f, extendedPlayer.gbw$getHideExpHud() / 20f);
@@ -137,7 +137,6 @@ public class InGameHudMixin {
             if (extendedPlayer.gbw$getHideHealthHud() < 0)
                 offset += 10;
         }
-
         instance.drawGuiTexture(texture, x, y + offset, width, height);
     }
 
@@ -155,15 +154,14 @@ public class InGameHudMixin {
 
     @Redirect(method = "renderHeldItemTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"))
     private int gbw$repositionHeldItemNameForHiddenHud(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int color) {
+        int offset = 0;
         if (client.player instanceof ExtendedPlayer extendedPlayer) {
-            int offset = 0;
             if (extendedPlayer.gbw$getHideExpHud() < 0 && extendedPlayer.gbw$getHideFoodHud() < 0)
                 offset += 7;
             if (extendedPlayer.gbw$getHideHealthHud() < 0 && extendedPlayer.gbw$getHideArmorHud() < 0)
                 offset += 10;
-            return instance.drawTextWithShadow(textRenderer, text, x, y + offset, color);
         }
-       return instance.drawTextWithShadow(textRenderer, text, x, y, color);
+        return instance.drawTextWithShadow(textRenderer, text, x, y + offset, color);
     }
     // endgroup
 }

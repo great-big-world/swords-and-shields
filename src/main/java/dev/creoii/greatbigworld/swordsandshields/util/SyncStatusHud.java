@@ -6,23 +6,24 @@ import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
-public record SyncStatusHud(boolean health, boolean food, boolean armor, boolean experience) implements CustomPayload {
+public record SyncStatusHud(Type type) implements CustomPayload {
     public static final CustomPayload.Id<SyncStatusHud> PACKET_ID = new CustomPayload.Id<>(new Identifier(SwordsAndShields.NAMESPACE, "sync_status_hud"));
     public static final PacketCodec<RegistryByteBuf, SyncStatusHud> PACKET_CODEC = PacketCodec.of(SyncStatusHud::write, SyncStatusHud::new);
 
     public SyncStatusHud(RegistryByteBuf buf) {
-        this(buf.readBoolean(), buf.readBoolean(), buf.readBoolean(), buf.readBoolean());
+        this(Type.values()[buf.readVarInt()]);
     }
 
     public void write(RegistryByteBuf buf) {
-        buf.writeBoolean(health);
-        buf.writeBoolean(food);
-        buf.writeBoolean(armor);
-        buf.writeBoolean(experience);
+        buf.writeVarInt(type.ordinal());
     }
 
     @Override
     public CustomPayload.Id<? extends CustomPayload> getId() {
         return PACKET_ID;
+    }
+
+    public enum Type {
+        HEALTH, FOOD, ARMOR, EXPERIENCE
     }
 }

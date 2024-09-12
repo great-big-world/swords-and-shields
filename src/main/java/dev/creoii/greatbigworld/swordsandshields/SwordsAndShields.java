@@ -19,7 +19,7 @@ public class SwordsAndShields implements ModInitializer {
         LivingEntityEvents.EQUIP_STACK.register((livingEntity, slot, oldStack, newStack) -> {
             if (!livingEntity.getWorld().isClient) {
                 if (livingEntity instanceof ServerPlayerEntity serverPlayer && serverPlayer.interactionManager != null && serverPlayer.networkHandler != null) {
-                    ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(false, false, true, false));
+                    ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(SyncStatusHud.Type.ARMOR));
                 }
             }
             return true;
@@ -27,7 +27,7 @@ public class SwordsAndShields implements ModInitializer {
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
             if (!world.isClient) {
                 if (player instanceof ServerPlayerEntity serverPlayer && serverPlayer.interactionManager != null && serverPlayer.networkHandler != null) {
-                    ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(true, false, false, false));
+                    ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(SyncStatusHud.Type.HEALTH));
                 }
             }
             return ActionResult.PASS;

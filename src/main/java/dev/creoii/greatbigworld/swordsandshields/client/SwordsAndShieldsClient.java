@@ -9,20 +9,15 @@ public class SwordsAndShieldsClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ClientPlayNetworking.registerGlobalReceiver(SyncStatusHud.PACKET_ID, (payload, context) -> {
-            boolean health = payload.health();
-            boolean food = payload.food();
-            boolean armor = payload.armor();
-            boolean experience = payload.experience();
+            SyncStatusHud.Type type = payload.type();
             context.client().execute(() -> {
                 if (context.player() instanceof ExtendedPlayer extendedPlayer) {
-                    if (health)
-                        extendedPlayer.gbw$resetHideHealthHud();
-                    if (food)
-                        extendedPlayer.gbw$resetHideFoodHud();
-                    if (armor)
-                        extendedPlayer.gbw$resetHideArmorHud();
-                    if (experience)
-                        extendedPlayer.gbw$resetHideExpHud();
+                    switch (type) {
+                        case FOOD -> extendedPlayer.gbw$resetHideFoodHud();
+                        case ARMOR -> extendedPlayer.gbw$resetHideArmorHud();
+                        case HEALTH -> extendedPlayer.gbw$resetHideHealthHud();
+                        case EXPERIENCE -> extendedPlayer.gbw$resetHideExpHud();
+                    }
                 }
             });
         });

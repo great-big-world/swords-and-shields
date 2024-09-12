@@ -26,7 +26,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     private void gbw$showHudFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
         if (!world.isClient) {
             if ((PlayerEntity) (Object) this instanceof ServerPlayerEntity serverPlayer && serverPlayer.interactionManager != null && serverPlayer.networkHandler != null) {
-                ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(false, true, false, false));
+                ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(SyncStatusHud.Type.FOOD));
             }
         }
     }
@@ -35,7 +35,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
     private void gbw$showHudExp(int experience, CallbackInfo ci) {
         if (!getWorld().isClient) {
             if ((PlayerEntity) (Object) this instanceof ServerPlayerEntity serverPlayer && serverPlayer.interactionManager != null && serverPlayer.networkHandler != null) {
-                ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(false, false, false, true));
+                ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(SyncStatusHud.Type.EXPERIENCE));
             }
         }
     }
@@ -45,7 +45,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
         super.setHealth(health);
         if (!getWorld().isClient) {
             if ((PlayerEntity) (Object) this instanceof ServerPlayerEntity serverPlayer && serverPlayer.interactionManager != null && serverPlayer.networkHandler != null) {
-                ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(true, false, false, false));
+                ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(SyncStatusHud.Type.HEALTH));
             }
         }
     }

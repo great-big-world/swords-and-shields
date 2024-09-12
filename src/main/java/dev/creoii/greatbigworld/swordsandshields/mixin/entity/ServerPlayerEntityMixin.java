@@ -14,7 +14,11 @@ public class ServerPlayerEntityMixin {
     @Inject(method = "changeGameMode", at = @At("RETURN"))
     private void gbw$resetStatusHudOnSurvival(GameMode gameMode, CallbackInfoReturnable<Boolean> cir) {
         if (gameMode == GameMode.SURVIVAL) {
-            ServerPlayNetworking.send((ServerPlayerEntity) (Object) this, new SyncStatusHud(true, true, true, true));
+            ServerPlayerEntity serverPlayer = (ServerPlayerEntity) (Object) this;
+            ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(SyncStatusHud.Type.FOOD));
+            ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(SyncStatusHud.Type.HEALTH));
+            ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(SyncStatusHud.Type.ARMOR));
+            ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(SyncStatusHud.Type.EXPERIENCE));
         }
     }
 }
