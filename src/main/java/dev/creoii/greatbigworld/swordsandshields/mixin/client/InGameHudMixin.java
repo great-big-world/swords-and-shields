@@ -26,7 +26,6 @@ public class InGameHudMixin {
     private void gbw$hideHealthBarPre(DrawContext context, CallbackInfo ci, @Local PlayerEntity player) {
         if (player instanceof ExtendedPlayer extendedPlayer) {
             if (extendedPlayer.gbw$getHideHealthHud() <= 0 && player.getStackInHand(player.getActiveHand()).isIn(SwordsAndShieldsTags.HINTS_HEALTH_HUD)) {
-                // sin wave for opacity
                 float alpha = MathHelper.sin(.2f * client.world.getTime()) * .2f + .2f;
                 context.setShaderColor(1f, 1f, 1f,  alpha);
             } else if (extendedPlayer.gbw$getHideHealthHud() < 20)
@@ -156,9 +155,9 @@ public class InGameHudMixin {
     private int gbw$repositionHeldItemNameForHiddenHud(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int color) {
         int offset = 0;
         if (client.player instanceof ExtendedPlayer extendedPlayer) {
-            if (extendedPlayer.gbw$getHideExpHud() < 0 && extendedPlayer.gbw$getHideFoodHud() < 0)
+            if (extendedPlayer.gbw$getHideHealthHud() < 0 && extendedPlayer.gbw$getHideFoodHud() < 0)
                 offset += 7;
-            if (extendedPlayer.gbw$getHideHealthHud() < 0 && extendedPlayer.gbw$getHideArmorHud() < 0)
+            if (extendedPlayer.gbw$getHideArmorHud() < 0)
                 offset += 10;
         }
         return instance.drawTextWithShadow(textRenderer, text, x, y + offset, color);

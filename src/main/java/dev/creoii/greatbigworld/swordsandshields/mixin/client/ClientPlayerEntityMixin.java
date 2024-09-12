@@ -3,8 +3,9 @@ package dev.creoii.greatbigworld.swordsandshields.mixin.client;
 import com.mojang.authlib.GameProfile;
 import dev.creoii.greatbigworld.swordsandshields.util.ExtendedPlayer;
 import dev.creoii.greatbigworld.swordsandshields.util.SwordsAndShieldsTags;
+import net.minecraft.client.network.AbstractClientPlayerEntity;
 import net.minecraft.client.network.ClientPlayerEntity;
-import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -14,19 +15,19 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayerEntity.class)
-public abstract class ClientPlayerEntityMixin extends PlayerEntity implements ExtendedPlayer {
+public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity implements ExtendedPlayer {
     @Unique private static final int DEFAULT_HIDE_STATUS_HUD_TIME = 200;
     @Unique private int gbw$shouldHideHealthHud = DEFAULT_HIDE_STATUS_HUD_TIME;
     @Unique private int gbw$shouldHideArmorHud = DEFAULT_HIDE_STATUS_HUD_TIME;
     @Unique private int gbw$shouldHideFoodHud = DEFAULT_HIDE_STATUS_HUD_TIME;
     @Unique private int gbw$shouldHideExpHud = DEFAULT_HIDE_STATUS_HUD_TIME;
 
-    public ClientPlayerEntityMixin(World world, BlockPos pos, float yaw, GameProfile gameProfile) {
-        super(world, pos, yaw, gameProfile);
+    public ClientPlayerEntityMixin(ClientWorld world, GameProfile profile) {
+        super(world, profile);
     }
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tick()V", shift = At.Shift.AFTER))
-    private void gbw$hideHudIfNotInWater(CallbackInfo ci) {
+    private void gbw$tickHideStatusHuds(CallbackInfo ci) {
         if (getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_HEALTH_HUD)) && !isSubmergedInWater()) {
             if (--gbw$shouldHideHealthHud < 0)
                 gbw$shouldHideHealthHud = -1;
