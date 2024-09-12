@@ -11,11 +11,11 @@ public record SyncStatusHud(Type type) implements CustomPayload {
     public static final PacketCodec<RegistryByteBuf, SyncStatusHud> PACKET_CODEC = PacketCodec.of(SyncStatusHud::write, SyncStatusHud::new);
 
     public SyncStatusHud(RegistryByteBuf buf) {
-        this(Type.values()[buf.readVarInt()]);
+        this(Type.values()[buf.readByte()]);
     }
 
     public void write(RegistryByteBuf buf) {
-        buf.writeVarInt(type.ordinal());
+        buf.writeByte((byte) type.ordinal());
     }
 
     @Override
