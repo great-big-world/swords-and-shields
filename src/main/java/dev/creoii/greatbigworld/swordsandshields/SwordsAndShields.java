@@ -1,6 +1,9 @@
 package dev.creoii.greatbigworld.swordsandshields;
 
 import dev.creoii.creoapi.api.event.entity.LivingEntityEvents;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldBlocks;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldItems;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsBlockEntities;
 import dev.creoii.greatbigworld.swordsandshields.util.SyncStatusHud;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
@@ -14,6 +17,10 @@ public class SwordsAndShields implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        SwordsAndShieldBlocks.register();
+        SwordsAndShieldsBlockEntities.register();
+        SwordsAndShieldItems.register();
+
         PayloadTypeRegistry.playS2C().register(SyncStatusHud.PACKET_ID, SyncStatusHud.PACKET_CODEC);
 
         LivingEntityEvents.EQUIP_STACK.register((livingEntity, slot, oldStack, newStack) -> {

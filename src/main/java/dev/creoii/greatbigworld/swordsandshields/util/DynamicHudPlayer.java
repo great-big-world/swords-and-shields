@@ -1,6 +1,6 @@
 package dev.creoii.greatbigworld.swordsandshields.util;
 
-public interface ExtendedPlayer {
+public interface DynamicHudPlayer {
     int gbw$getHideHealthHud();
 
     void gbw$resetHideHealthHud();
