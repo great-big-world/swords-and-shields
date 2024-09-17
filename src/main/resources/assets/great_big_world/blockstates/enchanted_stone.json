@@ -1,16 +1,7 @@
 {
   "variants": {
-    "glow=0": {
+    "": {
       "model": "great_big_world:block/enchanted_stone"
-    },
-    "glow=1": {
-      "model": "great_big_world:block/enchanted_stone_faint_glow"
-    },
-    "glow=2": {
-      "model": "great_big_world:block/enchanted_stone_light_glow"
-    },
-    "glow=3": {
-      "model": "great_big_world:block/enchanted_stone_glow"
     }
   }
 }

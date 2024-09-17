@@ -21,72 +21,54 @@
 			"from": [0, -0.001, 0],
 			"to": [16, 0, 16],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 0.001], "texture": "#rune"},
-				"east": {"uv": [0, 0, 16, 0.001], "texture": "#rune"},
-				"south": {"uv": [0, 0, 16, 0.001], "texture": "#rune"},
-				"west": {"uv": [0, 0, 16, 0.001], "texture": "#rune"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#rune"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#rune"}
+				"down": {"uv": [0, 0, 16, 16], "texture": "#rune", "tintindex": 1}
 			}
 		},
 		{
 			"from": [0, 16.001, 0],
 			"to": [16, 16.002, 16],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 0.001], "texture": "#rune"},
-				"east": {"uv": [0, 0, 16, 0.001], "texture": "#rune"},
-				"south": {"uv": [0, 0, 16, 0.001], "texture": "#rune"},
-				"west": {"uv": [0, 0, 16, 0.001], "texture": "#rune"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#rune"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#rune"}
+				"up": {"uv": [0, 0, 16, 16], "texture": "#rune", "tintindex": 1}
 			}
 		},
 		{
 			"from": [-0.001, 0, 0],
 			"to": [0, 16, 16],
 			"faces": {
-				"north": {"uv": [0, 0, 0.001, 16], "texture": "#rune"},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#rune"},
-				"south": {"uv": [0, 0, 0.001, 16], "texture": "#rune"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#rune"},
-				"up": {"uv": [0, 0, 0.001, 16], "texture": "#rune"},
-				"down": {"uv": [0, 0, 0.001, 16], "texture": "#rune"}
+				"north": {"uv": [0, 0, 0.001, 16], "texture": "#rune", "tintindex": 1},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#rune", "tintindex": 1},
+				"south": {"uv": [0, 0, 0.001, 16], "texture": "#rune", "tintindex": 1},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#rune", "tintindex": 1}
 			}
 		},
 		{
 			"from": [16.001, 0, 0],
 			"to": [16.002, 16, 16],
 			"faces": {
-				"north": {"uv": [0, 0, 0.001, 16], "texture": "#rune"},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#rune"},
-				"south": {"uv": [0, 0, 0.001, 16], "texture": "#rune"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#rune"},
-				"up": {"uv": [0, 0, 0.001, 16], "texture": "#rune"},
-				"down": {"uv": [0, 0, 0.001, 16], "texture": "#rune"}
+				"north": {"uv": [0, 0, 0.001, 16], "texture": "#rune", "tintindex": 1},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#rune", "tintindex": 1},
+				"south": {"uv": [0, 0, 0.001, 16], "texture": "#rune", "tintindex": 1},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#rune", "tintindex": 1}
 			}
 		},
 		{
 			"from": [0, 0, -0.001],
 			"to": [16, 16, 0],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#rune"},
-				"east": {"uv": [0, 0, 0.001, 16], "texture": "#rune"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#rune"},
-				"west": {"uv": [0, 0, 0.001, 16], "texture": "#rune"},
-				"up": {"uv": [0, 0, 16, 0.001], "texture": "#rune"},
-				"down": {"uv": [0, 0, 16, 0.001], "texture": "#rune"}
+				"north": {"uv": [0, 0, 16, 16], "texture": "#rune", "tintindex": 1},
+				"east": {"uv": [0, 0, 0.001, 16], "texture": "#rune", "tintindex": 1},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#rune", "tintindex": 1},
+				"west": {"uv": [0, 0, 0.001, 16], "texture": "#rune", "tintindex": 1}
 			}
 		},
 		{
 			"from": [0, 0, 16.001],
 			"to": [16, 16, 16.002],
 			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#rune"},
-				"east": {"uv": [0, 0, 0.001, 16], "texture": "#rune"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#rune"},
-				"west": {"uv": [0, 0, 0.001, 16], "texture": "#rune"},
-				"up": {"uv": [0, 0, 16, 0.001], "texture": "#rune"},
-				"down": {"uv": [0, 0, 16, 0.001], "texture": "#rune"}
+				"north": {"uv": [0, 0, 16, 16], "texture": "#rune", "tintindex": 1},
+				"east": {"uv": [0, 0, 0.001, 16], "texture": "#rune", "tintindex": 1},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#rune", "tintindex": 1},
+				"west": {"uv": [0, 0, 0.001, 16], "texture": "#rune", "tintindex": 1}
 			}
 		}
 	]

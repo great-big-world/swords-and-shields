@@ -1,6 +1,0 @@
-{
-  "parent": "great_big_world:block/enchanted_stone_template",
-  "textures": {
-    "rune": "great_big_world:block/fire_aspect_rune_glow"
-  }
-}

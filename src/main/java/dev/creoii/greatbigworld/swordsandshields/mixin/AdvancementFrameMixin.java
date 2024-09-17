@@ -27,10 +27,8 @@ public class AdvancementFrameMixin {
         ArrayList<AdvancementFrame> values = new ArrayList<>(Arrays.asList(field_1253));
         int last = values.size();
 
-        System.out.println(field_1253.length);
         values.add(init("ENCHANTMENT", last, "enchantment", Formatting.LIGHT_PURPLE));
 
         field_1253 = values.toArray(new AdvancementFrame[0]);
-        System.out.println(field_1253.length);
     }
 }
