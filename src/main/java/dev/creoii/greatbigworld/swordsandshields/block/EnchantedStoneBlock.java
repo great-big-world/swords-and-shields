@@ -2,6 +2,7 @@ package dev.creoii.greatbigworld.swordsandshields.block;
 
 import com.mojang.serialization.MapCodec;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsBlockEntities;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsCriteria;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
@@ -12,6 +13,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -60,8 +62,9 @@ public class EnchantedStoneBlock extends BlockWithEntity {
             if (!world.isClient) {
                 BlockEntity blockEntity = world.getBlockEntity(pos);
                 if (blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity) {
-                    if (!enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment()))
-                        return ActionResult.PASS;
+                    if (enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment())) {
+                        SwordsAndShieldsCriteria.ENCHANTMENT_LEARNED.trigger((ServerPlayerEntity) player, Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment()));
+                    } else return ActionResult.PASS;
                 }
             }
             world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 1f);

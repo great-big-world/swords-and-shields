@@ -1,0 +1,29 @@
+{
+  "parent": "great_big_world:enchantments/root",
+  "criteria": {
+    "has_the_enchantment": {
+      "conditions": {
+        "enchantment": "minecraft:blast_protection"
+      },
+      "trigger": "great_big_world:enchantment_learned"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_enchantment"
+    ]
+  ],
+  "display": {
+    "announce_to_chat": false,
+    "description": "",
+    "icon": {
+      "id": "minecraft:enchanted_book"
+    },
+    "title": {
+      "translate": "advancements.enchantments.blast_protection.title"
+    }
+  },
+  "rewards": {
+    "experience": 20
+  }
+}

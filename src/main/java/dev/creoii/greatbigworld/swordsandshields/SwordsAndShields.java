@@ -5,6 +5,7 @@ import dev.creoii.greatbigworld.swordsandshields.enchantment.EnchantmentManager;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldBlocks;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldItems;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsBlockEntities;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsCriteria;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
 import dev.creoii.greatbigworld.swordsandshields.util.SyncStatusHud;
 import net.fabricmc.api.ModInitializer;
@@ -24,6 +25,7 @@ public class SwordsAndShields implements ModInitializer {
         SwordsAndShieldBlocks.register();
         SwordsAndShieldsBlockEntities.register();
         SwordsAndShieldItems.register();
+        SwordsAndShieldsCriteria.register();
 
         PayloadTypeRegistry.playS2C().register(SyncStatusHud.PACKET_ID, SyncStatusHud.PACKET_CODEC);
 
@@ -54,7 +56,6 @@ public class SwordsAndShields implements ModInitializer {
                 }
             }
         });
-
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             if (handler.player instanceof EnchantmentPlayer enchantmentPlayer) {
                 EnchantmentManager manager = EnchantmentManager.getServerState(server);

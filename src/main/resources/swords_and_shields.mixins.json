@@ -4,6 +4,7 @@
   "package": "dev.creoii.greatbigworld.swordsandshields.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "AdvancementFrameMixin",
     "EnchantmentScreenHandlerMixin",
     "WindChargeItemMixin",
     "entity.AbstractSkeletonEntityMixin",
