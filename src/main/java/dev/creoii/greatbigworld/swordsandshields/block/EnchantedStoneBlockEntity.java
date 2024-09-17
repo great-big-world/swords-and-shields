@@ -7,6 +7,8 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -46,6 +48,10 @@ public class EnchantedStoneBlockEntity extends BlockEntity {
         } else if (blockEntity.nearPlayers && !world.isClient) {
             blockEntity.nearPlayers = false;
             world.setBlockState(pos, state.with(EnchantedStoneBlock.GLOW, 0));
+        }
+
+        if (world.getTime() % 4 == 0 && world.getRandom().nextBoolean() && blockEntity.nearPlayers) {
+            world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.BLOCKS, 1f, 1f);
         }
     }
 }

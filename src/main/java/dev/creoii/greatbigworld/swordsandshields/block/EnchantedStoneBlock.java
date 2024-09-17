@@ -11,7 +11,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
@@ -19,7 +18,6 @@ import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,7 +27,7 @@ public class EnchantedStoneBlock extends BlockWithEntity {
     public static final IntProperty GLOW = IntProperty.of("glow", 0, 3);
 
     public EnchantedStoneBlock() {
-        super(Settings.copy(Blocks.STONE).ticksRandomly().luminance(state -> state.get(GLOW) * 3));
+        super(Settings.copy(Blocks.STONE).luminance(state -> state.get(GLOW) * 3));
         setDefaultState(getStateManager().getDefaultState().with(GLOW, 0));
     }
 
@@ -50,26 +48,16 @@ public class EnchantedStoneBlock extends BlockWithEntity {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (!world.isClient) {
-            if (player instanceof EnchantmentPlayer enchantmentPlayer) {
+        if (player instanceof EnchantmentPlayer enchantmentPlayer) {
+            if (!world.isClient) {
                 Optional<RegistryEntry.Reference<Enchantment>> enchantment = Registries.ENCHANTMENT.getRandom(player.getRandom());
                 if (enchantment.isEmpty())
                     return ActionResult.PASS;
                 enchantmentPlayer.gbw$addEnchantment(enchantment.get().value());
-                world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 1f);
             }
+            world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 1f);
         }
         return ActionResult.success(world.isClient);
-    }
-
-    @Override
-    protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.BLOCKS, 1f, 1f);
-    }
-
-    @Override
-    protected boolean hasRandomTicks(BlockState state) {
-        return state.get(GLOW) > 0;
     }
 
     @Override
