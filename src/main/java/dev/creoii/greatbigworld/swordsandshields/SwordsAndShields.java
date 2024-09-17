@@ -1,17 +1,28 @@
 package dev.creoii.greatbigworld.swordsandshields;
 
 import dev.creoii.creoapi.api.event.entity.LivingEntityEvents;
+import dev.creoii.greatbigworld.swordsandshields.enchantment.EnchantmentManager;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldBlocks;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldItems;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsBlockEntities;
+import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
 import dev.creoii.greatbigworld.swordsandshields.util.SyncStatusHud;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 
+/**
+ * ENCHANTED STONE TODO:
+ * - make assets dynamic
+ * - make glow part actually glow
+ * - figure out how to store enchantments in the block
+ * - particles
+ */
 public class SwordsAndShields implements ModInitializer {
     public static final String NAMESPACE = "great_big_world";
 
@@ -38,6 +49,24 @@ public class SwordsAndShields implements ModInitializer {
                 }
             }
             return ActionResult.PASS;
+        });
+
+        ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> {
+            if (handler.player instanceof EnchantmentPlayer enchantmentPlayer) {
+                EnchantmentManager manager = EnchantmentManager.getServerState(server);
+                if (manager.players.containsKey(handler.player.getUuid())) {
+                    for (Enchantment enchantment : EnchantmentManager.readEnchantments(manager.players.get(handler.player.getUuid()))) {
+                        enchantmentPlayer.gbw$addEnchantment(enchantment);
+                    }
+                }
+            }
+        });
+
+        ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
+            if (handler.player instanceof EnchantmentPlayer enchantmentPlayer) {
+                EnchantmentManager manager = EnchantmentManager.getServerState(server);
+                manager.players.put(handler.player.getUuid(), EnchantmentManager.writeEnchantments(enchantmentPlayer.gbw$getEnchantments()));
+            }
         });
     }
 }

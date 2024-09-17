@@ -1,6 +1,6 @@
 {
-  "parent": "block/cube_all",
+  "parent": "great_big_world:block/enchanted_stone_template",
   "textures": {
-    "all": "great_big_world:block/enchanted_stone_fire_aspect_light"
+    "rune": "great_big_world:block/fire_aspect_rune_light"
   }
 }

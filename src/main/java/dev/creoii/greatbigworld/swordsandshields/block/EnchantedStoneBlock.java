@@ -7,8 +7,10 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.enchantment.Enchantments;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -20,6 +22,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 public class EnchantedStoneBlock extends BlockWithEntity {
     public static final IntProperty GLOW = IntProperty.of("glow", 0, 3);
@@ -48,8 +52,11 @@ public class EnchantedStoneBlock extends BlockWithEntity {
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (!world.isClient) {
             if (player instanceof EnchantmentPlayer enchantmentPlayer) {
-                enchantmentPlayer.gbw$addEnchantment(Enchantments.FIRE_ASPECT);
-                world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, world.random.nextFloat() * .1f + .9f);
+                Optional<RegistryEntry.Reference<Enchantment>> enchantment = Registries.ENCHANTMENT.getRandom(player.getRandom());
+                if (enchantment.isEmpty())
+                    return ActionResult.PASS;
+                enchantmentPlayer.gbw$addEnchantment(enchantment.get().value());
+                world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 1f);
             }
         }
         return ActionResult.success(world.isClient);
@@ -57,7 +64,7 @@ public class EnchantedStoneBlock extends BlockWithEntity {
 
     @Override
     protected void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
-        world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.BLOCKS, 1f, .5f + world.random.nextFloat() * 1.2f);
+        world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.BLOCKS, 1f, 1f);
     }
 
     @Override
