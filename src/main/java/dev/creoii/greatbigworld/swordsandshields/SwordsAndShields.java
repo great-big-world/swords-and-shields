@@ -16,13 +16,6 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 
-/**
- * ENCHANTED STONE TODO:
- * - make assets dynamic
- * - make glow part actually glow
- * - figure out how to store enchantments in the block
- * - particles
- */
 public class SwordsAndShields implements ModInitializer {
     public static final String NAMESPACE = "great_big_world";
 

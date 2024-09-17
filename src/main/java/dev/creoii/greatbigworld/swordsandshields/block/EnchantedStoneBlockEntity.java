@@ -4,8 +4,10 @@ import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldBlocks;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsBlockEntities;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
+import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -13,20 +15,31 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class EnchantedStoneBlockEntity extends BlockEntity {
+    private Enchantment enchantment = null;
     private boolean nearPlayers = false;
 
     public EnchantedStoneBlockEntity(BlockPos pos, BlockState state) {
         super(SwordsAndShieldsBlockEntities.ENCHANTED_STONE, pos, state);
     }
 
+    public Enchantment getEnchantment() {
+        return enchantment;
+    }
+
+    public void setEnchantment(Enchantment enchantment) {
+        this.enchantment = enchantment;
+    }
+
     @Override
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         nearPlayers = nbt.getBoolean("near_players");
+        enchantment = Registries.ENCHANTMENT.get(nbt.getInt("enchantment"));
     }
 
     @Override
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         nbt.putBoolean("near_players", nearPlayers);
+        nbt.putInt("enchantment", Registries.ENCHANTMENT.getRawId(enchantment));
     }
 
     public static void tick(World world, BlockPos pos, BlockState state, EnchantedStoneBlockEntity blockEntity) {

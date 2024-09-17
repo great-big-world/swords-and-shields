@@ -9,6 +9,7 @@ import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.sound.SoundCategory;
@@ -18,12 +19,14 @@ import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 public class EnchantedStoneBlock extends BlockWithEntity {
+    private static final Random RANDOM = Random.create();
     public static final IntProperty GLOW = IntProperty.of("glow", 0, 3);
 
     public EnchantedStoneBlock() {
@@ -38,7 +41,12 @@ public class EnchantedStoneBlock extends BlockWithEntity {
 
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        return new EnchantedStoneBlockEntity(pos, state);
+        EnchantedStoneBlockEntity blockEntity = new EnchantedStoneBlockEntity(pos, state);
+        Optional<RegistryEntry.Reference<Enchantment>> enchantment = Registries.ENCHANTMENT.getRandom(RANDOM);
+        if (enchantment.isEmpty())
+            return null;
+        blockEntity.setEnchantment(enchantment.get().value());
+        return blockEntity;
     }
 
     @Nullable
@@ -50,14 +58,35 @@ public class EnchantedStoneBlock extends BlockWithEntity {
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (player instanceof EnchantmentPlayer enchantmentPlayer) {
             if (!world.isClient) {
-                Optional<RegistryEntry.Reference<Enchantment>> enchantment = Registries.ENCHANTMENT.getRandom(player.getRandom());
-                if (enchantment.isEmpty())
-                    return ActionResult.PASS;
-                enchantmentPlayer.gbw$addEnchantment(enchantment.get().value());
+                BlockEntity blockEntity = world.getBlockEntity(pos);
+                if (blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity) {
+                    if (!enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment()))
+                        return ActionResult.PASS;
+                }
             }
             world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 1f);
         }
         return ActionResult.success(world.isClient);
+    }
+
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        for (int i = 0; i < 4; ++i) {
+            double d = (double) pos.getX() + random.nextDouble();
+            double f = (double) pos.getZ() + random.nextDouble();
+            double g = ((double) random.nextFloat() - .5d) * .5d;
+            double j = ((double) random.nextFloat() - .5d) * .5d;
+            int k = random.nextInt(2) * 2 - 1;
+            if (!world.getBlockState(pos.west()).isOf(this) && !world.getBlockState(pos.east()).isOf(this)) {
+                d = (double) pos.getX() + .5d + .25d * (double) k;
+                g = random.nextFloat() * 2f * (float) k;
+            } else {
+                f = (double) pos.getZ() + .5d + .25d * (double) k;
+                j = random.nextFloat() * 2f * (float) k;
+            }
+
+            world.addParticle(ParticleTypes.ENCHANT, d, (double) pos.getY() + random.nextDouble(), f, g, ((double) random.nextFloat() - .5d) * .5d, j);
+        }
     }
 
     @Override

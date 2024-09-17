@@ -30,8 +30,8 @@ public abstract class PlayerEntityMixin extends LivingEntity implements Enchantm
         super(entityType, world);
     }
 
-    public void gbw$addEnchantment(Enchantment enchantment) {
-        enchantments.add(enchantment);
+    public boolean gbw$addEnchantment(Enchantment enchantment) {
+        return enchantments.add(enchantment);
     }
 
     public Set<Enchantment> gbw$getEnchantments() {
