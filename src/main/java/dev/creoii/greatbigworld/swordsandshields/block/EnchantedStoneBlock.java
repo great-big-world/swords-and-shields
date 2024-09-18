@@ -62,7 +62,7 @@ public class EnchantedStoneBlock extends BlockWithEntity {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (player instanceof EnchantmentPlayer enchantmentPlayer) {
+        if (player instanceof EnchantmentPlayer enchantmentPlayer && state.get(GLOW) != 0) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity) {
                 if (enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment())) {
