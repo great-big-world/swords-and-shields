@@ -1,7 +1,7 @@
 {
   "parent": "great_big_world:block/enchanted_stone_template",
   "textures": {
-    "all": "block/stone",
+    "all": "block/deepslate",
     "rune": "great_big_world:block/fire_aspect_rune"
   }
 }

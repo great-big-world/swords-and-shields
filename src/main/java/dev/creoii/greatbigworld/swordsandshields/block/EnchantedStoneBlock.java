@@ -59,17 +59,17 @@ public class EnchantedStoneBlock extends BlockWithEntity {
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (player instanceof EnchantmentPlayer enchantmentPlayer) {
-            if (!world.isClient) {
-                BlockEntity blockEntity = world.getBlockEntity(pos);
-                if (blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity) {
-                    if (enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment())) {
+            BlockEntity blockEntity = world.getBlockEntity(pos);
+            if (blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity) {
+                if (enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment())) {
+                    if (!world.isClient)
                         SwordsAndShieldsCriteria.ENCHANTMENT_LEARNED.trigger((ServerPlayerEntity) player, Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment()));
-                    } else return ActionResult.PASS;
+                    world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 1f);
+                    return ActionResult.success(world.isClient);
                 }
             }
-            world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 1f);
         }
-        return ActionResult.success(world.isClient);
+        return ActionResult.PASS;
     }
 
     @Override

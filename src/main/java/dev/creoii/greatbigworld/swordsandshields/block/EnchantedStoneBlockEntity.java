@@ -44,7 +44,7 @@ public class EnchantedStoneBlockEntity extends BlockEntity {
 
     public static void tick(World world, BlockPos pos, BlockState state, EnchantedStoneBlockEntity blockEntity) {
         PlayerEntity playerEntity = world.getClosestPlayer(pos.getX() + .5d, pos.getY() + .5d, pos.getZ() + .5d, 9d, false);
-        if (playerEntity != null && state.isOf(SwordsAndShieldBlocks.ENCHANTED_STONE)) {
+        if (playerEntity != null && isEnchantedStone(state)) {
             if (!world.isClient) {
                 blockEntity.nearPlayers = true;
 
@@ -66,5 +66,9 @@ public class EnchantedStoneBlockEntity extends BlockEntity {
         if (world.getTime() % 4 == 0 && world.getRandom().nextBoolean() && blockEntity.nearPlayers) {
             world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.BLOCKS, 1f, 1f);
         }
+    }
+
+    private static boolean isEnchantedStone(BlockState state) {
+        return state.isOf(SwordsAndShieldBlocks.ENCHANTED_STONE) || state.isOf(SwordsAndShieldBlocks.ENCHANTED_DEEPSLATE);
     }
 }

@@ -11,8 +11,10 @@ import net.minecraft.util.Rarity;
 
 public final class SwordsAndShieldItems {
     public static final Item ENCHANTED_STONE = new BlockItem(SwordsAndShieldBlocks.ENCHANTED_STONE, new CreoItemSettings().rarity(Rarity.UNCOMMON));
+    public static final Item ENCHANTED_DEEPSLATE = new BlockItem(SwordsAndShieldBlocks.ENCHANTED_DEEPSLATE, new CreoItemSettings().rarity(Rarity.UNCOMMON));
 
     public static void register() {
         Registry.register(Registries.ITEM, new Identifier(SwordsAndShields.NAMESPACE, "enchanted_stone"), ENCHANTED_STONE);
+        Registry.register(Registries.ITEM, new Identifier(SwordsAndShields.NAMESPACE, "enchanted_deepslate"), ENCHANTED_DEEPSLATE);
     }
 }

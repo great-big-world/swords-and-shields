@@ -14,14 +14,16 @@ import net.minecraft.util.Identifier;
 
 public final class SwordsAndShieldBlocks {
     public static final Block ENCHANTED_STONE = new EnchantedStoneBlock();
+    public static final Block ENCHANTED_DEEPSLATE = new EnchantedStoneBlock();
 
     public static void register() {
         Registry.register(Registries.BLOCK, new Identifier(SwordsAndShields.NAMESPACE, "enchanted_stone"), ENCHANTED_STONE);
+        Registry.register(Registries.BLOCK, new Identifier(SwordsAndShields.NAMESPACE, "enchanted_deepslate"), ENCHANTED_DEEPSLATE);
     }
 
     @Environment(EnvType.CLIENT)
     public static void registerClient() {
-        BlockRenderLayerMap.INSTANCE.putBlock(SwordsAndShieldBlocks.ENCHANTED_STONE, RenderLayer.getCutoutMipped());
+        BlockRenderLayerMap.INSTANCE.putBlocks(RenderLayer.getCutoutMipped(), ENCHANTED_STONE, ENCHANTED_DEEPSLATE);
         ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
             if (tintIndex != 0) {
                 return switch (state.get(EnchantedStoneBlock.GLOW)) {
@@ -32,6 +34,6 @@ public final class SwordsAndShieldBlocks {
                     default -> -1;
                 };
             } else return -1;
-        }, SwordsAndShieldBlocks.ENCHANTED_STONE);
+        }, ENCHANTED_STONE, ENCHANTED_DEEPSLATE);
     }
 }
