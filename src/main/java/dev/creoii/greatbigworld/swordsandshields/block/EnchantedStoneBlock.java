@@ -5,6 +5,8 @@ import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldGameEve
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsBlockEntities;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsCriteria;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
+import dev.creoii.greatbigworld.swordsandshields.util.LearnEnchantment;
+import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
@@ -67,6 +69,7 @@ public class EnchantedStoneBlock extends BlockWithEntity {
                     if (!world.isClient) {
                         enchantedStoneBlockEntity.setCachedPlayer(null);
                         SwordsAndShieldsCriteria.ENCHANTMENT_LEARNED.trigger((ServerPlayerEntity) player, Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment()));
+                        ServerPlayNetworking.send((ServerPlayerEntity) player, new LearnEnchantment(Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment())));
                     }
                     world.emitGameEvent(SwordsAndShieldGameEvents.LEARN_ENCHANTMENT, pos, GameEvent.Emitter.of(player, state));
                     world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 1f);

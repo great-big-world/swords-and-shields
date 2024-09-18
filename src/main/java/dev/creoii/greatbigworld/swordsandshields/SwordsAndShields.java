@@ -4,8 +4,10 @@ import dev.creoii.creoapi.api.event.entity.LivingEntityEvents;
 import dev.creoii.greatbigworld.swordsandshields.enchantment.EnchantmentManager;
 import dev.creoii.greatbigworld.swordsandshields.registry.*;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
+import dev.creoii.greatbigworld.swordsandshields.util.LearnEnchantment;
 import dev.creoii.greatbigworld.swordsandshields.util.SyncStatusHud;
 import net.fabricmc.api.ModInitializer;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
@@ -26,6 +28,7 @@ public class SwordsAndShields implements ModInitializer {
         SwordsAndShieldsCriteria.register();
 
         PayloadTypeRegistry.playS2C().register(SyncStatusHud.PACKET_ID, SyncStatusHud.PACKET_CODEC);
+        PayloadTypeRegistry.playS2C().register(LearnEnchantment.PACKET_ID, LearnEnchantment.PACKET_CODEC);
 
         LivingEntityEvents.EQUIP_STACK.register((livingEntity, slot, oldStack, newStack) -> {
             if (!livingEntity.getWorld().isClient) {
@@ -58,6 +61,12 @@ public class SwordsAndShields implements ModInitializer {
             if (handler.player instanceof EnchantmentPlayer enchantmentPlayer) {
                 EnchantmentManager manager = EnchantmentManager.getServerState(server);
                 manager.players.put(handler.player.getUuid(), EnchantmentManager.writeEnchantments(enchantmentPlayer.gbw$getEnchantments()));
+            }
+        });
+
+        ServerLivingEntityEvents.AFTER_DEATH.register((entity, damageSource) -> {
+            if (entity instanceof EnchantmentPlayer enchantmentPlayer) {
+                enchantmentPlayer.gbw$getEnchantments().clear();
             }
         });
     }

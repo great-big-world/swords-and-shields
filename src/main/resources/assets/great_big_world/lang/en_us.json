@@ -2,6 +2,8 @@
   "block.great_big_world.enchanted_stone": "Enchanted Stone",
   "block.great_big_world.enchanted_deepslate": "Enchanted Deepslate",
 
+  "gui.learnEnchantment": "Learned %s",
+
   "advancements.toast.enchantment": "",
   "chat.type.advancement.enchantment": "",
   "advancements.enchantments.aqua_affinity.title": "Unlocked Aqua Affinity!",

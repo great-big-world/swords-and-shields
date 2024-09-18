@@ -1,11 +1,13 @@
 package dev.creoii.greatbigworld.swordsandshields.mixin.client;
 
 import com.llamalad7.mixinextras.sugar.Local;
+import dev.creoii.greatbigworld.swordsandshields.client.SwordsAndShieldsClient;
 import dev.creoii.greatbigworld.swordsandshields.util.DynamicHudPlayer;
 import dev.creoii.greatbigworld.swordsandshields.util.SwordsAndShieldsTags;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.LayeredDrawer;
 import net.minecraft.client.gui.hud.InGameHud;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
@@ -21,6 +23,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(InGameHud.class)
 public class InGameHudMixin {
     @Shadow @Final private MinecraftClient client;
+    @Shadow @Final private LayeredDrawer layeredDrawer;
+
+    @Inject(method = "<init>", at = @At("TAIL"))
+    private void gbw$addLearnEnchantmentLayerDrawer(MinecraftClient client, CallbackInfo ci) {
+        layeredDrawer.addLayer((context, tickDelta) -> SwordsAndShieldsClient.renderLearnEnchantmentOverlay(client, context, tickDelta));
+    }
 
     @Inject(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHealthBar(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/entity/player/PlayerEntity;IIIIFIIIZ)V"))
     private void gbw$hideHealthBarPre(DrawContext context, CallbackInfo ci, @Local PlayerEntity player) {
