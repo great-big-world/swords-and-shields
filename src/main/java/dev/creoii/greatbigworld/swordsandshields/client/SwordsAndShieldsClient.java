@@ -11,7 +11,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.registry.Registries;
 import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
@@ -42,17 +41,33 @@ public class SwordsAndShieldsClient implements ClientModInitializer {
             Identifier enchantment = payload.enchantment();
             context.client().execute(() -> {
                 currentEnchantment = Registries.ENCHANTMENT.get(enchantment);
-                learnEnchantmentTime = 160; // 8 seconds
+                learnEnchantmentTime = 140; // 7 seconds
             });
         });
     }
 
     public static void renderLearnEnchantmentOverlay(MinecraftClient client, DrawContext context, float tickDelta) {
-        if (learnEnchantmentTime >= 0 && currentEnchantment != null) {
+        if (learnEnchantmentTime > 1 && currentEnchantment != null) {
             Text text = Text.translatable("gui.learnEnchantment", Text.translatable(currentEnchantment.getTranslationKey()));
-            int opacity = learnEnchantmentTime > 80 ? 255 : (int) (255 * (learnEnchantmentTime / 80d));
 
-            context.drawText(client.textRenderer, text, client.textRenderer.getWidth(text) / 2, 10, subtractOpacity(0xffffff, opacity), false);
+            int opacity;
+            if (learnEnchantmentTime > 70) {
+                opacity = 255;
+            } else opacity = Math.max(0, (int) (255 * (learnEnchantmentTime / 70f)));
+
+            float scale;
+            if (learnEnchantmentTime >= 40) {
+                scale = 1f + easeInOut((140f - learnEnchantmentTime) / 100f);
+            } else scale = 2f;
+
+            context.getMatrices().push();
+
+            context.getMatrices().translate(context.getScaledWindowWidth() / 2f, context.getScaledWindowHeight() / 2f, 0f);
+            context.getMatrices().scale(scale, scale, scale);
+            context.drawText(client.textRenderer, text, -client.textRenderer.getWidth(text) / 2, -10, (opacity << 24) | 0xffffff, false);
+
+            context.getMatrices().pop();
+
             --learnEnchantmentTime;
         }
 
@@ -61,7 +76,7 @@ public class SwordsAndShieldsClient implements ClientModInitializer {
         }
     }
 
-    private static int subtractOpacity(int color, int subtract) {
-        return (subtract << 24) | (color & 0x00ffffff);
+    private static float easeInOut(float t) {
+        return t < .5f ? 2f * t * t : 1f - (float) Math.pow(-2f * t + 2f, 2f) / 2f;
     }
 }

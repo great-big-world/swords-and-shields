@@ -67,6 +67,7 @@ public class EnchantedStoneBlock extends BlockWithEntity {
             if (blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity) {
                 if (enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment())) {
                     if (!world.isClient) {
+                        world.setBlockState(pos, state.with(GLOW, 0));
                         enchantedStoneBlockEntity.setCachedPlayer(null);
                         SwordsAndShieldsCriteria.ENCHANTMENT_LEARNED.trigger((ServerPlayerEntity) player, Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment()));
                         ServerPlayNetworking.send((ServerPlayerEntity) player, new LearnEnchantment(Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment())));
@@ -82,21 +83,23 @@ public class EnchantedStoneBlock extends BlockWithEntity {
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        for (int i = 0; i < 4; ++i) {
-            double d = (double) pos.getX() + random.nextDouble();
-            double f = (double) pos.getZ() + random.nextDouble();
-            double g = ((double) random.nextFloat() - .5d) * .5d;
-            double j = ((double) random.nextFloat() - .5d) * .5d;
-            int k = random.nextInt(2) * 2 - 1;
-            if (!world.getBlockState(pos.west()).isOf(this) && !world.getBlockState(pos.east()).isOf(this)) {
-                d = (double) pos.getX() + .5d + .25d * (double) k;
-                g = random.nextFloat() * 2f * (float) k;
-            } else {
-                f = (double) pos.getZ() + .5d + .25d * (double) k;
-                j = random.nextFloat() * 2f * (float) k;
-            }
+        if (state.get(GLOW) != 0) {
+            for (int i = 0; i < 4; ++i) {
+                double d = (double) pos.getX() + random.nextDouble();
+                double f = (double) pos.getZ() + random.nextDouble();
+                double g = ((double) random.nextFloat() - .5d) * .5d;
+                double j = ((double) random.nextFloat() - .5d) * .5d;
+                int k = random.nextInt(2) * 2 - 1;
+                if (!world.getBlockState(pos.west()).isOf(this) && !world.getBlockState(pos.east()).isOf(this)) {
+                    d = (double) pos.getX() + .5d + .25d * (double) k;
+                    g = random.nextFloat() * 2f * (float) k;
+                } else {
+                    f = (double) pos.getZ() + .5d + .25d * (double) k;
+                    j = random.nextFloat() * 2f * (float) k;
+                }
 
-            world.addParticle(ParticleTypes.ENCHANT, d, (double) pos.getY() + random.nextDouble(), f, g, ((double) random.nextFloat() - .5d) * .5d, j);
+                world.addParticle(ParticleTypes.ENCHANT, d, (double) pos.getY() + random.nextDouble(), f, g, ((double) random.nextFloat() - .5d) * .5d, j);
+            }
         }
     }
 
