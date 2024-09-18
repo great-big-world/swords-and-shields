@@ -1,7 +1,7 @@
 package dev.creoii.greatbigworld.swordsandshields.block;
 
-import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldBlocks;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsBlockEntities;
+import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.enchantment.Enchantment;
@@ -12,22 +12,38 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Comparator;
+import java.util.List;
 
 public class EnchantedStoneBlockEntity extends BlockEntity {
+    @Nullable
     private Enchantment enchantment = null;
     private boolean nearPlayers = false;
+    @Nullable
+    private PlayerEntity cachedPlayer = null;
 
     public EnchantedStoneBlockEntity(BlockPos pos, BlockState state) {
         super(SwordsAndShieldsBlockEntities.ENCHANTED_STONE, pos, state);
     }
 
-    public Enchantment getEnchantment() {
+    public @Nullable Enchantment getEnchantment() {
         return enchantment;
     }
 
-    public void setEnchantment(Enchantment enchantment) {
+    public @Nullable PlayerEntity getCachedPlayer() {
+        return cachedPlayer;
+    }
+
+    public void setEnchantment(@Nullable Enchantment enchantment) {
         this.enchantment = enchantment;
+    }
+
+    public void setCachedPlayer(@Nullable PlayerEntity cachedPlayer) {
+        this.cachedPlayer = cachedPlayer;
     }
 
     @Override
@@ -42,33 +58,47 @@ public class EnchantedStoneBlockEntity extends BlockEntity {
         nbt.putInt("enchantment", Registries.ENCHANTMENT.getRawId(enchantment));
     }
 
-    public static void tick(World world, BlockPos pos, BlockState state, EnchantedStoneBlockEntity blockEntity) {
-        PlayerEntity playerEntity = world.getClosestPlayer(pos.getX() + .5d, pos.getY() + .5d, pos.getZ() + .5d, 9d, false);
-        if (playerEntity != null && isEnchantedStone(state)) {
-            if (!world.isClient) {
-                blockEntity.nearPlayers = true;
+    public static void tickServer(World world, BlockPos pos, BlockState state, EnchantedStoneBlockEntity blockEntity) {
+        if (blockEntity.getCachedPlayer() == null)
+            blockEntity.cachedPlayer = findClosestValidPlayer(world, pos, blockEntity);
 
-                double distance = pos.toCenterPos().distanceTo(playerEntity.getPos());
+        if (blockEntity.getCachedPlayer() != null) {
+            blockEntity.nearPlayers = true;
+
+            double distance = pos.toCenterPos().squaredDistanceTo(blockEntity.getCachedPlayer().getPos());
+            if (distance <= 81) {
                 int glow = state.get(EnchantedStoneBlock.GLOW);
-                if (distance < 4 && distance >= 0 && glow != 3) {
+                if (distance < 16 && distance >= 0 && glow != 3) {
                     world.setBlockState(pos, state.with(EnchantedStoneBlock.GLOW, 3));
-                } else if (distance < 7 && distance >= 4 && glow != 2) {
+                } else if (distance < 49 && distance >= 16 && glow != 2) {
                     world.setBlockState(pos, state.with(EnchantedStoneBlock.GLOW, 2));
-                } else if (distance >= 7 && glow != 1) {
+                } else if (distance >= 49 && glow != 1) {
                     world.setBlockState(pos, state.with(EnchantedStoneBlock.GLOW, 1));
                 }
+            } else {
+                blockEntity.cachedPlayer = null;
+                blockEntity.nearPlayers = false;
+                world.setBlockState(pos, state.with(EnchantedStoneBlock.GLOW, 0));
             }
-        } else if (blockEntity.nearPlayers && !world.isClient) {
+        } else if (blockEntity.nearPlayers) {
             blockEntity.nearPlayers = false;
+            blockEntity.cachedPlayer = null;
             world.setBlockState(pos, state.with(EnchantedStoneBlock.GLOW, 0));
         }
 
-        if (world.getTime() % 4 == 0 && world.getRandom().nextBoolean() && blockEntity.nearPlayers) {
+        if (blockEntity.nearPlayers && world.getTime() % 4 == 0 && world.getRandom().nextBoolean()) {
             world.playSound(null, pos, SoundEvents.BLOCK_AMETHYST_BLOCK_CHIME, SoundCategory.BLOCKS, 1f, 1f);
         }
     }
 
-    private static boolean isEnchantedStone(BlockState state) {
-        return state.isOf(SwordsAndShieldBlocks.ENCHANTED_STONE) || state.isOf(SwordsAndShieldBlocks.ENCHANTED_DEEPSLATE);
+    @Nullable
+    private static PlayerEntity findClosestValidPlayer(World world, BlockPos pos, EnchantedStoneBlockEntity blockEntity) {
+        List<PlayerEntity> players = world.getEntitiesByClass(PlayerEntity.class, new Box(pos).expand(9d), player -> player instanceof EnchantmentPlayer enchantmentPlayer && !enchantmentPlayer.gbw$getEnchantments().contains(blockEntity.getEnchantment()));
+        if (players.isEmpty())
+            return null;
+        else {
+            players.sort(Comparator.comparingDouble(player -> pos.toCenterPos().squaredDistanceTo(player.getPos())));
+            return players.getFirst();
+        }
     }
 }

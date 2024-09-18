@@ -1,6 +1,7 @@
 package dev.creoii.greatbigworld.swordsandshields.block;
 
 import com.mojang.serialization.MapCodec;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldGameEvents;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsBlockEntities;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsCriteria;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
@@ -23,6 +24,7 @@ import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
+import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
@@ -53,7 +55,7 @@ public class EnchantedStoneBlock extends BlockWithEntity {
 
     @Nullable
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(World world, BlockState state, BlockEntityType<T> type) {
-        return validateTicker(type, SwordsAndShieldsBlockEntities.ENCHANTED_STONE, EnchantedStoneBlockEntity::tick);
+        return world.isClient ? null : validateTicker(type, SwordsAndShieldsBlockEntities.ENCHANTED_STONE, EnchantedStoneBlockEntity::tickServer);
     }
 
     @Override
@@ -62,8 +64,11 @@ public class EnchantedStoneBlock extends BlockWithEntity {
             BlockEntity blockEntity = world.getBlockEntity(pos);
             if (blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity) {
                 if (enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment())) {
-                    if (!world.isClient)
+                    if (!world.isClient) {
+                        enchantedStoneBlockEntity.setCachedPlayer(null);
                         SwordsAndShieldsCriteria.ENCHANTMENT_LEARNED.trigger((ServerPlayerEntity) player, Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment()));
+                    }
+                    world.emitGameEvent(SwordsAndShieldGameEvents.LEARN_ENCHANTMENT, pos, GameEvent.Emitter.of(player, state));
                     world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 1f);
                     return ActionResult.success(world.isClient);
                 }

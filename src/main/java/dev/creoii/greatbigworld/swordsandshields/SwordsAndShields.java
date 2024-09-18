@@ -2,10 +2,7 @@ package dev.creoii.greatbigworld.swordsandshields;
 
 import dev.creoii.creoapi.api.event.entity.LivingEntityEvents;
 import dev.creoii.greatbigworld.swordsandshields.enchantment.EnchantmentManager;
-import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldBlocks;
-import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldItems;
-import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsBlockEntities;
-import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsCriteria;
+import dev.creoii.greatbigworld.swordsandshields.registry.*;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
 import dev.creoii.greatbigworld.swordsandshields.util.SyncStatusHud;
 import net.fabricmc.api.ModInitializer;
@@ -25,6 +22,7 @@ public class SwordsAndShields implements ModInitializer {
         SwordsAndShieldBlocks.register();
         SwordsAndShieldsBlockEntities.register();
         SwordsAndShieldItems.register();
+        SwordsAndShieldGameEvents.register();
         SwordsAndShieldsCriteria.register();
 
         PayloadTypeRegistry.playS2C().register(SyncStatusHud.PACKET_ID, SyncStatusHud.PACKET_CODEC);
