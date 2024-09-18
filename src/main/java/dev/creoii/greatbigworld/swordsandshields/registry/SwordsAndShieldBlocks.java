@@ -27,11 +27,10 @@ public final class SwordsAndShieldBlocks {
         ColorProviderRegistry.BLOCK.register((state, world, pos, tintIndex) -> {
             if (tintIndex != 0) {
                 return switch (state.get(EnchantedStoneBlock.GLOW)) {
-                    case 0 -> 5921370;
-                    case 1 -> 10194851;
-                    case 2 -> 12824784;
-                    case 3 -> 15325173;
-                    default -> -1;
+                    case 1 -> 7892862;
+                    case 2 -> 11246518;
+                    case 3 -> 14995441;
+                    default -> 5066061;
                 };
             } else return -1;
         }, ENCHANTED_STONE, ENCHANTED_DEEPSLATE);
