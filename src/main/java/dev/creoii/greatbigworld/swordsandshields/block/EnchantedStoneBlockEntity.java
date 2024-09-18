@@ -93,7 +93,7 @@ public class EnchantedStoneBlockEntity extends BlockEntity {
 
     @Nullable
     private static PlayerEntity findClosestValidPlayer(World world, BlockPos pos, EnchantedStoneBlockEntity blockEntity) {
-        List<PlayerEntity> players = world.getEntitiesByClass(PlayerEntity.class, new Box(pos).expand(9d), player -> player instanceof EnchantmentPlayer enchantmentPlayer && !enchantmentPlayer.gbw$getEnchantments().contains(blockEntity.getEnchantment()));
+        List<PlayerEntity> players = world.getEntitiesByClass(PlayerEntity.class, new Box(pos).expand(9d), player -> !player.isSpectator() && player instanceof EnchantmentPlayer enchantmentPlayer && !enchantmentPlayer.gbw$getEnchantments().contains(blockEntity.getEnchantment()));
         if (players.isEmpty())
             return null;
         else {
