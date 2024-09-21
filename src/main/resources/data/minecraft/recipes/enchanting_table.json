@@ -3,7 +3,7 @@
   "category": "misc",
   "pattern": [
     " B ",
-    "D#D",
+    "A#A",
     "###"
   ],
   "key": {
@@ -13,8 +13,8 @@
     "B": {
       "item": "minecraft:enchanted_book"
     },
-    "D": {
-      "item": "minecraft:diamond"
+    "A": {
+      "item": "minecraft:amethyst_shard"
     }
   },
   "result": {
