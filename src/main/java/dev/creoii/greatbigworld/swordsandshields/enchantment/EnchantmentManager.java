@@ -39,7 +39,7 @@ public class EnchantmentManager extends PersistentState {
 
     public static EnchantmentManager getServerState(MinecraftServer server) {
         PersistentStateManager stateManager = server.getWorld(World.OVERWORLD).getPersistentStateManager();
-        EnchantmentManager manager = stateManager.getOrCreate(TYPE, SwordsAndShields.NAMESPACE);
+        EnchantmentManager manager = stateManager.getOrCreate(TYPE, SwordsAndShields.NAMESPACE + ":known_enchantment_data");
         manager.markDirty();
         return manager;
     }
