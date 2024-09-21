@@ -27,11 +27,9 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/AbstractClientPlayerEntity;tick()V", shift = At.Shift.AFTER))
     private void gbw$tickHideStatusHuds(CallbackInfo ci) {
         if (!isCreative() && !isSpectator()) {
-            if (getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_HEALTH_HUD)) && getHealth() > 6 && !isSubmergedInWater()) {
+            if (getHealth() >= getMaxHealth() && getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_HEALTH_HUD)) && getHealth() > 6 && !isSubmergedInWater()) {
                 if (--gbw$shouldHideHealthHud < 0)
                     gbw$shouldHideHealthHud = -1;
-            } else if (getHealth() <= 6) {
-                gbw$resetHideHealthHud();
             } else gbw$resetHideHealthHud();
 
             if (getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_ARMOR_HUD)) && getArmor() > 6) {
@@ -39,11 +37,9 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
                     gbw$shouldHideArmorHud = -1;
             } else gbw$resetHideArmorHud();
 
-            if (getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_FOOD_HUD)) && getHungerManager().getFoodLevel() > 6) {
+            if (getHungerManager().getFoodLevel() >= 20 && getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_FOOD_HUD)) && getHungerManager().getFoodLevel() > 6) {
                 if (--gbw$shouldHideFoodHud < 0)
                     gbw$shouldHideFoodHud = -1;
-            } else if (getHungerManager().getFoodLevel() <= 6) {
-                gbw$resetHideFoodHud();
             } else gbw$resetHideFoodHud();
 
             if (getStatusEffects().stream().noneMatch(instance -> instance.getEffectType().isIn(SwordsAndShieldsTags.PRESERVES_EXPERIENCE_HUD))) {
@@ -51,10 +47,10 @@ public abstract class ClientPlayerEntityMixin extends AbstractClientPlayerEntity
                     gbw$shouldHideExpHud = -1;
             } else gbw$resetHideExpHud();
 
-            System.out.println("health: " + gbw$shouldHideHealthHud);
+            /*System.out.println("health: " + gbw$shouldHideHealthHud);
             System.out.println("armor: " + gbw$shouldHideArmorHud);
             System.out.println("food: " + gbw$shouldHideFoodHud);
-            System.out.println("exp: " + gbw$shouldHideExpHud);
+            System.out.println("exp: " + gbw$shouldHideExpHud);*/
         }
     }
 

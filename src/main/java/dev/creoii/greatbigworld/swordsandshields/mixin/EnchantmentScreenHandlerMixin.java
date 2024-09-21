@@ -50,7 +50,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
         ItemStack itemStack3 = itemStack;
         List<EnchantmentLevelEntry> list = generateValidEnchantments(player, world.getEnabledFeatures(), itemStack3, id, enchantmentPower[id]);
         int i = id + 1;
-        list.forEach(entry -> System.out.println(entry.enchantment.getTranslationKey()));
+        //list.forEach(entry -> System.out.println(entry.enchantment.getTranslationKey()));
         if (!list.isEmpty()) {
             player.applyEnchantmentCosts(itemStack3, i);
             if (itemStack3.isOf(Items.BOOK)) {

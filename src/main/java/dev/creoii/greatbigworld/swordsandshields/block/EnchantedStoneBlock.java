@@ -67,8 +67,7 @@ public class EnchantedStoneBlock extends BlockWithEntity {
             if (blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity) {
                 if (enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment())) {
                     if (!world.isClient) {
-                        world.setBlockState(pos, state.with(GLOW, 0));
-                        enchantedStoneBlockEntity.setCachedPlayer(null);
+                        enchantedStoneBlockEntity.refreshCachedPlayer(world, pos);
                         SwordsAndShieldsCriteria.ENCHANTMENT_LEARNED.trigger((ServerPlayerEntity) player, Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment()));
                         ServerPlayNetworking.send((ServerPlayerEntity) player, new LearnEnchantment(Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment())));
                     }

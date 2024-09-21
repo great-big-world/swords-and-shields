@@ -46,6 +46,10 @@ public class EnchantedStoneBlockEntity extends BlockEntity {
         this.cachedPlayer = cachedPlayer;
     }
 
+    public void refreshCachedPlayer(World world, BlockPos pos) {
+        setCachedPlayer(findClosestValidPlayer(world, pos, this));
+    }
+
     @Override
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         nearPlayers = nbt.getBoolean("near_players");

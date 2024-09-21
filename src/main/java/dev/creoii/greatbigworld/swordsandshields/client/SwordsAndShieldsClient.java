@@ -5,6 +5,8 @@ import dev.creoii.greatbigworld.swordsandshields.util.DynamicHudPlayer;
 import dev.creoii.greatbigworld.swordsandshields.util.LearnEnchantment;
 import dev.creoii.greatbigworld.swordsandshields.util.SyncStatusHud;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
@@ -46,6 +48,7 @@ public class SwordsAndShieldsClient implements ClientModInitializer {
         });
     }
 
+    @Environment(EnvType.CLIENT)
     public static void renderLearnEnchantmentOverlay(MinecraftClient client, DrawContext context, float tickDelta) {
         if (learnEnchantmentTime > 1 && currentEnchantment != null) {
             Text text = Text.translatable("gui.learnEnchantment", Text.translatable(currentEnchantment.getTranslationKey()));
