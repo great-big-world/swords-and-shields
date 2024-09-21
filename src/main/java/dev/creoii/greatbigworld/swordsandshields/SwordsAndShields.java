@@ -58,7 +58,7 @@ public class SwordsAndShields implements ModInitializer {
             }
         });
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
-            if (handler.player instanceof EnchantmentPlayer enchantmentPlayer) {
+            if (handler.player instanceof EnchantmentPlayer enchantmentPlayer && !enchantmentPlayer.gbw$getEnchantments().isEmpty()) {
                 EnchantmentManager manager = EnchantmentManager.getServerState(server);
                 manager.players.put(handler.player.getUuid(), EnchantmentManager.writeEnchantments(enchantmentPlayer.gbw$getEnchantments()));
             }
