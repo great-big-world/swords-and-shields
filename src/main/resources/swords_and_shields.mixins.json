@@ -10,7 +10,8 @@
     "entity.AbstractSkeletonEntityMixin",
     "entity.FireworkRocketEntityMixin",
     "entity.PlayerEntityMixin",
-    "entity.ServerPlayerEntityMixin"
+    "entity.ServerPlayerEntityMixin",
+    "world.JungleTempleGeneratorMixin"
   ],
   "client": [
     "client.ClientPlayerEntityMixin",

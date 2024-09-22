@@ -63,8 +63,9 @@ public class EnchantedStoneBlockEntity extends BlockEntity {
     }
 
     public static void tickServer(World world, BlockPos pos, BlockState state, EnchantedStoneBlockEntity blockEntity) {
-        if (blockEntity.getCachedPlayer() == null || (blockEntity.getCachedPlayer() instanceof EnchantmentPlayer enchantmentPlayer && enchantmentPlayer.gbw$getEnchantments().contains(blockEntity.getEnchantment())))
+        if (blockEntity.getCachedPlayer() == null || (blockEntity.getCachedPlayer() instanceof EnchantmentPlayer enchantmentPlayer && enchantmentPlayer.gbw$getEnchantments().contains(blockEntity.getEnchantment()))) {
             blockEntity.cachedPlayer = findClosestValidPlayer(world, pos, blockEntity);
+        }
 
         if (blockEntity.getCachedPlayer() != null) {
             blockEntity.nearPlayers = true;
