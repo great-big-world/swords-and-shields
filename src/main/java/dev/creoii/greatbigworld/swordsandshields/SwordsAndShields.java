@@ -1,6 +1,7 @@
 package dev.creoii.greatbigworld.swordsandshields;
 
 import dev.creoii.creoapi.api.event.entity.LivingEntityEvents;
+import dev.creoii.creoapi.api.modification.BlockModification;
 import dev.creoii.greatbigworld.swordsandshields.enchantment.EnchantmentManager;
 import dev.creoii.greatbigworld.swordsandshields.registry.*;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
@@ -12,6 +13,7 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -69,5 +71,7 @@ public class SwordsAndShields implements ModInitializer {
                 enchantmentPlayer.gbw$getEnchantments().clear();
             }
         });
+
+        BlockModification.INSTANCE.setHardness(Blocks.ENCHANTING_TABLE, 15f);
     }
 }
