@@ -18,6 +18,9 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 
+// change enchanted stone to chiseled stones
+// use nbt files to place enchanted stone as an actual structure piece
+// add one-two more 'glow' levels
 public class SwordsAndShields implements ModInitializer {
     public static final String NAMESPACE = "great_big_world";
 

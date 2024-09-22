@@ -11,6 +11,7 @@
     "entity.FireworkRocketEntityMixin",
     "entity.PlayerEntityMixin",
     "entity.ServerPlayerEntityMixin",
+    "world.DesertTempleGeneratorMixin",
     "world.JungleTempleGeneratorMixin"
   ],
   "client": [
