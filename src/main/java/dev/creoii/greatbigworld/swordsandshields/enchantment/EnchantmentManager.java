@@ -1,6 +1,5 @@
 package dev.creoii.greatbigworld.swordsandshields.enchantment;
 
-import dev.creoii.greatbigworld.swordsandshields.SwordsAndShields;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
