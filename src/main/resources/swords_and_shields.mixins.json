@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [
     "AdvancementFrameMixin",
+    "EnchantingTableBlockMixin",
     "EnchantmentScreenHandlerMixin",
     "WindChargeItemMixin",
     "entity.AbstractSkeletonEntityMixin",

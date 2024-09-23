@@ -1,7 +1,9 @@
 package dev.creoii.greatbigworld.swordsandshields.client;
 
-import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldBlocks;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsBlocks;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsScreenHandlers;
 import dev.creoii.greatbigworld.swordsandshields.util.DynamicHudPlayer;
+import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
 import dev.creoii.greatbigworld.swordsandshields.util.LearnEnchantment;
 import dev.creoii.greatbigworld.swordsandshields.util.SyncStatusHud;
 import net.fabricmc.api.ClientModInitializer;
@@ -23,7 +25,8 @@ public class SwordsAndShieldsClient implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        SwordsAndShieldBlocks.registerClient();
+        SwordsAndShieldsBlocks.registerClient();
+        SwordsAndShieldsScreenHandlers.registerClient();
 
         ClientPlayNetworking.registerGlobalReceiver(SyncStatusHud.PACKET_ID, (payload, context) -> {
             SyncStatusHud.Type type = payload.type();
@@ -44,6 +47,9 @@ public class SwordsAndShieldsClient implements ClientModInitializer {
             context.client().execute(() -> {
                 currentEnchantment = Registries.ENCHANTMENT.get(enchantment);
                 learnEnchantmentTime = 140; // 7 seconds
+                if (context.player() instanceof EnchantmentPlayer enchantmentPlayer) {
+                    enchantmentPlayer.gbw$addEnchantment(currentEnchantment);
+                }
             });
         });
     }

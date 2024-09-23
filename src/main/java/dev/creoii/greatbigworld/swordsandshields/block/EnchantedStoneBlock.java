@@ -1,7 +1,7 @@
 package dev.creoii.greatbigworld.swordsandshields.block;
 
 import com.mojang.serialization.MapCodec;
-import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldGameEvents;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsGameEvents;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsBlockEntities;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsCriteria;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
@@ -71,7 +71,7 @@ public class EnchantedStoneBlock extends BlockWithEntity {
                         SwordsAndShieldsCriteria.ENCHANTMENT_LEARNED.trigger((ServerPlayerEntity) player, Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment()));
                         ServerPlayNetworking.send((ServerPlayerEntity) player, new LearnEnchantment(Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment())));
                     }
-                    world.emitGameEvent(SwordsAndShieldGameEvents.LEARN_ENCHANTMENT, pos, GameEvent.Emitter.of(player, state));
+                    world.emitGameEvent(SwordsAndShieldsGameEvents.LEARN_ENCHANTMENT, pos, GameEvent.Emitter.of(player, state));
                     world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 1f);
                     return ActionResult.success(world.isClient);
                 }

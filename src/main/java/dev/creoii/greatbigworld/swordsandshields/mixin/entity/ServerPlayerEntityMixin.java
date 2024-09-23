@@ -1,7 +1,7 @@
 package dev.creoii.greatbigworld.swordsandshields.mixin.entity;
 
 import com.mojang.authlib.GameProfile;
-import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldGameEvents;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsGameEvents;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
 import dev.creoii.greatbigworld.swordsandshields.util.LearnEnchantment;
 import dev.creoii.greatbigworld.swordsandshields.util.SyncStatusHud;
@@ -75,7 +75,7 @@ public abstract class ServerPlayerEntityMixin extends PlayerEntity {
                                 itemEnchantments.getEnchantments().forEach(entry -> {
                                     if (enchantmentPlayer.gbw$addEnchantment(entry.value()) && entry.getKey().isPresent()) {
                                         ServerPlayNetworking.send(serverPlayer, new LearnEnchantment(entry.getKey().get().getValue()));
-                                        world.emitGameEvent(SwordsAndShieldGameEvents.LEARN_ENCHANTMENT, getPos(), GameEvent.Emitter.of(serverPlayer));
+                                        world.emitGameEvent(SwordsAndShieldsGameEvents.LEARN_ENCHANTMENT, getPos(), GameEvent.Emitter.of(serverPlayer));
                                         world.playSound(serverPlayer, getBlockPos(), SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 1f);
                                     }
                                 });

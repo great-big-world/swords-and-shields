@@ -26,10 +26,11 @@ public class SwordsAndShields implements ModInitializer {
 
     @Override
     public void onInitialize() {
-        SwordsAndShieldBlocks.register();
+        SwordsAndShieldsBlocks.register();
         SwordsAndShieldsBlockEntities.register();
-        SwordsAndShieldItems.register();
-        SwordsAndShieldGameEvents.register();
+        SwordsAndShieldsItems.register();
+        SwordsAndShieldsScreenHandlers.register();
+        SwordsAndShieldsGameEvents.register();
         SwordsAndShieldsCriteria.register();
 
         PayloadTypeRegistry.playS2C().register(SyncStatusHud.PACKET_ID, SyncStatusHud.PACKET_CODEC);

@@ -7,7 +7,7 @@ import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.util.Identifier;
 import net.minecraft.world.event.GameEvent;
 
-public final class SwordsAndShieldGameEvents {
+public final class SwordsAndShieldsGameEvents {
     public static RegistryEntry<GameEvent> LEARN_ENCHANTMENT;
 
     public static void register() {
