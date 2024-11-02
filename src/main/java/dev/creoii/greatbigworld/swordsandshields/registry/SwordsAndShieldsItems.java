@@ -1,7 +1,6 @@
 package dev.creoii.greatbigworld.swordsandshields.registry;
 
-import dev.creoii.creoapi.api.item.CreoItemSettings;
-import dev.creoii.greatbigworld.swordsandshields.SwordsAndShields;
+import dev.creoii.greatbigworld.GreatBigWorld;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.BlockItem;
 import net.minecraft.item.Item;
@@ -13,12 +12,12 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Rarity;
 
 public final class SwordsAndShieldsItems {
-    public static final Item ENCHANTED_STONE = new BlockItem(SwordsAndShieldsBlocks.ENCHANTED_STONE, new CreoItemSettings().rarity(Rarity.UNCOMMON));
-    public static final Item ENCHANTED_DEEPSLATE = new BlockItem(SwordsAndShieldsBlocks.ENCHANTED_DEEPSLATE, new CreoItemSettings().rarity(Rarity.UNCOMMON));
+    public static final Item ENCHANTED_STONE = new BlockItem(SwordsAndShieldsBlocks.ENCHANTED_STONE, new Item.Settings().rarity(Rarity.UNCOMMON));
+    public static final Item ENCHANTED_DEEPSLATE = new BlockItem(SwordsAndShieldsBlocks.ENCHANTED_DEEPSLATE, new Item.Settings().rarity(Rarity.UNCOMMON));
 
     public static void register() {
-        Registry.register(Registries.ITEM, new Identifier(SwordsAndShields.NAMESPACE, "enchanted_stone"), ENCHANTED_STONE);
-        Registry.register(Registries.ITEM, new Identifier(SwordsAndShields.NAMESPACE, "enchanted_deepslate"), ENCHANTED_DEEPSLATE);
+        Registry.register(Registries.ITEM, new Identifier(GreatBigWorld.NAMESPACE, "enchanted_stone"), ENCHANTED_STONE);
+        Registry.register(Registries.ITEM, new Identifier(GreatBigWorld.NAMESPACE, "enchanted_deepslate"), ENCHANTED_DEEPSLATE);
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> {
             entries.addAfter(Items.ENCHANTING_TABLE, ENCHANTED_STONE, ENCHANTED_DEEPSLATE);

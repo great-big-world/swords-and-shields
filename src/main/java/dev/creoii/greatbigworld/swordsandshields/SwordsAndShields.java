@@ -1,7 +1,5 @@
 package dev.creoii.greatbigworld.swordsandshields;
 
-import dev.creoii.creoapi.api.event.entity.LivingEntityEvents;
-import dev.creoii.creoapi.api.modification.BlockModification;
 import dev.creoii.greatbigworld.swordsandshields.enchantment.EnchantmentManager;
 import dev.creoii.greatbigworld.swordsandshields.registry.*;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
@@ -13,7 +11,6 @@ import net.fabricmc.fabric.api.event.player.AttackEntityCallback;
 import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.block.Blocks;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
@@ -22,8 +19,6 @@ import net.minecraft.util.ActionResult;
 // use nbt files to place enchanted stone as an actual structure piece
 // add one-two more 'glow' levels
 public class SwordsAndShields implements ModInitializer {
-    public static final String NAMESPACE = "great_big_world";
-
     @Override
     public void onInitialize() {
         SwordsAndShieldsBlocks.register();
@@ -36,14 +31,14 @@ public class SwordsAndShields implements ModInitializer {
         PayloadTypeRegistry.playS2C().register(SyncStatusHud.PACKET_ID, SyncStatusHud.PACKET_CODEC);
         PayloadTypeRegistry.playS2C().register(LearnEnchantment.PACKET_ID, LearnEnchantment.PACKET_CODEC);
 
-        LivingEntityEvents.EQUIP_STACK.register((livingEntity, slot, oldStack, newStack) -> {
+        /*LivingEntityEvents.EQUIP_STACK.register((livingEntity, slot, oldStack, newStack) -> {
             if (!livingEntity.getWorld().isClient) {
                 if (livingEntity instanceof ServerPlayerEntity serverPlayer && serverPlayer.interactionManager != null && serverPlayer.networkHandler != null) {
                     ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(SyncStatusHud.Type.ARMOR));
                 }
             }
             return true;
-        });
+        });*/
         AttackEntityCallback.EVENT.register((player, world, hand, entity, hitResult) -> {
             if (!world.isClient) {
                 if (player instanceof ServerPlayerEntity serverPlayer && serverPlayer.interactionManager != null && serverPlayer.networkHandler != null) {
@@ -76,6 +71,6 @@ public class SwordsAndShields implements ModInitializer {
             }
         });
 
-        BlockModification.INSTANCE.setHardness(Blocks.ENCHANTING_TABLE, 15f);
+        //BlockModification.INSTANCE.setHardness(Blocks.ENCHANTING_TABLE, 15f);
     }
 }

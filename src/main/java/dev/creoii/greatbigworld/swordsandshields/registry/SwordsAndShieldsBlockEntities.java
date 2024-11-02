@@ -1,5 +1,6 @@
 package dev.creoii.greatbigworld.swordsandshields.registry;
 
+import dev.creoii.greatbigworld.GreatBigWorld;
 import dev.creoii.greatbigworld.swordsandshields.SwordsAndShields;
 import dev.creoii.greatbigworld.swordsandshields.block.EnchantedStoneBlockEntity;
 import net.minecraft.block.entity.BlockEntityType;
@@ -11,6 +12,6 @@ public final class SwordsAndShieldsBlockEntities {
     public static final BlockEntityType<EnchantedStoneBlockEntity> ENCHANTED_STONE = BlockEntityType.Builder.create(EnchantedStoneBlockEntity::new, SwordsAndShieldsBlocks.ENCHANTED_STONE, SwordsAndShieldsBlocks.ENCHANTED_DEEPSLATE).build();
 
     public static void register() {
-        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(SwordsAndShields.NAMESPACE, "enchanted_stone"), ENCHANTED_STONE);
+        Registry.register(Registries.BLOCK_ENTITY_TYPE, new Identifier(GreatBigWorld.NAMESPACE, "enchanted_stone"), ENCHANTED_STONE);
     }
 }

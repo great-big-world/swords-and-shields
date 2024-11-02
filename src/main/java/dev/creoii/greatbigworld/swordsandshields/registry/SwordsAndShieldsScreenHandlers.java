@@ -1,5 +1,6 @@
 package dev.creoii.greatbigworld.swordsandshields.registry;
 
+import dev.creoii.greatbigworld.GreatBigWorld;
 import dev.creoii.greatbigworld.swordsandshields.SwordsAndShields;
 import dev.creoii.greatbigworld.swordsandshields.client.EnchantmentScreen;
 import dev.creoii.greatbigworld.swordsandshields.screen.EnchantmentScreenHandler;
@@ -16,7 +17,7 @@ public final class SwordsAndShieldsScreenHandlers {
     public static final ScreenHandlerType<EnchantmentScreenHandler> ENCHANTMENT = new ScreenHandlerType<>(EnchantmentScreenHandler::new, FeatureFlags.VANILLA_FEATURES);
 
     public static void register() {
-        Registry.register(Registries.SCREEN_HANDLER, new Identifier(SwordsAndShields.NAMESPACE, "enchantment"), ENCHANTMENT);
+        Registry.register(Registries.SCREEN_HANDLER, new Identifier(GreatBigWorld.NAMESPACE, "enchantment"), ENCHANTMENT);
     }
 
     @Environment(EnvType.CLIENT)

@@ -1,5 +1,6 @@
 package dev.creoii.greatbigworld.swordsandshields.registry;
 
+import dev.creoii.greatbigworld.GreatBigWorld;
 import dev.creoii.greatbigworld.swordsandshields.SwordsAndShields;
 import dev.creoii.greatbigworld.swordsandshields.block.EnchantedStoneBlock;
 import net.fabricmc.api.EnvType;
@@ -17,8 +18,8 @@ public final class SwordsAndShieldsBlocks {
     public static final Block ENCHANTED_DEEPSLATE = new EnchantedStoneBlock();
 
     public static void register() {
-        Registry.register(Registries.BLOCK, new Identifier(SwordsAndShields.NAMESPACE, "enchanted_stone"), ENCHANTED_STONE);
-        Registry.register(Registries.BLOCK, new Identifier(SwordsAndShields.NAMESPACE, "enchanted_deepslate"), ENCHANTED_DEEPSLATE);
+        Registry.register(Registries.BLOCK, new Identifier(GreatBigWorld.NAMESPACE, "enchanted_stone"), ENCHANTED_STONE);
+        Registry.register(Registries.BLOCK, new Identifier(GreatBigWorld.NAMESPACE, "enchanted_deepslate"), ENCHANTED_DEEPSLATE);
     }
 
     @Environment(EnvType.CLIENT)

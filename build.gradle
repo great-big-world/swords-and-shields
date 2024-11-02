@@ -1,3 +1,16 @@
 loom {
     accessWidenerPath = file("src/main/resources/swords_and_shields.accesswidener")
 }
+
+configurations {
+    common {
+        canBeResolved = true
+        canBeConsumed = false
+    }
+    compileClasspath.extendsFrom common
+    runtimeClasspath.extendsFrom common
+}
+
+dependencies {
+    common(project(path: ':core', configuration: 'namedElements')) { transitive false }
+}
