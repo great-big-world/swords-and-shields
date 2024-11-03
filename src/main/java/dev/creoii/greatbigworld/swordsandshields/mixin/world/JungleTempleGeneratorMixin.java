@@ -2,6 +2,7 @@ package dev.creoii.greatbigworld.swordsandshields.mixin.world;
 
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
 import net.minecraft.enchantment.Enchantments;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.structure.JungleTempleGenerator;
 import net.minecraft.structure.ShiftableStructurePiece;
 import net.minecraft.structure.StructurePieceType;

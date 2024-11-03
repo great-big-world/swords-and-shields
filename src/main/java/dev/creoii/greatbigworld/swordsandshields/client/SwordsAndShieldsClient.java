@@ -13,14 +13,16 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.registry.Registries;
+import net.minecraft.enchantment.Enchantments;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import org.jetbrains.annotations.Nullable;
 
 public class SwordsAndShieldsClient implements ClientModInitializer {
     @Nullable
-    private static Enchantment currentEnchantment = null;
+    private static RegistryKey<Enchantment> currentEnchantment = null;
     private static int learnEnchantmentTime = -1;
 
     @Override
@@ -45,9 +47,10 @@ public class SwordsAndShieldsClient implements ClientModInitializer {
         ClientPlayNetworking.registerGlobalReceiver(LearnEnchantment.PACKET_ID, (payload, context) -> {
             Identifier enchantment = payload.enchantment();
             context.client().execute(() -> {
-                currentEnchantment = Registries.ENCHANTMENT.get(enchantment);
+                currentEnchantment = context.client().world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(enchantment).get().registryKey();
                 learnEnchantmentTime = 140; // 7 seconds
                 if (context.player() instanceof EnchantmentPlayer enchantmentPlayer) {
+                    System.out.println("client enchantplayer count: " + enchantmentPlayer.gbw$getEnchantments().size());
                     enchantmentPlayer.gbw$addEnchantment(currentEnchantment);
                 }
             });
@@ -55,9 +58,9 @@ public class SwordsAndShieldsClient implements ClientModInitializer {
     }
 
     @Environment(EnvType.CLIENT)
-    public static void renderLearnEnchantmentOverlay(MinecraftClient client, DrawContext context, float tickDelta) {
-        if (learnEnchantmentTime > 1 && currentEnchantment != null) {
-            Text text = Text.translatable("gui.learnEnchantment", Text.translatable(currentEnchantment.getTranslationKey()));
+    public static void renderLearnEnchantmentOverlay(MinecraftClient client, DrawContext context) {
+        if (learnEnchantmentTime > 1 && currentEnchantment != null && client.world != null) {
+            Text text = Text.translatable("gui.learnEnchantment", client.world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).get(currentEnchantment).description());
 
             int opacity;
             if (learnEnchantmentTime > 70) {

@@ -3,11 +3,13 @@ package dev.creoii.greatbigworld.swordsandshields.mixin.entity;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
 import dev.creoii.greatbigworld.swordsandshields.util.SyncStatusHud;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.minecraft.component.type.FoodComponent;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,22 +26,22 @@ import java.util.Set;
 
 @Mixin(PlayerEntity.class)
 public abstract class PlayerEntityMixin extends LivingEntity implements EnchantmentPlayer {
-    @Unique private final Set<Enchantment> enchantments = new HashSet<>();
+    @Unique private final Set<RegistryKey<Enchantment>> enchantments = new HashSet<>();
 
     protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
 
-    public boolean gbw$addEnchantment(Enchantment enchantment) {
+    public boolean gbw$addEnchantment(RegistryKey<Enchantment> enchantment) {
         return enchantments.add(enchantment);
     }
 
-    public Set<Enchantment> gbw$getEnchantments() {
+    public Set<RegistryKey<Enchantment>> gbw$getEnchantments() {
         return enchantments;
     }
 
-    @Inject(method = "eatFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;eatFood(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;)Lnet/minecraft/item/ItemStack;"))
-    private void gbw$showHudFood(World world, ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
+    @Inject(method = "eatFood", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;eatFood(Lnet/minecraft/world/World;Lnet/minecraft/item/ItemStack;Lnet/minecraft/component/type/FoodComponent;)Lnet/minecraft/item/ItemStack;"))
+    private void gbw$showHudFood(World world, ItemStack stack, FoodComponent foodComponent, CallbackInfoReturnable<ItemStack> cir) {
         if (!world.isClient) {
             if ((PlayerEntity) (Object) this instanceof ServerPlayerEntity serverPlayer && serverPlayer.interactionManager != null && serverPlayer.networkHandler != null) {
                 ServerPlayNetworking.send(serverPlayer, new SyncStatusHud(SyncStatusHud.Type.FOOD));

@@ -3,12 +3,17 @@ package dev.creoii.greatbigworld.swordsandshields.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
 import net.minecraft.advancement.criterion.Criteria;
+import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.EnchantmentLevelEntry;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.Inventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.RegistryKeys;
+import net.minecraft.registry.entry.RegistryEntryList;
+import net.minecraft.registry.tag.EnchantmentTags;
 import net.minecraft.resource.featuretoggle.FeatureSet;
 import net.minecraft.screen.*;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -27,6 +32,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.function.BiConsumer;
 
 @Mixin(EnchantmentScreenHandler.class)
@@ -48,7 +54,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
     @Unique
     private void runButtonClick(PlayerEntity player, int id, ItemStack itemStack, ItemStack itemStack2, World world, BlockPos pos) {
         ItemStack itemStack3 = itemStack;
-        List<EnchantmentLevelEntry> list = generateValidEnchantments(player, world.getEnabledFeatures(), itemStack3, id, enchantmentPower[id]);
+        List<EnchantmentLevelEntry> list = generateValidEnchantments(world.getRegistryManager(), player, world.getEnabledFeatures(), itemStack3, id, enchantmentPower[id]);
         int i = id + 1;
         //list.forEach(entry -> System.out.println(entry.enchantment.getTranslationKey()));
         if (!list.isEmpty()) {
@@ -82,15 +88,19 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandler {
     }
 
     @Unique
-    private List<EnchantmentLevelEntry> generateValidEnchantments(PlayerEntity player, FeatureSet enabledFeatures, ItemStack stack, int slot, int level) {
+    private List<EnchantmentLevelEntry> generateValidEnchantments(DynamicRegistryManager registryManager, PlayerEntity player, FeatureSet enabledFeatures, ItemStack stack, int slot, int level) {
         random.setSeed(seed.get() + slot);
-        List<EnchantmentLevelEntry> list = EnchantmentHelper.generateEnchantments(enabledFeatures, random, stack, level, false);
-        if (stack.isOf(Items.BOOK) && list.size() > 1) {
-            list.remove(random.nextInt(list.size()));
-        }
+        Optional<RegistryEntryList.Named<Enchantment>> optional = registryManager.get(RegistryKeys.ENCHANTMENT).getEntryList(EnchantmentTags.IN_ENCHANTING_TABLE);
+        if (optional.isPresent()) {
+            List<EnchantmentLevelEntry> list = EnchantmentHelper.generateEnchantments(random, stack, level, optional.get().stream());
+            if (stack.isOf(Items.BOOK) && list.size() > 1) {
+                list.remove(random.nextInt(list.size()));
+            }
 
-        return list.stream().filter(entry -> {
-            return player instanceof EnchantmentPlayer enchantmentPlayer && enchantmentPlayer.gbw$getEnchantments().contains(entry.enchantment);
-        }).toList();
+            return list.stream().filter(entry -> {
+                return player instanceof EnchantmentPlayer enchantmentPlayer && enchantmentPlayer.gbw$getEnchantments().contains(entry.enchantment);
+            }).toList();
+        }
+        return List.of();
     }
 }

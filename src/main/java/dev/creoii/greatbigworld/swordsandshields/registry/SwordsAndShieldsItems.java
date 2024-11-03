@@ -16,8 +16,8 @@ public final class SwordsAndShieldsItems {
     public static final Item ENCHANTED_DEEPSLATE = new BlockItem(SwordsAndShieldsBlocks.ENCHANTED_DEEPSLATE, new Item.Settings().rarity(Rarity.UNCOMMON));
 
     public static void register() {
-        Registry.register(Registries.ITEM, new Identifier(GreatBigWorld.NAMESPACE, "enchanted_stone"), ENCHANTED_STONE);
-        Registry.register(Registries.ITEM, new Identifier(GreatBigWorld.NAMESPACE, "enchanted_deepslate"), ENCHANTED_DEEPSLATE);
+        Registry.register(Registries.ITEM, Identifier.of(GreatBigWorld.NAMESPACE, "enchanted_stone"), ENCHANTED_STONE);
+        Registry.register(Registries.ITEM, Identifier.of(GreatBigWorld.NAMESPACE, "enchanted_deepslate"), ENCHANTED_DEEPSLATE);
 
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.FUNCTIONAL).register(entries -> {
             entries.addAfter(Items.ENCHANTING_TABLE, ENCHANTED_STONE, ENCHANTED_DEEPSLATE);

@@ -12,6 +12,6 @@ public final class SwordsAndShieldsGameEvents {
     public static RegistryEntry<GameEvent> LEARN_ENCHANTMENT;
 
     public static void register() {
-        LEARN_ENCHANTMENT = Registry.registerReference(Registries.GAME_EVENT, new Identifier(GreatBigWorld.NAMESPACE, "learn_enchantment"), new GameEvent(16));
+        LEARN_ENCHANTMENT = Registry.registerReference(Registries.GAME_EVENT, Identifier.of(GreatBigWorld.NAMESPACE, "learn_enchantment"), new GameEvent(16));
     }
 }

@@ -20,6 +20,6 @@ public class EnchantingTableBlockEntityRendererMixin {
 
     @Inject(method = "render(Lnet/minecraft/block/entity/EnchantingTableBlockEntity;FLnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;pop()V"))
     private void gbw$renderEnchantingTableBookGlint(EnchantingTableBlockEntity enchantingTableBlockEntity, float f, MatrixStack matrixStack, VertexConsumerProvider vertexConsumerProvider, int i, int j, CallbackInfo ci) {
-        book.render(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getEntityGlint()), i, OverlayTexture.DEFAULT_UV, 1f, 1f, 1f, 1f);
+        book.render(matrixStack, vertexConsumerProvider.getBuffer(RenderLayer.getEntityGlint()), i, OverlayTexture.DEFAULT_UV);
     }
 }

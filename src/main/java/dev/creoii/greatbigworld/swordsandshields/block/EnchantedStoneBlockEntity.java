@@ -7,10 +7,12 @@ import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registries;
+import net.minecraft.registry.RegistryKey;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Box;
 import net.minecraft.world.World;
@@ -21,7 +23,7 @@ import java.util.List;
 
 public class EnchantedStoneBlockEntity extends BlockEntity {
     @Nullable
-    private Enchantment enchantment = null;
+    private RegistryKey<Enchantment> enchantment = null;
     private boolean nearPlayers = false;
     @Nullable
     private PlayerEntity cachedPlayer = null;
@@ -30,15 +32,19 @@ public class EnchantedStoneBlockEntity extends BlockEntity {
         super(SwordsAndShieldsBlockEntities.ENCHANTED_STONE, pos, state);
     }
 
-    public @Nullable Enchantment getEnchantment() {
+    public @Nullable RegistryKey<Enchantment> getEnchantment() {
         return enchantment;
+    }
+
+    public boolean hasEnchantment() {
+        return enchantment != null;
     }
 
     public @Nullable PlayerEntity getCachedPlayer() {
         return cachedPlayer;
     }
 
-    public void setEnchantment(@Nullable Enchantment enchantment) {
+    public void setEnchantment(@Nullable RegistryKey<Enchantment> enchantment) {
         this.enchantment = enchantment;
     }
 
@@ -53,16 +59,21 @@ public class EnchantedStoneBlockEntity extends BlockEntity {
     @Override
     protected void readNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         nearPlayers = nbt.getBoolean("near_players");
-        enchantment = Registries.ENCHANTMENT.get(nbt.getInt("enchantment"));
+        if (hasEnchantment())
+            enchantment = registryLookup.getWrapperOrThrow(RegistryKeys.ENCHANTMENT).getOrThrow(RegistryKey.of(RegistryKeys.ENCHANTMENT, Identifier.of(nbt.getString("enchantment")))).registryKey();
     }
 
     @Override
     protected void writeNbt(NbtCompound nbt, RegistryWrapper.WrapperLookup registryLookup) {
         nbt.putBoolean("near_players", nearPlayers);
-        nbt.putInt("enchantment", Registries.ENCHANTMENT.getRawId(enchantment));
+        if (hasEnchantment())
+            nbt.putString("enchantment", String.valueOf(enchantment.getValue()));
     }
 
     public static void tickServer(World world, BlockPos pos, BlockState state, EnchantedStoneBlockEntity blockEntity) {
+        if (!blockEntity.hasEnchantment())
+            return;
+
         if (blockEntity.getCachedPlayer() == null || (blockEntity.getCachedPlayer() instanceof EnchantmentPlayer enchantmentPlayer && enchantmentPlayer.gbw$getEnchantments().contains(blockEntity.getEnchantment()))) {
             blockEntity.cachedPlayer = findClosestValidPlayer(world, pos, blockEntity);
         }

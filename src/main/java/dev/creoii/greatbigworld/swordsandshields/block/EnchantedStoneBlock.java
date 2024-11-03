@@ -11,11 +11,9 @@ import net.minecraft.block.*;
 import net.minecraft.block.entity.BlockEntity;
 import net.minecraft.block.entity.BlockEntityTicker;
 import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.particle.ParticleTypes;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.registry.RegistryKeys;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
@@ -29,10 +27,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.event.GameEvent;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
-
 public class EnchantedStoneBlock extends BlockWithEntity {
-    private static final Random RANDOM = Random.create();
     public static final IntProperty GLOW = IntProperty.of("glow", 0, 3);
 
     public EnchantedStoneBlock() {
@@ -47,12 +42,7 @@ public class EnchantedStoneBlock extends BlockWithEntity {
 
     @Override
     public @Nullable BlockEntity createBlockEntity(BlockPos pos, BlockState state) {
-        EnchantedStoneBlockEntity blockEntity = new EnchantedStoneBlockEntity(pos, state);
-        Optional<RegistryEntry.Reference<Enchantment>> enchantment = Registries.ENCHANTMENT.getRandom(RANDOM);
-        if (enchantment.isEmpty())
-            return null;
-        blockEntity.setEnchantment(enchantment.get().value());
-        return blockEntity;
+        return new EnchantedStoneBlockEntity(pos, state);
     }
 
     @Nullable
@@ -64,12 +54,13 @@ public class EnchantedStoneBlock extends BlockWithEntity {
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
         if (player instanceof EnchantmentPlayer enchantmentPlayer && state.get(GLOW) != 0) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
-            if (blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity) {
-                if (enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment())) {
+            if (blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity && enchantedStoneBlockEntity.hasEnchantment()) {
+                if (!world.isClient && enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment())) {
+                    System.out.println("server enchantplayer count: " + enchantmentPlayer.gbw$getEnchantments().size());
                     if (!world.isClient) {
                         enchantedStoneBlockEntity.refreshCachedPlayer(world, pos);
-                        SwordsAndShieldsCriteria.ENCHANTMENT_LEARNED.trigger((ServerPlayerEntity) player, Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment()));
-                        ServerPlayNetworking.send((ServerPlayerEntity) player, new LearnEnchantment(Registries.ENCHANTMENT.getId(enchantedStoneBlockEntity.getEnchantment())));
+                        SwordsAndShieldsCriteria.ENCHANTMENT_LEARNED.trigger((ServerPlayerEntity) player, enchantedStoneBlockEntity.getEnchantment().getValue());
+                        ServerPlayNetworking.send((ServerPlayerEntity) player, new LearnEnchantment(enchantedStoneBlockEntity.getEnchantment().getValue()));
                     }
                     world.emitGameEvent(SwordsAndShieldsGameEvents.LEARN_ENCHANTMENT, pos, GameEvent.Emitter.of(player, state));
                     world.playSound(player, pos, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1f, 1f);
@@ -82,7 +73,8 @@ public class EnchantedStoneBlock extends BlockWithEntity {
 
     @Override
     public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
-        if (state.get(GLOW) != 0) {
+        BlockEntity blockEntity = world.getBlockEntity(pos);
+        if (state.get(GLOW) != 0 && blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity && enchantedStoneBlockEntity.hasEnchantment()) {
             for (int i = 0; i < 4; ++i) {
                 double d = (double) pos.getX() + random.nextDouble();
                 double f = (double) pos.getZ() + random.nextDouble();

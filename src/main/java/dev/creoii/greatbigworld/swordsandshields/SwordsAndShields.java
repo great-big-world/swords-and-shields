@@ -12,6 +12,7 @@ import net.fabricmc.fabric.api.networking.v1.PayloadTypeRegistry;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.ActionResult;
 
@@ -52,7 +53,7 @@ public class SwordsAndShields implements ModInitializer {
             if (handler.player instanceof EnchantmentPlayer enchantmentPlayer) {
                 EnchantmentManager manager = EnchantmentManager.getServerState(server);
                 if (manager.players.containsKey(handler.player.getUuid())) {
-                    for (Enchantment enchantment : EnchantmentManager.readEnchantments(manager.players.get(handler.player.getUuid()))) {
+                    for (RegistryKey<Enchantment> enchantment : EnchantmentManager.readEnchantments(server.getRegistryManager(), manager.players.get(handler.player.getUuid()))) {
                         enchantmentPlayer.gbw$addEnchantment(enchantment);
                     }
                 }
@@ -61,7 +62,7 @@ public class SwordsAndShields implements ModInitializer {
         ServerPlayConnectionEvents.DISCONNECT.register((handler, server) -> {
             if (handler.player instanceof EnchantmentPlayer enchantmentPlayer && !enchantmentPlayer.gbw$getEnchantments().isEmpty()) {
                 EnchantmentManager manager = EnchantmentManager.getServerState(server);
-                manager.players.put(handler.player.getUuid(), EnchantmentManager.writeEnchantments(enchantmentPlayer.gbw$getEnchantments()));
+                manager.players.put(handler.player.getUuid(), EnchantmentManager.writeEnchantments(server.getRegistryManager(), enchantmentPlayer.gbw$getEnchantments()));
             }
         });
 

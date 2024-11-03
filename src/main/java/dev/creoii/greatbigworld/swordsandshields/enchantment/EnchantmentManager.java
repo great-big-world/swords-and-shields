@@ -3,8 +3,7 @@ package dev.creoii.greatbigworld.swordsandshields.enchantment;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.*;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.PersistentState;
 import net.minecraft.world.PersistentStateManager;
@@ -14,7 +13,6 @@ import java.util.*;
 
 public class EnchantmentManager extends PersistentState {
     private static final Type<EnchantmentManager> TYPE = new Type<>(EnchantmentManager::new, EnchantmentManager::createFromNbt, null);
-    private static final int BASE = Registries.ENCHANTMENT.size();
     public HashMap<UUID, Long> players = new HashMap<>();
 
     @Override
@@ -48,27 +46,30 @@ public class EnchantmentManager extends PersistentState {
         return serverState.players.computeIfAbsent(player.getUuid(), uuid -> -1L);
     }
 
-    public static long writeEnchantments(Set<Enchantment> enchantmentsSet) {
+    public static long writeEnchantments(DynamicRegistryManager.Immutable registryManager, Set<RegistryKey<Enchantment>> enchantmentsSet) {
         if (enchantmentsSet.isEmpty())
             return -1;
 
+        Registry<Enchantment> enchantmentRegistry = registryManager.get(RegistryKeys.ENCHANTMENT);
         long encodedEnchantments = 0;
         int i = 0;
-        for (Enchantment enchantment : enchantmentsSet) {
-            encodedEnchantments += (long) (Registries.ENCHANTMENT.getRawId(enchantment) * Math.pow(BASE, i));
+        for (RegistryKey<Enchantment> enchantment : enchantmentsSet) {
+            encodedEnchantments += (long) (enchantmentRegistry.getRawId(enchantmentRegistry.get(enchantment)) * Math.pow(enchantmentRegistry.size(), i));
             ++i;
         }
 
         return encodedEnchantments;
     }
 
-    public static Set<Enchantment> readEnchantments(long enchantments) {
-        Set<Enchantment> enchantmentsSet = new HashSet<>();
+    public static Set<RegistryKey<Enchantment>> readEnchantments(DynamicRegistryManager.Immutable registryManager, long enchantments) {
+        Registry<Enchantment> enchantmentRegistry = registryManager.get(RegistryKeys.ENCHANTMENT);
+
+        Set<RegistryKey<Enchantment>> enchantmentsSet = new HashSet<>();
         while (enchantments > 0) {
-            Enchantment enchantment = Registries.ENCHANTMENT.get((int) (enchantments % BASE));
+            Enchantment enchantment = enchantmentRegistry.get((int) (enchantments % enchantmentRegistry.size()));
             if (enchantment != null) {
-                enchantmentsSet.add(enchantment);
-                enchantments /= BASE;
+                enchantmentsSet.add(enchantmentRegistry.getKey(enchantment).get());
+                enchantments /= enchantmentRegistry.size();
             }
         }
         return enchantmentsSet;

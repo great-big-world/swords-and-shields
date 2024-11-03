@@ -8,7 +8,7 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
 public record LearnEnchantment(Identifier enchantment) implements CustomPayload {
-    public static final CustomPayload.Id<LearnEnchantment> PACKET_ID = new CustomPayload.Id<>(new Identifier(GreatBigWorld.NAMESPACE, "learn_enchantment"));
+    public static final CustomPayload.Id<LearnEnchantment> PACKET_ID = new CustomPayload.Id<>(Identifier.of(GreatBigWorld.NAMESPACE, "learn_enchantment"));
     public static final PacketCodec<RegistryByteBuf, LearnEnchantment> PACKET_CODEC = PacketCodec.of(LearnEnchantment::write, LearnEnchantment::new);
 
     public LearnEnchantment(RegistryByteBuf buf) {

@@ -11,6 +11,6 @@ public final class SwordsAndShieldsCriteria {
     public static final EnchantmentLearnedCriterion ENCHANTMENT_LEARNED = new EnchantmentLearnedCriterion();
 
     public static void register() {
-        Registry.register(Registries.CRITERION, new Identifier(GreatBigWorld.NAMESPACE, "enchantment_learned"), ENCHANTMENT_LEARNED);
+        Registry.register(Registries.CRITERION, Identifier.of(GreatBigWorld.NAMESPACE, "enchantment_learned"), ENCHANTMENT_LEARNED);
     }
 }

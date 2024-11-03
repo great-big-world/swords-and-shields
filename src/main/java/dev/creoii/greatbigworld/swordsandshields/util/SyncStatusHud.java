@@ -8,7 +8,7 @@ import net.minecraft.network.packet.CustomPayload;
 import net.minecraft.util.Identifier;
 
 public record SyncStatusHud(Type type) implements CustomPayload {
-    public static final CustomPayload.Id<SyncStatusHud> PACKET_ID = new CustomPayload.Id<>(new Identifier(GreatBigWorld.NAMESPACE, "sync_status_hud"));
+    public static final CustomPayload.Id<SyncStatusHud> PACKET_ID = new CustomPayload.Id<>(Identifier.of(GreatBigWorld.NAMESPACE, "sync_status_hud"));
     public static final PacketCodec<RegistryByteBuf, SyncStatusHud> PACKET_CODEC = PacketCodec.of(SyncStatusHud::write, SyncStatusHud::new);
 
     public SyncStatusHud(RegistryByteBuf buf) {

@@ -9,6 +9,7 @@ import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.LayeredDrawer;
 import net.minecraft.client.gui.hud.InGameHud;
+import net.minecraft.client.render.RenderTickCounter;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.text.Text;
 import net.minecraft.util.Hand;
@@ -27,7 +28,7 @@ public class InGameHudMixin {
 
     @Inject(method = "<init>", at = @At("TAIL"))
     private void gbw$addLearnEnchantmentLayerDrawer(MinecraftClient client, CallbackInfo ci) {
-        layeredDrawer.addLayer((context, tickDelta) -> SwordsAndShieldsClient.renderLearnEnchantmentOverlay(client, context, tickDelta));
+        layeredDrawer.addLayer((context, tickDelta) -> SwordsAndShieldsClient.renderLearnEnchantmentOverlay(client, context));
     }
 
     @Inject(method = "renderStatusBars", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderHealthBar(Lnet/minecraft/client/gui/DrawContext;Lnet/minecraft/entity/player/PlayerEntity;IIIIFIIIZ)V"))
@@ -85,7 +86,7 @@ public class InGameHudMixin {
     }
 
     @Inject(method = "renderMainHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameHud;renderExperienceBar(Lnet/minecraft/client/gui/DrawContext;I)V"))
-    private void gbw$hideExpBarPre(DrawContext context, float tickDelta, CallbackInfo ci) {
+    private void gbw$hideExpBarPre(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (client.player instanceof DynamicHudPlayer dynamicHudPlayer) {
             if (dynamicHudPlayer.gbw$getHideExpHud() <= 0 && client.player.getStackInHand(Hand.MAIN_HAND).isIn(SwordsAndShieldsTags.HINTS_EXPERIENCE_HUD)) {
                 float alpha = MathHelper.sin(.2f * client.world.getTime()) * .2f + .2f;
@@ -96,14 +97,14 @@ public class InGameHudMixin {
     }
 
     @Inject(method = "renderMainHud", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;hasStatusBars()Z"))
-    private void gbw$hideExpBarPost(DrawContext context, float tickDelta, CallbackInfo ci) {
+    private void gbw$hideExpBarPost(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (client.player instanceof DynamicHudPlayer dynamicHudPlayer && dynamicHudPlayer.gbw$getHideExpHud() < 20) {
             context.setShaderColor(1f, 1f, 1f, 1f);
         }
     }
 
     @Inject(method = "renderExperienceLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;push(Ljava/lang/String;)V", shift = At.Shift.AFTER))
-    private void gbw$hideExpLevelPre(DrawContext context, float tickDelta, CallbackInfo ci) {
+    private void gbw$hideExpLevelPre(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (client.player instanceof DynamicHudPlayer dynamicHudPlayer) {
             if (dynamicHudPlayer.gbw$getHideExpHud() <= 0 && client.player.getStackInHand(Hand.MAIN_HAND).isIn(SwordsAndShieldsTags.HINTS_EXPERIENCE_HUD)) {
                 float alpha = MathHelper.sin(.2f * client.world.getTime()) * .2f + .2f;
@@ -114,7 +115,7 @@ public class InGameHudMixin {
     }
 
     @Inject(method = "renderExperienceLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/profiler/Profiler;pop()V"))
-    private void gbw$hideExpLevelPost(DrawContext context, float tickDelta, CallbackInfo ci) {
+    private void gbw$hideExpLevelPost(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         if (client.player instanceof DynamicHudPlayer dynamicHudPlayer && dynamicHudPlayer.gbw$getHideExpHud() < 20) {
             context.setShaderColor(1f, 1f, 1f, 1f);
         }
@@ -159,8 +160,8 @@ public class InGameHudMixin {
         instance.drawGuiTexture(texture, x, y + offset, width, height);
     }
 
-    @Redirect(method = "renderHeldItemTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;III)I"))
-    private int gbw$repositionHeldItemNameForHiddenHud(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int color) {
+    @Redirect(method = "renderHeldItemTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithBackground(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/Text;IIII)I"))
+    private int gbw$repositionHeldItemNameForHiddenHud(DrawContext instance, TextRenderer textRenderer, Text text, int x, int y, int width, int color) {
         int offset = 0;
         if (client.player instanceof DynamicHudPlayer dynamicHudPlayer) {
             if (dynamicHudPlayer.gbw$getHideHealthHud() < 0 && dynamicHudPlayer.gbw$getHideFoodHud() < 0)

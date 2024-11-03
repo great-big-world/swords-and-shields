@@ -18,8 +18,8 @@ public final class SwordsAndShieldsBlocks {
     public static final Block ENCHANTED_DEEPSLATE = new EnchantedStoneBlock();
 
     public static void register() {
-        Registry.register(Registries.BLOCK, new Identifier(GreatBigWorld.NAMESPACE, "enchanted_stone"), ENCHANTED_STONE);
-        Registry.register(Registries.BLOCK, new Identifier(GreatBigWorld.NAMESPACE, "enchanted_deepslate"), ENCHANTED_DEEPSLATE);
+        Registry.register(Registries.BLOCK, Identifier.of(GreatBigWorld.NAMESPACE, "enchanted_stone"), ENCHANTED_STONE);
+        Registry.register(Registries.BLOCK, Identifier.of(GreatBigWorld.NAMESPACE, "enchanted_deepslate"), ENCHANTED_DEEPSLATE);
     }
 
     @Environment(EnvType.CLIENT)
