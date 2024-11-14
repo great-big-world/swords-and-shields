@@ -110,11 +110,9 @@ public class EnchantmentScreen extends HandledScreen<EnchantmentScreenHandler> {
             context.drawTextWithShadow(textRenderer, "Learn Enchantments", m + 2, j + 19 + scrollOffset, 8453920);
             RenderSystem.disableBlend();
         } else if (handler.getEnchantmentsCount() > 0) {
-            System.out.println("drawBackground 1: " + handler.getEnchantmentsCount());
             for (int l = 0; l < handler.getEnchantmentsCount(); ++l) {
                 int y1 = j + 14 + 19 * l + scrollOffset;
-                System.out.println(l + " y: " + y1);
-                if (y1 > 89)
+                if (y1 > 100 || y1 < 35)
                     continue;
                 int y2 = y1 + 2;
                 int y3 = y1 + 3;
@@ -193,7 +191,6 @@ public class EnchantmentScreen extends HandledScreen<EnchantmentScreenHandler> {
         boolean bl = this.client.player.getAbilities().creativeMode;
         int i = this.handler.getLapisCount();
 
-        System.out.println("render 1: " + handler.getEnchantmentsCount());
         for (int j = 0; j < handler.getEnchantmentsCount(); ++j) {
             int k = this.handler.enchantmentPower[j];
             Optional<RegistryEntry.Reference<Enchantment>> optional = client.world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(handler.enchantmentId[j]); // null

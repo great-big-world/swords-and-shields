@@ -1,7 +1,6 @@
 package dev.creoii.greatbigworld.swordsandshields.util;
 
 import dev.creoii.greatbigworld.GreatBigWorld;
-import dev.creoii.greatbigworld.swordsandshields.SwordsAndShields;
 import net.minecraft.network.RegistryByteBuf;
 import net.minecraft.network.codec.PacketCodec;
 import net.minecraft.network.packet.CustomPayload;

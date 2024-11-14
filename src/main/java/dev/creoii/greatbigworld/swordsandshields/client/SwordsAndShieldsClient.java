@@ -13,7 +13,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.Enchantments;
 import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.text.Text;
@@ -50,7 +49,6 @@ public class SwordsAndShieldsClient implements ClientModInitializer {
                 currentEnchantment = context.client().world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(enchantment).get().registryKey();
                 learnEnchantmentTime = 140; // 7 seconds
                 if (context.player() instanceof EnchantmentPlayer enchantmentPlayer) {
-                    System.out.println("client enchantplayer count: " + enchantmentPlayer.gbw$getEnchantments().size());
                     enchantmentPlayer.gbw$addEnchantment(currentEnchantment);
                 }
             });
