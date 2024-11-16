@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:smithing_transform",
+  "category": "equipment",
+  "template": [],
+  "base": {
+    "item": "minecraft:diamond_leggings"
+  },
+  "addition": {
+    "item": "minecraft:netherite_ingot"
+  },
+  "result": {
+    "id": "minecraft:netherite_leggings"
+  }
+}
