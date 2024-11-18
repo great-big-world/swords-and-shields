@@ -20,6 +20,7 @@ import net.minecraft.sound.SoundEvents;
 import net.minecraft.state.StateManager;
 import net.minecraft.state.property.IntProperty;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.random.Random;
@@ -52,10 +53,18 @@ public class EnchantedStoneBlock extends BlockWithEntity {
 
     @Override
     protected ActionResult onUse(BlockState state, World world, BlockPos pos, PlayerEntity player, BlockHitResult hit) {
-        if (player instanceof EnchantmentPlayer enchantmentPlayer && state.get(GLOW) != 0) {
+        if (player instanceof EnchantmentPlayer enchantmentPlayer /*&& state.get(GLOW) != 0*/) {
             BlockEntity blockEntity = world.getBlockEntity(pos);
+
+            if (!world.isClient && blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity) {
+                enchantedStoneBlockEntity.refreshCachedPlayer(world, pos);
+                Identifier enchantmentId = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getRandom(world.getRandom()).get().getKey().get().getValue();
+                SwordsAndShieldsCriteria.ENCHANTMENT_LEARNED.trigger((ServerPlayerEntity) player, enchantmentId);
+                ServerPlayNetworking.send((ServerPlayerEntity) player, new LearnEnchantment(enchantmentId));
+            }
+
             if (blockEntity instanceof EnchantedStoneBlockEntity enchantedStoneBlockEntity && enchantedStoneBlockEntity.hasEnchantment()) {
-                if (!world.isClient && enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment())) {
+                if (enchantmentPlayer.gbw$addEnchantment(enchantedStoneBlockEntity.getEnchantment())) {
                     System.out.println("server enchantplayer count: " + enchantmentPlayer.gbw$getEnchantments().size());
                     if (!world.isClient) {
                         enchantedStoneBlockEntity.refreshCachedPlayer(world, pos);

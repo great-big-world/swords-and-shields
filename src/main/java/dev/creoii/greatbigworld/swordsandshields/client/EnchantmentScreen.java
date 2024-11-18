@@ -3,8 +3,8 @@ package dev.creoii.greatbigworld.swordsandshields.client;
 import com.google.common.collect.Lists;
 import com.mojang.blaze3d.systems.RenderSystem;
 import dev.creoii.greatbigworld.GreatBigWorld;
-import dev.creoii.greatbigworld.swordsandshields.SwordsAndShields;
 import dev.creoii.greatbigworld.swordsandshields.screen.EnchantmentScreenHandler;
+import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentPlayer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.EnchantingPhrases;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
@@ -17,6 +17,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 import net.minecraft.screen.ScreenTexts;
@@ -71,7 +72,7 @@ public class EnchantmentScreen extends HandledScreen<EnchantmentScreenHandler> {
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
 
-        for (int k = 0; k < handler.getEnchantmentsCount(); ++k) {
+        for (int k = 0; k < handler.getEnchantmentsCount(client.world.getRegistryManager()); ++k) {
             double d = mouseX - (double) (i + 60);
             double e = mouseY - (double) (j + 14 + 19 * k);
             if (d >= 0.0 && e >= 0.0 && d < 108.0 && e < 19.0 && this.handler.onButtonClick(this.client.player, k)) {
@@ -91,6 +92,8 @@ public class EnchantmentScreen extends HandledScreen<EnchantmentScreenHandler> {
     }
 
     protected void drawBackground(DrawContext context, float delta, int mouseX, int mouseY) {
+        if (client == null)
+            return;
         int i = (this.width - this.backgroundWidth) / 2;
         int j = (this.height - this.backgroundHeight) / 2;
         this.drawBook(context, i, j, delta);
@@ -109,53 +112,63 @@ public class EnchantmentScreen extends HandledScreen<EnchantmentScreenHandler> {
             }
             context.drawTextWithShadow(textRenderer, "Learn Enchantments", m + 2, j + 19 + scrollOffset, 8453920);
             RenderSystem.disableBlend();
-        } else if (handler.getEnchantmentsCount() > 0) {
-            for (int l = 0; l < handler.getEnchantmentsCount(); ++l) {
-                int y1 = j + 14 + 19 * l + scrollOffset;
-                if (y1 > 100 || y1 < 35)
+        } else if (handler.getEnchantmentsCount(client.world.getRegistryManager()) > 0 && client.player instanceof EnchantmentPlayer enchantmentPlayer) {
+            for (int l = 0; l < handler.getEnchantmentsCount(client.world.getRegistryManager()); ++l) {
+                //System.out.println(handler.enchantmentId[l]);
+                Optional<RegistryEntry.Reference<Enchantment>> enchantmentEntry = client.player.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(handler.enchantmentId[l]);
+                if (enchantmentEntry.isEmpty())
                     continue;
-                int y2 = y1 + 2;
-                int y3 = y1 + 3;
-                int y4 = y1 + 5;
 
-                int o = this.handler.enchantmentPower[l];
-                if (o == 0) {
-                    RenderSystem.enableBlend();
-                    context.drawGuiTexture(ENCHANTMENT_SLOT_DISABLED_TEXTURE, m, y1, 108, 19);
-                    RenderSystem.disableBlend();
-                } else {
-                    String string = "" + o;
-                    int p = 86 - this.textRenderer.getWidth(string);
-                    EnchantingPhrases.getInstance().setSeed(this.handler.getSeed());
-                    StringVisitable stringVisitable = EnchantingPhrases.getInstance().generatePhrase(this.textRenderer, p);
-                    int q = 6839882;
-                    if ((k < l + 1 || this.client.player.experienceLevel < o) && !this.client.player.getAbilities().creativeMode) {
+                Optional<RegistryKey<Enchantment>> enchantmentKey = enchantmentEntry.get().getKey();
+                if (enchantmentKey.isPresent()) {
+
+                    int y1 = j + 14 + 19 * l + scrollOffset;
+                    if (y1 > 100 || y1 < 35)
+                        continue;
+                    int y2 = y1 + 2;
+                    int y3 = y1 + 3;
+                    int y4 = y1 + 5;
+
+                    int o = this.handler.enchantmentPower[l];
+                    if (o == 0) {
                         RenderSystem.enableBlend();
                         context.drawGuiTexture(ENCHANTMENT_SLOT_DISABLED_TEXTURE, m, y1, 108, 19);
-                        context.drawGuiTexture(LEVEL_DISABLED_TEXTURE, m + 6, y3 - 1, 16, 16);
-                        context.drawTextWithShadow(textRenderer, String.valueOf(l + 1), m + 2, y4, 4226832);
                         RenderSystem.disableBlend();
-                        context.drawTextWrapped(this.textRenderer, stringVisitable, n, y2, p, (q & 16711422) >> 1);
-                        q = 4226832;
                     } else {
-                        int r = mouseX - (i + 60);
-                        int s = mouseY - y1;
-                        RenderSystem.enableBlend();
-                        if (r >= 0 && s >= 0 && r < 108 && s < 19) {
-                            context.drawGuiTexture(ENCHANTMENT_SLOT_HIGHLIGHTED_TEXTURE, m, y1, 108, 19);
-                            q = 16777088;
+                        String string = "" + o;
+                        int p = 86 - this.textRenderer.getWidth(string);
+                        EnchantingPhrases.getInstance().setSeed(this.handler.getSeed());
+                        StringVisitable stringVisitable = EnchantingPhrases.getInstance().generatePhrase(this.textRenderer, p);
+
+                        int q = 6839882;
+                        if ((k < l + 1 || this.client.player.experienceLevel < o) && !this.client.player.getAbilities().creativeMode) {
+                            RenderSystem.enableBlend();
+                            context.drawGuiTexture(ENCHANTMENT_SLOT_DISABLED_TEXTURE, m, y1, 108, 19);
+                            context.drawGuiTexture(LEVEL_DISABLED_TEXTURE, m + 6, y3 - 1, 16, 16);
+                            context.drawTextWithShadow(textRenderer, String.valueOf(l + 1), m + 2, y4, 4226832);
+                            RenderSystem.disableBlend();
+                            context.drawTextWrapped(this.textRenderer, StringVisitable.plain(enchantmentKey.get().getValue().toString()), n, y2, p, (q & 16711422) >> 1);
+                            q = 4226832;
                         } else {
-                            context.drawGuiTexture(ENCHANTMENT_SLOT_TEXTURE, m, y1, 108, 19);
+                            int r = mouseX - (i + 60);
+                            int s = mouseY - y1;
+                            RenderSystem.enableBlend();
+                            if (r >= 0 && s >= 0 && r < 108 && s < 19) {
+                                context.drawGuiTexture(ENCHANTMENT_SLOT_HIGHLIGHTED_TEXTURE, m, y1, 108, 19);
+                                q = 16777088;
+                            } else {
+                                context.drawGuiTexture(ENCHANTMENT_SLOT_TEXTURE, m, y1, 108, 19);
+                            }
+
+                            context.drawGuiTexture(LEVEL_TEXTURE, m + 6, y3 - 1, 16, 16);
+                            context.drawTextWithShadow(textRenderer, String.valueOf(l + 1), m + 2, y4, 8453920);
+                            RenderSystem.disableBlend();
+                            context.drawTextWrapped(this.textRenderer, stringVisitable, n, y2, p, q);
+                            q = 8453920;
                         }
 
-                        context.drawGuiTexture(LEVEL_TEXTURE, m + 6, y3 - 1, 16, 16);
-                        context.drawTextWithShadow(textRenderer, String.valueOf(l + 1), m + 2, y4, 8453920);
-                        RenderSystem.disableBlend();
-                        context.drawTextWrapped(this.textRenderer, stringVisitable, n, y2, p, q);
-                        q = 8453920;
+                        context.drawTextWithShadow(this.textRenderer, string, n + 86 - this.textRenderer.getWidth(string), y2 + 7, q);
                     }
-
-                    context.drawTextWithShadow(this.textRenderer, string, n + 86 - this.textRenderer.getWidth(string), y2 + 7, q);
                 }
             }
         }
@@ -191,12 +204,15 @@ public class EnchantmentScreen extends HandledScreen<EnchantmentScreenHandler> {
         boolean bl = this.client.player.getAbilities().creativeMode;
         int i = this.handler.getLapisCount();
 
-        for (int j = 0; j < handler.getEnchantmentsCount(); ++j) {
+        for (int j = 0; j < handler.getEnchantmentsCount(client.world.getRegistryManager()); ++j) {
             int k = this.handler.enchantmentPower[j];
             Optional<RegistryEntry.Reference<Enchantment>> optional = client.world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(handler.enchantmentId[j]); // null
             if (optional.isPresent()) {
                 int l = this.handler.enchantmentLevel[j]; // -1
                 int m = j + 1;
+                int y = ((this.height - this.backgroundHeight) / 2) + 14 + 19 * j + scrollOffset;
+                if (y > 100 || y < 35)
+                    continue;
                 if (this.isPointWithinBounds(60, 14 + 19 * j, 108, 17, mouseX, mouseY) && k > 0 && l >= 0) {
                     List<Text> list = Lists.newArrayList();
                     list.add(Text.translatable("container.enchant.clue", Enchantment.getName(optional.get(), l)).formatted(Formatting.WHITE));
@@ -246,7 +262,7 @@ public class EnchantmentScreen extends HandledScreen<EnchantmentScreenHandler> {
         this.pageTurningSpeed = this.nextPageTurningSpeed;
         boolean bl = false;
 
-        for (int i = 0; i < handler.getEnchantmentsCount(); ++i) {
+        for (int i = 0; i < handler.getEnchantmentsCount(client.world.getRegistryManager()); ++i) {
             if (this.handler.enchantmentPower[i] != 0) {
                 bl = true;
                 break;
@@ -267,8 +283,8 @@ public class EnchantmentScreen extends HandledScreen<EnchantmentScreenHandler> {
 
     @Override
     public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        if (handler.getEnchantmentsCount() > 3)
-            scrollOffset = (int) Math.clamp(scrollOffset + verticalAmount, handler.getEnchantmentsCount() * -13, 0);
+        if (handler.getEnchantmentsCount(client.world.getRegistryManager()) > 3)
+            scrollOffset = (int) Math.clamp(scrollOffset + verticalAmount, handler.getEnchantmentsCount(client.world.getRegistryManager()) * -13, 0);
         return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
     }
 }

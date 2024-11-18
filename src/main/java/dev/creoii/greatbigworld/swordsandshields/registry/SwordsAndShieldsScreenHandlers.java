@@ -1,7 +1,6 @@
 package dev.creoii.greatbigworld.swordsandshields.registry;
 
 import dev.creoii.greatbigworld.GreatBigWorld;
-import dev.creoii.greatbigworld.swordsandshields.SwordsAndShields;
 import dev.creoii.greatbigworld.swordsandshields.client.EnchantmentScreen;
 import dev.creoii.greatbigworld.swordsandshields.screen.EnchantmentScreenHandler;
 import net.fabricmc.api.EnvType;

@@ -17,6 +17,6 @@ import org.spongepowered.asm.mixin.injection.At;
 public class EnchantingTableBlockMixin {
     @ModifyReturnValue(method = "method_17467", at = @At("RETURN"))
     private static ScreenHandler gbw$useImprovedEnchantingScreen(ScreenHandler original, @Local(ordinal = 0, argsOnly = true) int syncId, @Local(argsOnly = true) PlayerInventory inventory, @Local(argsOnly = true) World world, @Local(argsOnly = true) BlockPos pos, @Local(argsOnly = true) PlayerEntity player) {
-        return new EnchantmentScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos), player);
+        return new EnchantmentScreenHandler(syncId, inventory, ScreenHandlerContext.create(world, pos));
     }
 }

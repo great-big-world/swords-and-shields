@@ -19,6 +19,7 @@ import net.minecraft.inventory.Inventory;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.screen.*;
@@ -32,16 +33,16 @@ import net.minecraft.util.Util;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.random.Random;
+import net.minecraft.world.World;
 import org.apache.commons.lang3.mutable.MutableInt;
 
+import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public class EnchantmentScreenHandler extends ScreenHandler {
     static final Identifier EMPTY_LAPIS_SLOT_TEXTURE = Identifier.of("item/empty_slot_lapis_lazuli");
-    private final PlayerEntity player;
     private final Inventory inventory;
-    private int enchantmentsCount;
     private final ScreenHandlerContext context;
     private final Random random;
     private final Property seed;
@@ -51,12 +52,11 @@ public class EnchantmentScreenHandler extends ScreenHandler {
     private boolean stackHasNeededEnchantments;
 
     public EnchantmentScreenHandler(int syncId, PlayerInventory playerInventory) {
-        this(syncId, playerInventory, ScreenHandlerContext.EMPTY, playerInventory.player);
+        this(syncId, playerInventory, ScreenHandlerContext.EMPTY);
     }
 
-    public EnchantmentScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context, PlayerEntity player) {
+    public EnchantmentScreenHandler(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context) {
         super(SwordsAndShieldsScreenHandlers.ENCHANTMENT, syncId);
-        this.player = player;
         this.inventory = new SimpleInventory(2) {
             public void markDirty() {
                 super.markDirty();
@@ -92,23 +92,24 @@ public class EnchantmentScreenHandler extends ScreenHandler {
             this.addSlot(new Slot(playerInventory, i, 8 + i * 18, 142));
         }
 
-        if (player instanceof EnchantmentPlayer enchantmentPlayer) {
-            enchantmentsCount = Math.max(0, enchantmentPlayer.gbw$getEnchantments().size() - 1);
-            this.enchantmentPower = new int[enchantmentsCount];
-            this.enchantmentId = new int[enchantmentsCount];
-            this.enchantmentLevel = new int[enchantmentsCount];
-            //addProperty(Property.create()).set(enchantmentsCount);
-            for (i = 0; i < enchantmentsCount; ++i) {
-                this.addProperty(Property.create(this.enchantmentPower, i));
-                this.addProperty(Property.create(this.enchantmentId, i));
-                this.addProperty(Property.create(this.enchantmentLevel, i));
-            }
-            this.addProperty(this.seed).set(player.getEnchantmentTableSeed());
+        this.enchantmentPower = new int[getEnchantmentsCount(playerInventory.player.getRegistryManager())];
+        this.enchantmentId = new int[getEnchantmentsCount(playerInventory.player.getRegistryManager())];
+        this.enchantmentLevel = new int[getEnchantmentsCount(playerInventory.player.getRegistryManager())];
+        //addProperty(Property.create()).set(enchantmentsCount);
+
+        //Arrays.fill(enchantmentPower, 10);
+        //Arrays.fill(enchantmentLevel, 1);
+
+        for (i = 0; i < getEnchantmentsCount(playerInventory.player.getRegistryManager()); ++i) {
+            this.addProperty(Property.create(this.enchantmentPower, i));
+            this.addProperty(Property.create(this.enchantmentId, i));
+            this.addProperty(Property.create(this.enchantmentLevel, i));
         }
+        this.addProperty(this.seed).set(playerInventory.player.getEnchantmentTableSeed());
     }
 
-    public int getEnchantmentsCount() {
-        return enchantmentsCount;
+    public int getEnchantmentsCount(DynamicRegistryManager dynamicRegistryManager) {
+        return dynamicRegistryManager.get(RegistryKeys.ENCHANTMENT).size();
     }
 
     public boolean doesStackHaveNeededEnchantments() {
@@ -122,7 +123,6 @@ public class EnchantmentScreenHandler extends ScreenHandler {
                 /*if (inventory instanceof PlayerInventory playerInventory) {
                     stackHasNeededEnchantments = playerInventory.player instanceof EnchantmentPlayer enchantmentPlayer && !EnchantmentHelper.getEnchantments(itemStack).getEnchantments().stream().map(RegistryEntry::value).collect(Collectors.toSet()).equals(enchantmentPlayer.gbw$getEnchantments());
                 } else stackHasNeededEnchantments = false;*/
-                System.out.println("contentchanged count 1: " + enchantmentsCount);
                 this.context.run((world, pos) -> {
                     int bookshelfCount = /*0*/15;
 
@@ -135,20 +135,18 @@ public class EnchantmentScreenHandler extends ScreenHandler {
                     this.random.setSeed(this.seed.get());
 
                     int j;
-                    System.out.println("contentchanged count 2: " + enchantmentsCount);
-                    for (j = 0; j < enchantmentsCount; ++j) {
-                        this.enchantmentPower[j] = EnchantmentHelper.calculateRequiredExperienceLevel(this.random, j, bookshelfCount, itemStack);
-                        System.out.println("set power: " + enchantmentPower[j]);
+                    for (j = 0; j < getEnchantmentsCount(world.getRegistryManager()); ++j) {
+                        this.enchantmentPower[j] = 10/*EnchantmentHelper.calculateRequiredExperienceLevel(this.random, j, bookshelfCount, itemStack)*/;
                         this.enchantmentId[j] = -1;
                         this.enchantmentLevel[j] = -1;
-                        if (this.enchantmentPower[j] < j + 1) {
+                        /*if (this.enchantmentPower[j] < j + 1) {
                             this.enchantmentPower[j] = 0;
-                        }
+                        }*/
                     }
 
-                    for (j = 0; j < enchantmentsCount; ++j) {
-                        if (this.enchantmentPower[j] > 0 && inventory instanceof PlayerInventory playerInventory && playerInventory.player instanceof EnchantmentPlayer enchantmentPlayer) {
-                            Set<EnchantmentLevelEntry> set = generateEnchantments(playerInventory.player, itemStack, j, enchantmentPower[j]);
+                    for (j = 0; j < getEnchantmentsCount(world.getRegistryManager()); ++j) {
+                        if (this.enchantmentPower[j] > 0) {
+                            Set<EnchantmentLevelEntry> set = generateEnchantments(world, itemStack, j, enchantmentPower[j]);
                             if (set != null && !set.isEmpty()) {
                                 for (EnchantmentLevelEntry entry : set) {
                                     this.enchantmentId[j] = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getRawId(entry.enchantment.value());
@@ -161,11 +159,13 @@ public class EnchantmentScreenHandler extends ScreenHandler {
                     this.sendContentUpdates();
                 });
             } else {
-                for (int i = 0; i < enchantmentsCount; ++i) {
-                    this.enchantmentPower[i] = 0;
-                    this.enchantmentId[i] = -1;
-                    this.enchantmentLevel[i] = -1;
-                }
+                context.run((world, pos) -> {
+                    for (int i = 0; i < getEnchantmentsCount(world.getRegistryManager()); ++i) {
+                        this.enchantmentPower[i] = 0;
+                        this.enchantmentId[i] = -1;
+                        this.enchantmentLevel[i] = -1;
+                    }
+                });
             }
         }
     }
@@ -190,9 +190,8 @@ public class EnchantmentScreenHandler extends ScreenHandler {
                     float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
                     level = MathHelper.clamp(Math.round(level + level * f), 1, Integer.MAX_VALUE);
                     if (enchantment != null)
-                        entry = new EnchantmentLevelEntry(enchantmentRegistry.createEntry(enchantment), level);
+                        entry = new EnchantmentLevelEntry(enchantmentRegistry.getEntry(enchantment), level);
                     if (entry != null) {
-                        System.out.println(entry.enchantment.getKey().get());
                         player.applyEnchantmentCosts(itemStack3, i);
                         if (itemStack3.isOf(Items.BOOK)) {
                             itemStack3 = itemStack.copyComponentsToNewStack(Items.ENCHANTED_BOOK, 1);
@@ -253,14 +252,14 @@ public class EnchantmentScreenHandler extends ScreenHandler {
         }
     }
 
-    private Set<EnchantmentLevelEntry> generateEnchantments(PlayerEntity player, ItemStack stack, int slot, int level) {
+    private Set<EnchantmentLevelEntry> generateEnchantments(World world, ItemStack stack, int slot, int level) {
         MutableInt mutable = new MutableInt(level);
         this.random.setSeed(this.seed.get() + slot);
-        Set<EnchantmentLevelEntry> set = ((EnchantmentPlayer) player).gbw$getEnchantments().stream().map(enchantment -> {
+        Set<EnchantmentLevelEntry> set = world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).stream().map(enchantment -> {
             mutable.add(1 + random.nextInt(1) + random.nextInt(1));
-            float f = (random.nextFloat() + random.nextFloat() - 1.0F) * 0.15F;
+            float f = (random.nextFloat() + random.nextFloat() - 1f) * 0.15F;
             mutable.setValue(MathHelper.clamp(Math.round(mutable.floatValue() + mutable.floatValue() * f), 1, Integer.MAX_VALUE));
-            return new EnchantmentLevelEntry(player.getRegistryManager().get(RegistryKeys.ENCHANTMENT).entryOf(enchantment), mutable.getValue());
+            return new EnchantmentLevelEntry(world.getRegistryManager().get(RegistryKeys.ENCHANTMENT).getEntry(enchantment), 1);
         }).collect(Collectors.toSet());
         if (stack.isOf(Items.BOOK) && set.size() > 1) {
             //set.remove(this.random.nextInt(set.size()));
