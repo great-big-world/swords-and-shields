@@ -42,8 +42,7 @@ public class EnchantmentManager extends PersistentState {
     }
 
     public static long getPlayerKnownEnchantments(PlayerEntity player) {
-        EnchantmentManager serverState = getServerState(player.getWorld().getServer());
-        return serverState.players.computeIfAbsent(player.getUuid(), uuid -> -1L);
+        return getServerState(player.getWorld().getServer()).players.computeIfAbsent(player.getUuid(), uuid -> -1L);
     }
 
     public static long writeEnchantments(DynamicRegistryManager.Immutable registryManager, Set<RegistryKey<Enchantment>> enchantmentsSet) {
