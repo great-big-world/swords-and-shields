@@ -7,15 +7,9 @@
     "###"
   ],
   "key": {
-    "#": {
-      "item": "minecraft:obsidian"
-    },
-    "B": {
-      "item": "minecraft:enchanted_book"
-    },
-    "A": {
-      "item": "minecraft:amethyst_shard"
-    }
+    "#": "minecraft:obsidian",
+    "B": "minecraft:enchanted_book",
+    "A": "minecraft:amethyst_shard"
   },
   "result": {
     "id": "minecraft:enchanting_table"

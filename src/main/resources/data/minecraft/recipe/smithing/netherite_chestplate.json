@@ -1,13 +1,8 @@
 {
   "type": "minecraft:smithing_transform",
   "category": "equipment",
-  "template": [],
-  "base": {
-    "item": "minecraft:diamond_chestplate"
-  },
-  "addition": {
-    "item": "minecraft:netherite_ingot"
-  },
+  "base": "minecraft:diamond_chestplate",
+  "addition": "minecraft:netherite_ingot",
   "result": {
     "id": "minecraft:netherite_chestplate"
   }
