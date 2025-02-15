@@ -42,7 +42,7 @@ public abstract class AbstractSkeletonEntityMixin extends HostileEntity {
 
     @Inject(method = "createAbstractSkeletonAttributes", at = @At("RETURN"), cancellable = true)
     private static void gbw$weakerSkeletons(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
-        cir.setReturnValue(cir.getReturnValue().add(EntityAttributes.GENERIC_MAX_HEALTH, 16));
+        cir.setReturnValue(cir.getReturnValue().add(EntityAttributes.MAX_HEALTH, 16));
     }
 
     @Inject(method = "initialize", at = @At("RETURN"))

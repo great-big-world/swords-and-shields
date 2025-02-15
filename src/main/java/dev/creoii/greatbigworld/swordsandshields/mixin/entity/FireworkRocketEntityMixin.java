@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.injection.At;
 
 @Mixin(FireworkRocketEntity.class)
 public class FireworkRocketEntityMixin {
-    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isFallFlying()Z"))
+    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/LivingEntity;isGliding()Z"))
     private boolean gbw$disableRocketBoosting(boolean original) {
         return false;
     }
