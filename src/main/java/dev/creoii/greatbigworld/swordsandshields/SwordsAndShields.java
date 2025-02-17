@@ -8,5 +8,7 @@ public class SwordsAndShields implements ModInitializer {
     @Override
     public void onInitialize() {
         ((AbstractBlockStateAccessor) Blocks.ENCHANTING_TABLE.getDefaultState()).setHardness(15f);
+        ((AbstractBlockStateAccessor) Blocks.SPAWNER.getDefaultState()).setLuminance(7);
+        ((AbstractBlockStateAccessor) Blocks.TRIAL_SPAWNER.getDefaultState()).setLuminance(7);
     }
 }
