@@ -8,8 +8,7 @@
     "entity.AbstractSkeletonEntityMixin",
     "entity.FireworkRocketEntityMixin",
     "entity.LivingEntityMixin",
-    "entity.PlayerEntityMixin",
-    "entity.SlimeEntityMixin"
+    "entity.PlayerEntityMixin"
   ],
   "client": [
     "client.EnchantingTableBlockEntityRendererMixin",
