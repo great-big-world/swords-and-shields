@@ -7,13 +7,10 @@
     "BlocksMixin",
     "entity.AbstractSkeletonEntityMixin",
     "entity.FireworkRocketEntityMixin",
-    "entity.LivingEntityMixin",
     "entity.PlayerEntityMixin"
   ],
   "client": [
-    "client.EnchantingTableBlockEntityRendererMixin",
-    "client.LivingEntityRendererMixin",
-    "client.LivingEntityRenderStateMixin"
+    "client.EnchantingTableBlockEntityRendererMixin"
   ],
   "injectors": {
     "defaultRequire": 1

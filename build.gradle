@@ -13,4 +13,5 @@ configurations {
 
 dependencies {
     common(project(path: ':core', configuration: 'namedElements')) { transitive false }
+    common(project(path: ':lightning-flash', configuration: 'namedElements')) { transitive false }
 }
