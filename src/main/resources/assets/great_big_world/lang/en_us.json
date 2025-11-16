@@ -1,4 +1,4 @@
 {
-  "death.attack.bamboo": "%1$s was bamboo-ed to death",
-  "death.attack.bamboo.player": "%1$s walked into a bamboo while trying to escape %2$s"
+  "death.attack.bamboo": "%1$s was skewered to death",
+  "death.attack.bamboo.player": "%1$s skewered by bamboo while trying to escape %2$s"
 }
