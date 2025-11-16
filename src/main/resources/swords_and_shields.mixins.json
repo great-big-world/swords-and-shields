@@ -4,7 +4,9 @@
   "package": "dev.creoii.greatbigworld.swordsandshields.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "BlocksMixin",
+    "block.BambooBlockMixin",
+    "block.BambooShootBlockMixin",
+    "block.BlocksMixin",
     "entity.AbstractSkeletonEntityMixin",
     "entity.FireworkRocketEntityMixin",
     "entity.PlayerEntityMixin"

@@ -1,4 +1,4 @@
-package dev.creoii.greatbigworld.swordsandshields.mixin;
+package dev.creoii.greatbigworld.swordsandshields.mixin.block;
 
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
