@@ -1,4 +1,4 @@
-package dev.creoii.greatbigworld.swordsandshields.mixin;
+package dev.creoii.greatbigworld.swordsandshields.mixin.screen;
 
 import dev.creoii.greatbigworld.swordsandshields.util.ExtendedScreenHandler;
 import net.minecraft.entity.player.PlayerEntity;

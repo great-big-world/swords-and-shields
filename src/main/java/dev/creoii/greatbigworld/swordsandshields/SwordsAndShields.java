@@ -2,6 +2,8 @@ package dev.creoii.greatbigworld.swordsandshields;
 
 import com.google.common.collect.ImmutableList;
 import dev.creoii.greatbigworld.mixin.AbstractBlockStateAccessor;
+import dev.creoii.greatbigworld.swordsandshields.item.SwordsAndShieldsArmorMaterials;
+import dev.creoii.greatbigworld.swordsandshields.item.SwordsAndShieldsToolMaterials;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.minecraft.block.Blocks;
@@ -27,6 +29,9 @@ public class SwordsAndShields implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        SwordsAndShieldsArmorMaterials.register();
+        SwordsAndShieldsToolMaterials.register();
+
         ((AbstractBlockStateAccessor) Blocks.ENCHANTING_TABLE.getDefaultState()).setHardness(15f);
         ((AbstractBlockStateAccessor) Blocks.SPAWNER.getDefaultState()).setLuminance(4);
 

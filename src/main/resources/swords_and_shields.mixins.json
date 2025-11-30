@@ -4,18 +4,22 @@
   "package": "dev.creoii.greatbigworld.swordsandshields.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
-    "EnchantmentScreenHandlerMixin",
-    "ScreenHandlerMixin",
     "block.BambooBlockMixin",
     "block.BambooShootBlockMixin",
     "block.BlocksMixin",
+    "block.EnchantingTableBlockEntityMixin",
     "entity.AbstractSkeletonEntityMixin",
     "entity.FireworkRocketEntityMixin",
     "entity.PlayerEntityMixin",
-    "entity.ServerPlayerEntityMixin"
+    "entity.ServerPlayerEntityMixin",
+    "item.ArmorMaterialMixin",
+    "item.ToolMaterialMixin",
+    "screen.EnchantmentScreenHandlerMixin",
+    "screen.ScreenHandlerMixin"
   ],
   "client": [
-    "client.EnchantingTableBlockEntityRendererMixin"
+    "client.EnchantingTableBlockEntityRendererMixin",
+    "client.EnchantmentScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
