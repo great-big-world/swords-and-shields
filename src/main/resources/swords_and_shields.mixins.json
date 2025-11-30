@@ -8,6 +8,7 @@
     "block.BambooShootBlockMixin",
     "block.BlocksMixin",
     "block.EnchantingTableBlockEntityMixin",
+    "component.ItemEnchantmentsComponentMixin",
     "entity.AbstractSkeletonEntityMixin",
     "entity.FireworkRocketEntityMixin",
     "entity.PlayerEntityMixin",
