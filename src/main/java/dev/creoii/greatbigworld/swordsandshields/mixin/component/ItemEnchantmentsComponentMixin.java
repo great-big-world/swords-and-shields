@@ -21,7 +21,7 @@ public class ItemEnchantmentsComponentMixin {
         Text name = original.call(enchantment, level);
         Element element = ElementHolder.gbw$getElement(enchantment.getKey().orElseThrow());
         if (element != null)
-            return Texts.join(List.of(element.getSymbol(), name), Text.literal(""));
+            return Texts.join(List.of(element.getSymbol(), name), Text.literal(" "));
         return name;
     }
 }

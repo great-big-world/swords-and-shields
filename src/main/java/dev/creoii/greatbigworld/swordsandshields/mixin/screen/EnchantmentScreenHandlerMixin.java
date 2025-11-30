@@ -106,6 +106,9 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
             total += enchantment.getWeight() * (enchantment.getMaxLevel() - levels[i] + 1);
         }
 
+        if (total <= 0)
+            return ids.length - 1;
+
         int roll = random.nextInt(total);
 
         for (int i = 0; i < ids.length; i++) {
