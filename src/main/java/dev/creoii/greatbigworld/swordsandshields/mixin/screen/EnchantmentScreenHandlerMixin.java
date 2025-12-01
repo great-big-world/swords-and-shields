@@ -71,7 +71,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
             }
 
             RegistryEntryList<Enchantment> entries = RegistryEntryList.of(registryEntries);
-            List<EnchantmentLevelEntry> list = EnchantmentHelper.generateEnchantments(random, stack, level, entries.stream());
+            List<EnchantmentLevelEntry> list = EnchantmentHelper.generateEnchantments(random, stack, level / 2, entries.stream());
             if (stack.isOf(Items.BOOK) && list.size() > 1) {
                 list.remove(random.nextInt(list.size()));
             }
