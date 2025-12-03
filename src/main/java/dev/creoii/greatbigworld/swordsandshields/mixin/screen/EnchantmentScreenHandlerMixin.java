@@ -86,6 +86,43 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
                 list.remove(random.nextInt(list.size()));
             }
 
+            if (!list.isEmpty()) {
+                List<EnchantmentLevelEntry> weightedPool = new ArrayList<>();
+
+                for (EnchantmentLevelEntry entry : list) {
+                    Element element = ElementHolder.gbw$getElement(entry.enchantment().getKey().orElseThrow());
+                    if (element == null) {
+                        weightedPool.add(entry);
+                        continue;
+                    }
+
+                    int mod = elementPower[element.ordinal()];
+
+                    double boost = 1d + (Math.log(mod + 2) / Math.log(2));
+
+                    int weight = Math.max(1, (int) (entry.enchantment().value().getWeight() * boost));
+
+                    for (int i = 0; i < weight; ++i) {
+                        weightedPool.add(entry);
+                    }
+                }
+
+                if (!weightedPool.isEmpty()) {
+                    System.out.println(Arrays.toString(weightedPool.toArray()));
+                    List<EnchantmentLevelEntry> biased = new ArrayList<>();
+
+                    int count = list.size();
+                    Random rand = random;
+
+                    for (int i = 0; i < count; ++i) {
+                        biased.add(weightedPool.get(rand.nextInt(weightedPool.size())));
+                    }
+
+                    list.clear();
+                    list.addAll(biased);
+                }
+            }
+
             cir.setReturnValue(list);
             return;
         }
@@ -132,7 +169,6 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
 
         for (int i = 0; i < getLapisCount() - 1; ++i) {
             int idx = weightedPick(random, enchantmentId, enchantmentLevel, indexedIterable);
-            System.out.println("picked: " + idx);
             if (idx < 0)
                 continue;
             enchantmentLevel[idx] = Math.min(enchantmentLevel[idx] + 1, indexedIterable.get(enchantmentId[idx]).value().getMaxLevel());
