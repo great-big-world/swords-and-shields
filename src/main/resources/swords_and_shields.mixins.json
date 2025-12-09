@@ -14,8 +14,7 @@
     "entity.FireworkRocketEntityMixin",
     "entity.PlayerEntityMixin",
     "entity.ServerPlayerEntityMixin",
-    "item.ArmorMaterialMixin",
-    "item.ToolMaterialMixin",
+    "item.ItemStackMixin",
     "screen.EnchantmentScreenHandlerMixin",
     "screen.ScreenHandlerMixin"
   ],

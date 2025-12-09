@@ -1,4 +1,6 @@
 {
   "death.attack.bamboo": "%1$s was skewered to death",
-  "death.attack.bamboo.player": "%1$s skewered by bamboo while trying to escape %2$s"
+  "death.attack.bamboo.player": "%1$s skewered by bamboo while trying to escape %2$s",
+
+  "tooltip.enchantment_power": "Enchantment Power: %s/%s"
 }

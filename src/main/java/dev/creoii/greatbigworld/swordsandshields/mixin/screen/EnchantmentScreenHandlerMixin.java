@@ -37,7 +37,7 @@ import java.util.*;
 
 // Elemental cost applied to enchantments
 
-//TODO: Always applies level 1 to item
+//TODO: Always applies level 1 or 2 to item
 // TODO: Element power doesn't sway generated enchantments, just which one gets a level increase i think
 @Mixin(EnchantmentScreenHandler.class)
 public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
@@ -81,7 +81,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
             }
 
             RegistryEntryList<Enchantment> entries = RegistryEntryList.of(registryEntries);
-            List<EnchantmentLevelEntry> list = EnchantmentHelper.generateEnchantments(random, stack, level / 2, entries.stream());
+            List<EnchantmentLevelEntry> list = EnchantmentHelper.generateEnchantments(random, stack, level, entries.stream());
             if (stack.isOf(Items.BOOK) && list.size() > 1) {
                 list.remove(random.nextInt(list.size()));
             }
@@ -108,7 +108,6 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
                 }
 
                 if (!weightedPool.isEmpty()) {
-                    System.out.println(Arrays.toString(weightedPool.toArray()));
                     List<EnchantmentLevelEntry> biased = new ArrayList<>();
 
                     int count = list.size();
@@ -159,8 +158,6 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
         }
 
         System.arraycopy(add, 0, elementPower, 0, elementPower.length);
-
-        System.out.println(Arrays.toString(elementPower));
     }
 
     @Inject(method = "method_17411", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/EnchantmentScreenHandler;sendContentUpdates()V"))
@@ -169,9 +166,14 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
 
         for (int i = 0; i < getLapisCount() - 1; ++i) {
             int idx = weightedPick(random, enchantmentId, enchantmentLevel, indexedIterable);
-            if (idx < 0)
+            if (idx < 0 || idx >= enchantmentId.length || idx >= enchantmentLevel.length)
                 continue;
-            enchantmentLevel[idx] = Math.min(enchantmentLevel[idx] + 1, indexedIterable.get(enchantmentId[idx]).value().getMaxLevel());
+
+            RegistryEntry<Enchantment> registryEntry = indexedIterable.get(enchantmentId[idx]);
+            if (registryEntry == null)
+                continue;
+
+            enchantmentLevel[idx] = Math.min(enchantmentLevel[idx] + 1, registryEntry.value().getMaxLevel());
         }
     }
 
