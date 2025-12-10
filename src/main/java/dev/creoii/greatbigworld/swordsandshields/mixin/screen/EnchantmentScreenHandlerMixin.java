@@ -35,9 +35,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
 
-// Elemental cost applied to enchantments
-
-//TODO: Always applies level 1 or 2 to item
 // TODO: Element power doesn't sway generated enchantments, just which one gets a level increase i think
 @Mixin(EnchantmentScreenHandler.class)
 public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {

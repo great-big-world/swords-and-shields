@@ -16,11 +16,13 @@
     "entity.ServerPlayerEntityMixin",
     "item.ItemStackMixin",
     "screen.EnchantmentScreenHandlerMixin",
+    "screen.LoomScreenHandlerMixin",
     "screen.ScreenHandlerMixin"
   ],
   "client": [
     "client.EnchantingTableBlockEntityRendererMixin",
-    "client.EnchantmentScreenMixin"
+    "client.EnchantmentScreenMixin",
+    "client.LoomScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
