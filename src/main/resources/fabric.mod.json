@@ -21,7 +21,6 @@
     "fabric": "*",
     "minecraft": "${minecraft_version}"
   },
-  "accessWidener": "swords_and_shields.accesswidener",
   "mixins": [
     "swords_and_shields.mixins.json"
   ],

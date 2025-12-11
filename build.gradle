@@ -1,7 +1,3 @@
-loom {
-    accessWidenerPath = file("src/main/resources/swords_and_shields.accesswidener")
-}
-
 configurations {
     common {
         canBeResolved = true
