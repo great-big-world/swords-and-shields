@@ -4,26 +4,6 @@ import dev.creoii.greatbigworld.element.Element;
 import dev.creoii.greatbigworld.knowledge.Knowledge;
 import dev.creoii.greatbigworld.knowledge.KnowledgeManager;
 import dev.creoii.greatbigworld.swordsandshields.util.ElementHolder;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.EnchantingTableBlock;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.enchantment.EnchantmentLevelEntry;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.registry.DynamicRegistryManager;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.registry.entry.RegistryEntryList;
-import net.minecraft.registry.tag.EnchantmentTags;
-import net.minecraft.screen.EnchantmentScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
-import net.minecraft.util.collection.IndexedIterable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.random.Random;
-import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,29 +14,49 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.*;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Holder;
+import net.minecraft.core.HolderSet;
+import net.minecraft.core.IdMap;
+import net.minecraft.core.Registry;
+import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.tags.EnchantmentTags;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.ContainerLevelAccess;
+import net.minecraft.world.inventory.EnchantmentMenu;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.EnchantmentInstance;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.EnchantingTableBlock;
 
 // TODO: Element power doesn't sway generated enchantments, just which one gets a level increase i think
-@Mixin(EnchantmentScreenHandler.class)
+@Mixin(EnchantmentMenu.class)
 public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
-    @Shadow @Final private Random random;
-    @Shadow public abstract int getLapisCount();
-    @Shadow @Final public int[] enchantmentLevel;
-    @Shadow @Final public int[] enchantmentId;
+    @Shadow @Final private RandomSource random;
+    @Shadow public abstract int getGoldCount();
+    @Shadow @Final public int[] levelClue;
+    @Shadow @Final public int[] enchantClue;
 
     @Unique
     private final int[] elementPower = new int[Element.values().length];
 
-    @Inject(method = "<init>(ILnet/minecraft/entity/player/PlayerInventory;Lnet/minecraft/screen/ScreenHandlerContext;)V", at = @At("TAIL"))
-    private void gbw$initElementPower(int syncId, PlayerInventory playerInventory, ScreenHandlerContext context, CallbackInfo ci) {
+    @Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/inventory/ContainerLevelAccess;)V", at = @At("TAIL"))
+    private void gbw$initElementPower(int syncId, Inventory playerInventory, ContainerLevelAccess context, CallbackInfo ci) {
         Arrays.fill(elementPower, 0);
     }
 
-    @Inject(method = "generateEnchantments", at = @At(value = "INVOKE", target = "Lnet/minecraft/registry/Registry;getOptional(Lnet/minecraft/registry/tag/TagKey;)Ljava/util/Optional;"), cancellable = true)
-    private void gbw$generateEnchantmentsFromKnowledge(DynamicRegistryManager registryManager, ItemStack stack, int slot, int level, CallbackInfoReturnable<List<EnchantmentLevelEntry>> cir) {
-        if (gbw$getPlayer() != null && !gbw$getPlayer().getEntityWorld().isClient()) {
-            Registry<Enchantment> registry = registryManager.getOrThrow(RegistryKeys.ENCHANTMENT);
-            KnowledgeManager knowledgeManager = KnowledgeManager.getServerState(gbw$getPlayer().getEntityWorld().getServer());
-            List<RegistryEntry<Enchantment>> registryEntries = new ArrayList<>();
+    @Inject(method = "getEnchantmentList", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/Registry;get(Lnet/minecraft/tags/TagKey;)Ljava/util/Optional;"), cancellable = true)
+    private void gbw$generateEnchantmentsFromKnowledge(RegistryAccess registryManager, ItemStack stack, int slot, int level, CallbackInfoReturnable<List<EnchantmentInstance>> cir) {
+        if (gbw$getPlayer() != null && !gbw$getPlayer().level().isClientSide()) {
+            Registry<Enchantment> registry = registryManager.lookupOrThrow(Registries.ENCHANTMENT);
+            KnowledgeManager knowledgeManager = KnowledgeManager.getServerState(gbw$getPlayer().level().getServer());
+            List<Holder<Enchantment>> registryEntries = new ArrayList<>();
             Set<Knowledge> knowledges = knowledgeManager.getPlayerKnowledge(gbw$getPlayer(), Knowledge.Type.ENCHANTMENT);
 
             if (knowledges == null || knowledges.isEmpty()) {
@@ -65,29 +65,29 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
             }
 
             knowledges.forEach(knowledge -> {
-                Optional<RegistryEntry.Reference<Enchantment>> optional = registry.getEntry(knowledge.data());
+                Optional<Holder.Reference<Enchantment>> optional = registry.get(knowledge.data());
                 optional.ifPresent(enchantmentReference -> {
-                    if (enchantmentReference.isIn(EnchantmentTags.IN_ENCHANTING_TABLE))
+                    if (enchantmentReference.is(EnchantmentTags.IN_ENCHANTING_TABLE))
                         registryEntries.add(enchantmentReference);
                 });
             });
 
-            if (registryEntries.isEmpty() || getLapisCount() <= 0) {
+            if (registryEntries.isEmpty() || getGoldCount() <= 0) {
                 cir.setReturnValue(List.of());
                 return;
             }
 
-            RegistryEntryList<Enchantment> entries = RegistryEntryList.of(registryEntries);
-            List<EnchantmentLevelEntry> list = EnchantmentHelper.generateEnchantments(random, stack, level, entries.stream());
-            if (stack.isOf(Items.BOOK) && list.size() > 1) {
+            HolderSet<Enchantment> entries = HolderSet.direct(registryEntries);
+            List<EnchantmentInstance> list = EnchantmentHelper.selectEnchantment(random, stack, level, entries.stream());
+            if (stack.is(Items.BOOK) && list.size() > 1) {
                 list.remove(random.nextInt(list.size()));
             }
 
             if (!list.isEmpty()) {
-                List<EnchantmentLevelEntry> weightedPool = new ArrayList<>();
+                List<EnchantmentInstance> weightedPool = new ArrayList<>();
 
-                for (EnchantmentLevelEntry entry : list) {
-                    Element element = ElementHolder.gbw$getElement(entry.enchantment().getKey().orElseThrow());
+                for (EnchantmentInstance entry : list) {
+                    Element element = ElementHolder.gbw$getElement(entry.enchantment().unwrapKey().orElseThrow());
                     if (element == null) {
                         weightedPool.add(entry);
                         continue;
@@ -105,10 +105,10 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
                 }
 
                 if (!weightedPool.isEmpty()) {
-                    List<EnchantmentLevelEntry> biased = new ArrayList<>();
+                    List<EnchantmentInstance> biased = new ArrayList<>();
 
                     int count = list.size();
-                    Random rand = random;
+                    RandomSource rand = random;
 
                     for (int i = 0; i < count; ++i) {
                         biased.add(weightedPool.get(rand.nextInt(weightedPool.size())));
@@ -125,31 +125,31 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
         cir.setReturnValue(List.of());
     }
 
-    @Inject(method = "method_17411", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/math/random/Random;setSeed(J)V"))
-    private void gbw$updateElementPower(ItemStack itemStack, World world, BlockPos pos, CallbackInfo ci) {
+    @Inject(method = "method_17411", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;setSeed(J)V"))
+    private void gbw$updateElementPower(ItemStack itemStack, Level world, BlockPos pos, CallbackInfo ci) {
         int[] add = new int[Element.values().length];
-        for (BlockPos blockPos : EnchantingTableBlock.POWER_PROVIDER_OFFSETS) {
-            BlockPos up = pos.add(blockPos.up());
+        for (BlockPos blockPos : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+            BlockPos up = pos.offset(blockPos.above());
 
-            if (world.getBlockState(up).isOf(Blocks.COAL_BLOCK)) {
+            if (world.getBlockState(up).is(Blocks.COAL_BLOCK)) {
                 ++add[Element.EARTH.ordinal()];
-            } else if (world.getBlockState(up).isOf(Blocks.REDSTONE_BLOCK)) {
+            } else if (world.getBlockState(up).is(Blocks.REDSTONE_BLOCK)) {
                 ++add[Element.FIRE.ordinal()];
-            } else if (world.getBlockState(up).isOf(Blocks.LAPIS_BLOCK)) {
+            } else if (world.getBlockState(up).is(Blocks.LAPIS_BLOCK)) {
                 ++add[Element.WATER.ordinal()];
-            } else if (world.getBlockState(up).isOf(Blocks.DIAMOND_BLOCK)) {
+            } else if (world.getBlockState(up).is(Blocks.DIAMOND_BLOCK)) {
                 ++add[Element.ICE.ordinal()];
-            } else if (world.getBlockState(up).isOf(Blocks.WHITE_WOOL)) {
+            } else if (world.getBlockState(up).is(Blocks.WHITE_WOOL)) {
                 ++add[Element.AIR.ordinal()];
-            } else if (world.getBlockState(up).isOf(Blocks.GOLD_BLOCK)) {
+            } else if (world.getBlockState(up).is(Blocks.GOLD_BLOCK)) {
                 ++add[Element.LIGHTNING.ordinal()];
-            } else if (world.getBlockState(up).isOf(Blocks.GLOWSTONE)) {
+            } else if (world.getBlockState(up).is(Blocks.GLOWSTONE)) {
                 ++add[Element.LIGHT.ordinal()];
-            } else if (world.getBlockState(up).isOf(Blocks.TINTED_GLASS)) {
+            } else if (world.getBlockState(up).is(Blocks.TINTED_GLASS)) {
                 ++add[Element.DARK.ordinal()];
-            } else if (world.getBlockState(up).isOf(Blocks.BLACK_CONCRETE)) {
+            } else if (world.getBlockState(up).is(Blocks.BLACK_CONCRETE)) {
                 ++add[Element.VOID.ordinal()];
-            } else if (world.getBlockState(up).isOf(Blocks.GLASS)) {
+            } else if (world.getBlockState(up).is(Blocks.GLASS)) {
                 ++add[Element.AETHER.ordinal()];
             }
         }
@@ -157,32 +157,32 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
         System.arraycopy(add, 0, elementPower, 0, elementPower.length);
     }
 
-    @Inject(method = "method_17411", at = @At(value = "INVOKE", target = "Lnet/minecraft/screen/EnchantmentScreenHandler;sendContentUpdates()V"))
-    private void gbw$modifyLevels(ItemStack itemStack, World world, BlockPos pos, CallbackInfo ci) {
-        IndexedIterable<RegistryEntry<Enchantment>> indexedIterable = world.getRegistryManager().getOrThrow(RegistryKeys.ENCHANTMENT).getIndexedEntries();
+    @Inject(method = "method_17411", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/EnchantmentMenu;broadcastChanges()V"))
+    private void gbw$modifyLevels(ItemStack itemStack, Level world, BlockPos pos, CallbackInfo ci) {
+        IdMap<Holder<Enchantment>> indexedIterable = world.registryAccess().lookupOrThrow(Registries.ENCHANTMENT).asHolderIdMap();
 
-        for (int i = 0; i < getLapisCount() - 1; ++i) {
-            int idx = weightedPick(random, enchantmentId, enchantmentLevel, indexedIterable);
-            if (idx < 0 || idx >= enchantmentId.length || idx >= enchantmentLevel.length)
+        for (int i = 0; i < getGoldCount() - 1; ++i) {
+            int idx = weightedPick(random, enchantClue, levelClue, indexedIterable);
+            if (idx < 0 || idx >= enchantClue.length || idx >= levelClue.length)
                 continue;
 
-            RegistryEntry<Enchantment> registryEntry = indexedIterable.get(enchantmentId[idx]);
+            Holder<Enchantment> registryEntry = indexedIterable.byId(enchantClue[idx]);
             if (registryEntry == null)
                 continue;
 
-            enchantmentLevel[idx] = Math.min(enchantmentLevel[idx] + 1, registryEntry.value().getMaxLevel());
+            levelClue[idx] = Math.min(levelClue[idx] + 1, registryEntry.value().getMaxLevel());
         }
     }
 
     @Unique
-    private int weightedPick(Random random, int[] ids, int[] levels, IndexedIterable<RegistryEntry<Enchantment>> indexedIterable) {
+    private int weightedPick(RandomSource random, int[] ids, int[] levels, IdMap<Holder<Enchantment>> indexedIterable) {
         int total = 0;
 
         for (int i = 0; i < ids.length; ++i) {
             if (ids[i] < 0)
                 continue;
 
-            RegistryEntry<Enchantment> registryEntry = indexedIterable.get(ids[i]);
+            Holder<Enchantment> registryEntry = indexedIterable.byId(ids[i]);
             if (registryEntry == null)
                 continue;
 
@@ -190,7 +190,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
 
             int add = enchantment.getWeight() * (enchantment.getMaxLevel() - levels[i] + 1);
 
-            Element element = ElementHolder.gbw$getElement(registryEntry.getKey().orElseThrow());
+            Element element = ElementHolder.gbw$getElement(registryEntry.unwrapKey().orElseThrow());
             double mod = 1d / (Math.log(elementPower[element.ordinal()] + 2) / Math.log(2));
             total += (int) Math.max(1, add * mod);
         }
@@ -204,7 +204,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
             if (ids[i] < 0)
                 continue;
 
-            RegistryEntry<Enchantment> registryEntry = indexedIterable.get(ids[i]);
+            Holder<Enchantment> registryEntry = indexedIterable.byId(ids[i]);
             if (registryEntry == null)
                 continue;
 

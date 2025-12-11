@@ -1,7 +1,5 @@
 package dev.creoii.greatbigworld.swordsandshields.registry;
 
-import net.minecraft.item.Item;
-
 public final class SwordsAndShieldsItems {
     //public static Item BRISK_FLAKE;
     //public static Item TORRENT_BALL;

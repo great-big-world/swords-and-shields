@@ -3,17 +3,17 @@ package dev.creoii.greatbigworld.swordsandshields.util;
 import dev.creoii.greatbigworld.element.Element;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsDataComponentTypes;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.registry.entry.RegistryEntry;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 
 public final class EnchantmentUtil {
-    public static boolean canBeCombined(RegistryEntry<Enchantment> first, RegistryEntry<Enchantment> second) {
-        Element a = ElementHolder.gbw$getElement(first.getKey().orElseThrow());
-        Element b = ElementHolder.gbw$getElement(first.getKey().orElseThrow());
+    public static boolean canBeCombined(Holder<Enchantment> first, Holder<Enchantment> second) {
+        Element a = ElementHolder.gbw$getElement(first.unwrapKey().orElseThrow());
+        Element b = ElementHolder.gbw$getElement(first.unwrapKey().orElseThrow());
 
         if (a != null && b != null && (a == b || a.getSynergy() == null || a.getSynergy() == b || b.getSynergy() == null || b.getSynergy() == a)) {
             return !first.equals(second) && !first.value().exclusiveSet().contains(second) && !second.value().exclusiveSet().contains(first);
@@ -25,18 +25,18 @@ public final class EnchantmentUtil {
     public static int getEnchantmentPower(ItemStack stack) {
         int enchantmentPower = 0;
 
-        if (stack.contains(DataComponentTypes.ENCHANTMENTS)) {
-            enchantmentPower = getEnchantmentPower(stack.get(DataComponentTypes.ENCHANTMENTS));
+        if (stack.has(DataComponents.ENCHANTMENTS)) {
+            enchantmentPower = getEnchantmentPower(stack.get(DataComponents.ENCHANTMENTS));
         }
 
         return enchantmentPower;
     }
 
-    public static int getEnchantmentPower(ItemEnchantmentsComponent component) {
+    public static int getEnchantmentPower(ItemEnchantments component) {
         int enchantmentPower = 0;
 
         if (component != null && !component.isEmpty()) {
-            for (Object2IntMap.Entry<RegistryEntry<Enchantment>> entry : component.getEnchantmentEntries()) {
+            for (Object2IntMap.Entry<Holder<Enchantment>> entry : component.entrySet()) {
                 enchantmentPower += entry.getIntValue();
             }
         }
@@ -50,7 +50,7 @@ public final class EnchantmentUtil {
         if (id == null || id.isBlank())
             return 0;
 
-        if (stack.contains(DataComponentTypes.TOOL)) {
+        if (stack.has(DataComponents.TOOL)) {
             ToolMaterial toolMaterial = EquipmentMaterialUtil.getToolMaterial(id);
             EquipmentMaterialUtil.Entry entry = EquipmentMaterialUtil.TOOL_ENTRIES.get(toolMaterial);
             if (entry != null)

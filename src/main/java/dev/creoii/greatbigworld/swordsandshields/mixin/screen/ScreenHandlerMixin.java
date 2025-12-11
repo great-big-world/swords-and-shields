@@ -1,23 +1,23 @@
 package dev.creoii.greatbigworld.swordsandshields.mixin.screen;
 
 import dev.creoii.greatbigworld.swordsandshields.util.ExtendedScreenHandler;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.screen.ScreenHandler;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
-@Mixin(ScreenHandler.class)
+@Mixin(AbstractContainerMenu.class)
 public class ScreenHandlerMixin implements ExtendedScreenHandler {
     @Unique
-    private PlayerEntity gbw$player;
+    private Player gbw$player;
 
     @Override
-    public PlayerEntity gbw$getPlayer() {
+    public Player gbw$getPlayer() {
         return gbw$player;
     }
 
     @Override
-    public void gbw$setPlayer(PlayerEntity player) {
+    public void gbw$setPlayer(Player player) {
         this.gbw$player = player;
     }
 }

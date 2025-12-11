@@ -1,22 +1,22 @@
 package dev.creoii.greatbigworld.swordsandshields.mixin.entity;
 
-import net.minecraft.entity.EntityData;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.SpawnReason;
-import net.minecraft.entity.attribute.DefaultAttributeContainer;
-import net.minecraft.entity.attribute.EntityAttributes;
-import net.minecraft.entity.data.DataTracker;
-import net.minecraft.entity.data.TrackedData;
-import net.minecraft.entity.data.TrackedDataHandlerRegistry;
-import net.minecraft.entity.mob.AbstractSkeletonEntity;
-import net.minecraft.entity.mob.HostileEntity;
-import net.minecraft.entity.projectile.ProjectileUtil;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.world.LocalDifficulty;
-import net.minecraft.world.ServerWorldAccess;
-import net.minecraft.world.World;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.world.DifficultyInstance;
+import net.minecraft.world.entity.EntitySpawnReason;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.SpawnGroupData;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.entity.monster.skeleton.AbstractSkeleton;
+import net.minecraft.world.entity.projectile.ProjectileUtil;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -25,37 +25,37 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(AbstractSkeletonEntity.class)
-public abstract class AbstractSkeletonEntityMixin extends HostileEntity {
-    @Shadow public abstract void updateAttackType();
-    @Unique private static final TrackedData<Byte> ARROWS = DataTracker.registerData(AbstractSkeletonEntity.class, TrackedDataHandlerRegistry.BYTE);
+@Mixin(AbstractSkeleton.class)
+public abstract class AbstractSkeletonEntityMixin extends Monster {
+    @Shadow public abstract void reassessWeaponGoal();
+    @Unique private static final EntityDataAccessor<Byte> ARROWS = SynchedEntityData.defineId(AbstractSkeleton.class, EntityDataSerializers.BYTE);
 
-    protected AbstractSkeletonEntityMixin(EntityType<? extends HostileEntity> entityType, World world) {
+    protected AbstractSkeletonEntityMixin(EntityType<? extends Monster> entityType, Level world) {
         super(entityType, world);
     }
 
     @Override
-    protected void initDataTracker(DataTracker.Builder builder) {
-        super.initDataTracker(builder);
-        builder.add(ARROWS, (byte) 32);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ARROWS, (byte) 32);
     }
 
-    @Inject(method = "createAbstractSkeletonAttributes", at = @At("RETURN"), cancellable = true)
-    private static void gbw$weakerSkeletons(CallbackInfoReturnable<DefaultAttributeContainer.Builder> cir) {
-        cir.setReturnValue(cir.getReturnValue().add(EntityAttributes.MAX_HEALTH, 16));
+    @Inject(method = "createAttributes", at = @At("RETURN"), cancellable = true)
+    private static void gbw$weakerSkeletons(CallbackInfoReturnable<AttributeSupplier.Builder> cir) {
+        cir.setReturnValue(cir.getReturnValue().add(Attributes.MAX_HEALTH, 16));
     }
 
-    @Inject(method = "initialize", at = @At("RETURN"))
-    private void gbw$initRandomArrowCount(ServerWorldAccess world, LocalDifficulty difficulty, SpawnReason spawnReason, EntityData entityData, CallbackInfoReturnable<EntityData> cir) {
-        dataTracker.set(ARROWS, (byte) (32 - random.nextInt(24)));
+    @Inject(method = "finalizeSpawn", at = @At("RETURN"))
+    private void gbw$initRandomArrowCount(ServerLevelAccessor world, DifficultyInstance difficulty, EntitySpawnReason spawnReason, SpawnGroupData entityData, CallbackInfoReturnable<SpawnGroupData> cir) {
+        this.entityData.set(ARROWS, (byte) (32 - random.nextInt(24)));
     }
 
-    @Inject(method = "shootAt", at = @At("TAIL"))
+    @Inject(method = "performRangedAttack", at = @At("TAIL"))
     private void gbw$subtractArrow(LivingEntity target, float pullProgress, CallbackInfo ci) {
-        dataTracker.set(ARROWS, (byte) (dataTracker.get(ARROWS) - 1));
-        if (dataTracker.get(ARROWS) <= 0) {
-            setStackInHand(ProjectileUtil.getHandPossiblyHolding(this, Items.BOW), ItemStack.EMPTY);
-            updateAttackType();
+        entityData.set(ARROWS, (byte) (entityData.get(ARROWS) - 1));
+        if (entityData.get(ARROWS) <= 0) {
+            setItemInHand(ProjectileUtil.getWeaponHoldingHand(this, Items.BOW), ItemStack.EMPTY);
+            reassessWeaponGoal();
         }
     }
 }

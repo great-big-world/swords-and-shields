@@ -1,18 +1,18 @@
 package dev.creoii.greatbigworld.swordsandshields.util;
 
 import dev.creoii.greatbigworld.element.Element;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.registry.RegistryKey;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.item.enchantment.Enchantment;
 
 public interface ElementHolder {
-    Map<RegistryKey<Enchantment>, Element> ENCHANTMENT_ENTRIES = new HashMap<>();
+    Map<ResourceKey<Enchantment>, Element> ENCHANTMENT_ENTRIES = new HashMap<>();
 
     @Nullable
-    static Element gbw$getElement(RegistryKey<Enchantment> key) {
+    static Element gbw$getElement(ResourceKey<Enchantment> key) {
         return ENCHANTMENT_ENTRIES.getOrDefault(key, null);
     }
 
@@ -20,7 +20,7 @@ public interface ElementHolder {
         return (ElementHolder) (Object) enchantment;
     }
 
-    static void register(RegistryKey<Enchantment> enchantment, Element element) {
+    static void register(ResourceKey<Enchantment> enchantment, Element element) {
         ENCHANTMENT_ENTRIES.put(enchantment, element);
     }
 }

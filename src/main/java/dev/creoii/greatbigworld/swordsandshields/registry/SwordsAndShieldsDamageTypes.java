@@ -1,11 +1,11 @@
 package dev.creoii.greatbigworld.swordsandshields.registry;
 
 import dev.creoii.greatbigworld.GreatBigWorld;
-import net.minecraft.entity.damage.DamageType;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.damagesource.DamageType;
 
 public final class SwordsAndShieldsDamageTypes {
-    public static final RegistryKey<DamageType> BAMBOO = RegistryKey.of(RegistryKeys.DAMAGE_TYPE, Identifier.of(GreatBigWorld.NAMESPACE, "bamboo"));
+    public static final ResourceKey<DamageType> BAMBOO = ResourceKey.create(Registries.DAMAGE_TYPE, Identifier.fromNamespaceAndPath(GreatBigWorld.NAMESPACE, "bamboo"));
 }

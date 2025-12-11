@@ -1,20 +1,20 @@
 package dev.creoii.greatbigworld.swordsandshields.util;
 
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.item.equipment.ArmorMaterial;
-import net.minecraft.item.equipment.ArmorMaterials;
-import net.minecraft.network.PacketByteBuf;
-import net.minecraft.network.RegistryByteBuf;
-import net.minecraft.network.codec.PacketCodec;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterials;
 
 public final class EquipmentMaterialUtil {
     public static Map<ArmorMaterial, Entry> ARMOR_ENTRIES = new HashMap<>();
     public static Map<ToolMaterial, Entry> TOOL_ENTRIES = new HashMap<>();
-    public static PacketCodec<RegistryByteBuf, String> PACKET_CODEC = PacketCodec.of((value, buf) -> buf.writeString(value), PacketByteBuf::readString);
+    public static StreamCodec<RegistryFriendlyByteBuf, String> PACKET_CODEC = StreamCodec.ofMember((value, buf) -> buf.writeUtf(value), FriendlyByteBuf::readUtf);
 
     @Nullable
     static ToolMaterial getToolMaterial(String id) {
@@ -34,7 +34,7 @@ public final class EquipmentMaterialUtil {
     static ArmorMaterial getArmorMaterial(String id) {
         return switch (id) {
             case "leather" -> ArmorMaterials.LEATHER;
-            case "chain" -> ArmorMaterials.CHAIN;
+            case "chain" -> ArmorMaterials.CHAINMAIL;
             case "iron" -> ArmorMaterials.IRON;
             case "gold" -> ArmorMaterials.GOLD;
             case "diamond" -> ArmorMaterials.DIAMOND;

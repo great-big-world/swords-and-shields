@@ -4,24 +4,24 @@ import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import dev.creoii.greatbigworld.element.Element;
 import dev.creoii.greatbigworld.swordsandshields.util.ElementHolder;
-import net.minecraft.component.type.ItemEnchantmentsComponent;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.registry.entry.RegistryEntry;
-import net.minecraft.text.Text;
-import net.minecraft.text.Texts;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
+import net.minecraft.core.Holder;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.ComponentUtils;
+import net.minecraft.world.item.enchantment.Enchantment;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
 
-@Mixin(ItemEnchantmentsComponent.class)
+@Mixin(ItemEnchantments.class)
 public class ItemEnchantmentsComponentMixin {
-    @WrapOperation(method = "appendTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/enchantment/Enchantment;getName(Lnet/minecraft/registry/entry/RegistryEntry;I)Lnet/minecraft/text/Text;"))
-    private Text gbw$addElementSymbol(RegistryEntry<Enchantment> enchantment, int level, Operation<Text> original) {
-        Text name = original.call(enchantment, level);
-        Element element = ElementHolder.gbw$getElement(enchantment.getKey().orElseThrow());
+    @WrapOperation(method = "addToTooltip", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;getFullname(Lnet/minecraft/core/Holder;I)Lnet/minecraft/network/chat/Component;"))
+    private Component gbw$addElementSymbol(Holder<Enchantment> enchantment, int level, Operation<Component> original) {
+        Component name = original.call(enchantment, level);
+        Element element = ElementHolder.gbw$getElement(enchantment.unwrapKey().orElseThrow());
         if (element != null)
-            return Texts.join(List.of(element.getSymbol(), name), Text.literal(" "));
+            return ComponentUtils.formatList(List.of(element.getSymbol(), name), Component.literal(" "));
         return name;
     }
 }

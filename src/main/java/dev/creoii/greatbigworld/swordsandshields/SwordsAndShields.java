@@ -9,13 +9,12 @@ import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsDataCo
 import dev.creoii.greatbigworld.swordsandshields.util.ElementHolder;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
-import net.minecraft.block.Blocks;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.enchantment.Enchantments;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.item.PotionItem;
-
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.PotionItem;
+import net.minecraft.world.item.enchantment.Enchantments;
+import net.minecraft.world.level.block.Blocks;
 import java.util.List;
 
 public class SwordsAndShields implements ModInitializer {
@@ -40,6 +39,7 @@ public class SwordsAndShields implements ModInitializer {
             .add(Items.NETHERITE_CHESTPLATE)
             .add(Items.NETHERITE_LEGGINGS)
             .add(Items.NETHERITE_BOOTS)
+            .add(Items.NETHERITE_SPEAR)
             .build();
     private static final List<Item> DIAMOND_EQUIPMENT = new ImmutableList.Builder<Item>()
             .add(Items.DIAMOND_PICKAXE)
@@ -51,6 +51,7 @@ public class SwordsAndShields implements ModInitializer {
             .add(Items.DIAMOND_CHESTPLATE)
             .add(Items.DIAMOND_LEGGINGS)
             .add(Items.DIAMOND_BOOTS)
+            .add(Items.DIAMOND_SPEAR)
             .build();
     private static final List<Item> GOLD_EQUIPMENT = new ImmutableList.Builder<Item>()
             .add(Items.GOLDEN_PICKAXE)
@@ -62,6 +63,7 @@ public class SwordsAndShields implements ModInitializer {
             .add(Items.GOLDEN_CHESTPLATE)
             .add(Items.GOLDEN_LEGGINGS)
             .add(Items.GOLDEN_BOOTS)
+            .add(Items.GOLDEN_SPEAR)
             .build();
     private static final List<Item> IRON_EQUIPMENT = new ImmutableList.Builder<Item>()
             .add(Items.IRON_PICKAXE)
@@ -73,6 +75,7 @@ public class SwordsAndShields implements ModInitializer {
             .add(Items.IRON_CHESTPLATE)
             .add(Items.IRON_LEGGINGS)
             .add(Items.IRON_BOOTS)
+            .add(Items.IRON_SPEAR)
             .build();
     private static final List<Item> COPPER_EQUIPMENT = new ImmutableList.Builder<Item>()
             .add(Items.COPPER_PICKAXE)
@@ -84,6 +87,7 @@ public class SwordsAndShields implements ModInitializer {
             .add(Items.COPPER_CHESTPLATE)
             .add(Items.COPPER_LEGGINGS)
             .add(Items.COPPER_BOOTS)
+            .add(Items.COPPER_SPEAR)
             .build();
     private static final List<Item> STONE_EQUIPMENT = new ImmutableList.Builder<Item>()
             .add(Items.STONE_PICKAXE)
@@ -91,6 +95,7 @@ public class SwordsAndShields implements ModInitializer {
             .add(Items.STONE_AXE)
             .add(Items.STONE_SHOVEL)
             .add(Items.STONE_HOE)
+            .add(Items.STONE_SPEAR)
             .build();
     private static final List<Item> WOOD_EQUIPMENT = new ImmutableList.Builder<Item>()
             .add(Items.WOODEN_PICKAXE)
@@ -98,6 +103,7 @@ public class SwordsAndShields implements ModInitializer {
             .add(Items.WOODEN_AXE)
             .add(Items.WOODEN_SHOVEL)
             .add(Items.WOODEN_HOE)
+            .add(Items.WOODEN_SPEAR)
             .build();
     private static final List<Item> CHAIN_EQUIPMENT = new ImmutableList.Builder<Item>()
             .add(Items.CHAINMAIL_HELMET)
@@ -118,31 +124,31 @@ public class SwordsAndShields implements ModInitializer {
         SwordsAndShieldsToolMaterials.register();
         SwordsAndShieldsDataComponentTypes.register();
 
-        ((AbstractBlockStateAccessor) Blocks.ENCHANTING_TABLE.getDefaultState()).setHardness(15f);
-        ((AbstractBlockStateAccessor) Blocks.SPAWNER.getDefaultState()).setLuminance(4);
+        ((AbstractBlockStateAccessor) Blocks.ENCHANTING_TABLE.defaultBlockState()).setDestroySpeed(15f);
+        ((AbstractBlockStateAccessor) Blocks.SPAWNER.defaultBlockState()).setLightEmission(4);
 
         DefaultItemComponentEvents.MODIFY.register(modifyContext -> {
             modifyContext.modify(item -> item instanceof PotionItem, (builder, item) -> {
-                builder.add(DataComponentTypes.MAX_STACK_SIZE, 4);
+                builder.set(DataComponents.MAX_STACK_SIZE, 4);
             });
             modifyContext.modify(MEATS::contains, (builder, item) -> {
-                builder.add(DataComponentTypes.MAX_STACK_SIZE, 16);
+                builder.set(DataComponents.MAX_STACK_SIZE, 16);
             });
             modifyContext.modify(PIES::contains, (builder, item) -> {
-                builder.add(DataComponentTypes.MAX_STACK_SIZE, 1);
+                builder.set(DataComponents.MAX_STACK_SIZE, 1);
             });
 
-            modifyContext.modify(NETHERITE_EQUIPMENT::contains, (builder, item) -> builder.add(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "netherite"));
-            modifyContext.modify(DIAMOND_EQUIPMENT::contains, (builder, item) -> builder.add(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "diamond"));
-            modifyContext.modify(IRON_EQUIPMENT::contains, (builder, item) -> builder.add(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "iron"));
-            modifyContext.modify(GOLD_EQUIPMENT::contains, (builder, item) -> builder.add(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "gold"));
-            modifyContext.modify(COPPER_EQUIPMENT::contains, (builder, item) -> builder.add(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "copper"));
-            modifyContext.modify(STONE_EQUIPMENT::contains, (builder, item) -> builder.add(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "stone"));
-            modifyContext.modify(WOOD_EQUIPMENT::contains, (builder, item) -> builder.add(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "wood"));
-            modifyContext.modify(LEATHER_EQUIPMENT::contains, (builder, item) -> builder.add(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "leather"));
-            modifyContext.modify(CHAIN_EQUIPMENT::contains, (builder, item) -> builder.add(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "chain"));
-            modifyContext.modify(item -> item == Items.TURTLE_HELMET, (builder, item) -> builder.add(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "turtle_scute"));
-            modifyContext.modify(item -> item == Items.WOLF_ARMOR, (builder, item) -> builder.add(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "armadillo_scute"));
+            modifyContext.modify(NETHERITE_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "netherite"));
+            modifyContext.modify(DIAMOND_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "diamond"));
+            modifyContext.modify(IRON_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "iron"));
+            modifyContext.modify(GOLD_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "gold"));
+            modifyContext.modify(COPPER_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "copper"));
+            modifyContext.modify(STONE_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "stone"));
+            modifyContext.modify(WOOD_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "wood"));
+            modifyContext.modify(LEATHER_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "leather"));
+            modifyContext.modify(CHAIN_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "chain"));
+            modifyContext.modify(item -> item == Items.TURTLE_HELMET, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "turtle_scute"));
+            modifyContext.modify(item -> item == Items.WOLF_ARMOR, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "armadillo_scute"));
         });
 
         ElementHolder.register(Enchantments.FIRE_ASPECT, Element.FIRE);
