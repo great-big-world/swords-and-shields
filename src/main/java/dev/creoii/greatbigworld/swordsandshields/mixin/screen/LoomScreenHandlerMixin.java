@@ -2,6 +2,7 @@ package dev.creoii.greatbigworld.swordsandshields.mixin.screen;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import dev.creoii.greatbigworld.client.GreatBigWorldClient;
 import dev.creoii.greatbigworld.knowledge.Knowledge;
 import dev.creoii.greatbigworld.knowledge.KnowledgeManager;
 import org.objectweb.asm.Opcodes;
@@ -27,7 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BannerPattern;
 
 @Mixin(LoomMenu.class)
-public class LoomScreenHandlerMixin extends ScreenHandlerMixin {
+public abstract class LoomScreenHandlerMixin extends ScreenHandlerMixin {
     @Shadow
     @Final
     private HolderGetter<BannerPattern> patternGetter;
@@ -70,6 +71,17 @@ public class LoomScreenHandlerMixin extends ScreenHandlerMixin {
                         }
                     });
                 }
+            } else {
+                Set<Knowledge> knowledges = GreatBigWorldClient.getKnowledge().get(Knowledge.Type.BANNER_PATTERN);
+
+                if (knowledges != null) {
+                    knowledges.forEach(knowledge -> {
+                        if (registry.containsKey(knowledge.data())) {
+                            list.add(registry.wrapAsHolder(registry.getValue(knowledge.data())));
+                        }
+                    });
+                }
+
             }
         }
 

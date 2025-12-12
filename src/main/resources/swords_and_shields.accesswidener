@@ -1,0 +1,3 @@
+accessWidener v2 named
+
+accessible method net/minecraft/world/inventory/LoomMenu getSelectablePatterns (Lnet/minecraft/world/item/ItemStack;)Ljava/util/List;
