@@ -1,0 +1,37 @@
+{
+  "sources": [
+    {
+      "type": "minecraft:directory",
+      "prefix": "item/",
+      "source": "item"
+    },
+    {
+      "type": "minecraft:paletted_permutations",
+      "palette_key": "minecraft:trims/color_palettes/trim_palette",
+      "permutations": {
+        "brown": "great_big_world:trims/color_palettes/brown",
+        "red": "great_big_world:trims/color_palettes/red",
+        "orange": "great_big_world:trims/color_palettes/orange",
+        "yellow": "great_big_world:trims/color_palettes/yellow",
+        "lime": "great_big_world:trims/color_palettes/lime",
+        "green": "great_big_world:trims/color_palettes/green",
+        "cyan": "great_big_world:trims/color_palettes/cyan",
+        "blue": "great_big_world:trims/color_palettes/blue",
+        "light_blue": "great_big_world:trims/color_palettes/light_blue",
+        "pink": "great_big_world:trims/color_palettes/pink",
+        "magenta": "great_big_world:trims/color_palettes/magenta",
+        "purple": "great_big_world:trims/color_palettes/purple",
+        "black": "great_big_world:trims/color_palettes/black",
+        "gray": "great_big_world:trims/color_palettes/gray",
+        "light_gray": "great_big_world:trims/color_palettes/light_gray",
+        "white": "great_big_world:trims/color_palettes/white"
+      },
+      "textures": [
+        "minecraft:trims/items/helmet_trim",
+        "minecraft:trims/items/chestplate_trim",
+        "minecraft:trims/items/leggings_trim",
+        "minecraft:trims/items/boots_trim"
+      ]
+    }
+  ]
+}

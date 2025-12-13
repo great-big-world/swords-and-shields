@@ -2,5 +2,22 @@
   "death.attack.bamboo": "%1$s was skewered to death",
   "death.attack.bamboo.player": "%1$s skewered by bamboo while trying to escape %2$s",
 
-  "tooltip.enchantment_power": "Enchantment Power: %s/%s"
+  "tooltip.enchantment_power": "Enchantment Power: %s/%s",
+
+  "trim_material.great_big_world.brown": "Brown",
+  "trim_material.great_big_world.red": "Red",
+  "trim_material.great_big_world.orange": "Orange",
+  "trim_material.great_big_world.yellow": "Yellow",
+  "trim_material.great_big_world.lime": "Lime",
+  "trim_material.great_big_world.green": "Green",
+  "trim_material.great_big_world.cyan": "Cyan",
+  "trim_material.great_big_world.blue": "Blue",
+  "trim_material.great_big_world.light_blue": "Light Blue",
+  "trim_material.great_big_world.pink": "Pink",
+  "trim_material.great_big_world.magenta": "Magenta",
+  "trim_material.great_big_world.purple": "Purple",
+  "trim_material.great_big_world.black": "Black",
+  "trim_material.great_big_world.gray": "Gray",
+  "trim_material.great_big_world.light_gray": "Light Gray",
+  "trim_material.great_big_world.white": "White"
 }

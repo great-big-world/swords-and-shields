@@ -1,4 +1,4 @@
-package dev.creoii.greatbigworld.swordsandshields.mixin.client;
+package dev.creoii.greatbigworld.swordsandshields.mixin.client.screen;
 
 import com.google.common.collect.Sets;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;

@@ -3,33 +3,63 @@ package dev.creoii.greatbigworld.swordsandshields.mixin.screen;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.ChatFormatting;
+import dev.creoii.greatbigworld.client.GreatBigWorldClient;
+import dev.creoii.greatbigworld.knowledge.Knowledge;
+import dev.creoii.greatbigworld.knowledge.KnowledgeManager;
+import dev.creoii.greatbigworld.swordsandshields.util.ExtendedAnvilMenu;
+import dev.creoii.greatbigworld.swordsandshields.util.ExtendedScreenHandler;
+import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.equipment.trim.ArmorTrim;
+import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import net.minecraft.world.item.equipment.trim.TrimPattern;
+import net.minecraft.world.level.Level;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyConstant;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Mixin(AnvilMenu.class)
-public abstract class AnvilMenuMixin extends ItemCombinerMenu {
-    @Shadow
-    private boolean onlyRenaming;
+public abstract class AnvilMenuMixin extends ItemCombinerMenu implements ExtendedAnvilMenu {
+    @Shadow private boolean onlyRenaming;
+    @Shadow public abstract void createResult();
+
+    @Unique private Set<TrimPattern> knownPatterns;
+    @Unique Runnable slotUpdateListener;
+    @Unique DataSlot selectedRecipeIndex;
 
     public AnvilMenuMixin(@Nullable MenuType<?> menuType, int i, Inventory inventory, ContainerLevelAccess containerLevelAccess, ItemCombinerMenuSlotDefinition itemCombinerMenuSlotDefinition) {
         super(menuType, i, inventory, containerLevelAccess, itemCombinerMenuSlotDefinition);
+    }
+
+    @Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lnet/minecraft/world/inventory/ContainerLevelAccess;)V", at = @At("TAIL"))
+    private void gbw$init(int i, Inventory inventory, ContainerLevelAccess containerLevelAccess, CallbackInfo ci) {
+        knownPatterns = new HashSet<>();
+        slotUpdateListener = () -> {
+        };
+        selectedRecipeIndex = DataSlot.standalone();
+        selectedRecipeIndex.set(-1);
     }
 
     @WrapOperation(method = "onTake", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;hasInfiniteMaterials()Z"))
@@ -62,17 +92,33 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
     }
 
     @WrapOperation(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/ResultContainer;setItem(ILnet/minecraft/world/item/ItemStack;)V", ordinal = 4))
-    private void gbw$colorItemName(ResultContainer instance, int i, ItemStack itemStack, Operation<Void> original) {
+    private void gbw$colorItem(ResultContainer instance, int i, ItemStack itemStack, Operation<Void> original) {
         ItemStack itemStack3 = inputSlots.getItem(1);
         if (itemStack3.getItem() instanceof DyeItem dyeItem) {
-            Component oldName = itemStack.get(DataComponents.CUSTOM_NAME);
-            if (oldName == null) {
-                oldName = itemStack.getItemName().copy();
+            if (gbw$getSelectedRecipeIndex() == -1) {
+                Component oldName = itemStack.get(DataComponents.CUSTOM_NAME);
+                if (oldName == null) {
+                    oldName = itemStack.getItemName().copy();
+                }
+                itemStack.set(DataComponents.CUSTOM_NAME, oldName.copy().withColor(dyeItem.getDyeColor().getTextColor()));
+                original.call(instance, i, itemStack);
+                onlyRenaming = false;
+                return;
+            } else if (!gbw$getKnownPatterns().isEmpty() && isValidPatternIndex(gbw$getSelectedRecipeIndex()) && itemStack3.has(DataComponents.PROVIDES_TRIM_MATERIAL)) {
+                Player player = ((ExtendedScreenHandler) this).gbw$getPlayer();
+                Level level = player.level();
+
+                Registry<TrimPattern> patternRegistry = level.registryAccess().lookupOrThrow(Registries.TRIM_PATTERN);
+                Registry<TrimMaterial> materialRegistry = level.registryAccess().lookupOrThrow(Registries.TRIM_MATERIAL);
+
+                TrimPattern[] trimPatterns = gbw$getKnownPatterns().toArray(TrimPattern[]::new);
+                TrimPattern pattern = trimPatterns[gbw$getSelectedRecipeIndex()];
+                ResourceKey<TrimMaterial> material = itemStack3.get(DataComponents.PROVIDES_TRIM_MATERIAL).material().key().get();
+                itemStack.set(DataComponents.TRIM, new ArmorTrim(materialRegistry.get(material).get(), patternRegistry.get(patternRegistry.getKey(pattern)).get()));
+                original.call(instance, i, itemStack);
+                onlyRenaming = false;
+                return;
             }
-            itemStack.set(DataComponents.CUSTOM_NAME, oldName.copy().withColor(dyeItem.getDyeColor().getTextColor()));
-            original.call(instance, i, itemStack);
-            onlyRenaming = false;
-            return;
         }
         original.call(instance, i, itemStack);
     }
@@ -110,5 +156,86 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu {
     @ModifyConstant(method = "createInputSlotDefinitions", constant = @Constant(intValue = 134))
     private static int gbw$modifySlotX3(int constant) {
         return 36;
+    }
+
+    @Unique
+    private void setupTrimPatterns(ItemStack itemStack) {
+        knownPatterns = new HashSet<>();
+        if (!itemStack.isEmpty()) {
+            Player player = ((ExtendedScreenHandler) this).gbw$getPlayer();
+            Level level = player.level();
+
+            Registry<TrimPattern> registry = level.registryAccess().lookupOrThrow(Registries.TRIM_PATTERN);
+
+            if (level.isClientSide()) {
+                Set<Knowledge> knowledge = GreatBigWorldClient.getKnowledge().get(Knowledge.Type.ARMOR_TRIM);
+                if (knowledge == null)
+                    return;
+
+                knowledge.forEach(knowledge1 -> {
+                    knownPatterns.add(registry.getValue(knowledge1.data()));
+                });
+            } else {
+                KnowledgeManager manager = KnowledgeManager.getServerState(level.getServer());
+                Set<Knowledge> knowledge = manager.getPlayerKnowledge(player, Knowledge.Type.ARMOR_TRIM);
+                if (knowledge == null)
+                    return;
+
+                knowledge.forEach(knowledge1 -> {
+                    knownPatterns.add(registry.getValue(knowledge1.data()));
+                });
+            }
+        }
+    }
+
+    @Override
+    public boolean clickMenuButton(Player player, int i) {
+        if (selectedRecipeIndex.get() == i) {
+            selectedRecipeIndex.set(-1);
+            createResult();
+        } else {
+            if (isValidPatternIndex(i)) {
+                selectedRecipeIndex.set(i);
+                createResult();
+            }
+        }
+        return true;
+    }
+
+    @Unique
+    public Set<TrimPattern> gbw$getKnownPatterns() {
+        return knownPatterns;
+    }
+
+    @Override
+    public int gbw$getNumberOfVisiblePatterns() {
+        return knownPatterns.size();
+    }
+
+    @Override
+    public void gbw$registerUpdateListener(Runnable runnable) {
+        slotUpdateListener = runnable;
+    }
+
+    @Override
+    public void slotsChanged(Container container) {
+        super.slotsChanged(container);
+        slotUpdateListener.run();
+        setupTrimPatterns(inputSlots.getItem(0));
+    }
+
+    @Override
+    public int gbw$getSelectedRecipeIndex() {
+        return selectedRecipeIndex.get();
+    }
+
+    @Unique
+    public boolean gbw$hasInputItem() {
+        return !inputSlots.getItem(0).isEmpty() && !knownPatterns.isEmpty();
+    }
+
+    @Unique
+    private boolean isValidPatternIndex(int i) {
+        return i >= 0 && i < knownPatterns.size();
     }
 }

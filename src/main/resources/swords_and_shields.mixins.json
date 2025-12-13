@@ -22,11 +22,11 @@
     "screen.ScreenHandlerMixin"
   ],
   "client": [
-    "client.AbstractContainerScreenMixin",
-    "client.AnvilScreenMixin",
+    "client.screen.AbstractContainerScreenMixin",
+    "client.screen.AnvilScreenMixin",
     "client.EnchantingTableBlockEntityRendererMixin",
-    "client.EnchantmentScreenMixin",
-    "client.LoomScreenMixin"
+    "client.screen.EnchantmentScreenMixin",
+    "client.screen.LoomScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1
