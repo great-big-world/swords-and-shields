@@ -48,6 +48,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu implements Extende
     @Unique private Set<TrimPattern> knownPatterns;
     @Unique Runnable slotUpdateListener;
     @Unique DataSlot selectedRecipeIndex;
+    @Unique private boolean fixRename;
 
     public AnvilMenuMixin(@Nullable MenuType<?> menuType, int i, Inventory inventory, ContainerLevelAccess containerLevelAccess, ItemCombinerMenuSlotDefinition itemCombinerMenuSlotDefinition) {
         super(menuType, i, inventory, containerLevelAccess, itemCombinerMenuSlotDefinition);
@@ -60,11 +61,21 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu implements Extende
         };
         selectedRecipeIndex = DataSlot.standalone();
         selectedRecipeIndex.set(-1);
+        fixRename = false;
     }
 
     @WrapOperation(method = "onTake", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;hasInfiniteMaterials()Z"))
     private boolean gbw$dontTakeLevels(Player instance, Operation<Boolean> original) {
         return true;
+    }
+
+    @WrapOperation(method = "onTake", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/Container;setItem(ILnet/minecraft/world/item/ItemStack;)V", ordinal = 2))
+    private void gbw$fixDecrementDyes2(Container instance, int i, ItemStack stack, Operation<Void> original) {
+        ItemStack stack1 = inputSlots.getItem(1);
+        if (fixRename && stack1.getCount() > 1) {
+            stack1.shrink(1);
+            fixRename = false;
+        } else original.call(instance, i, stack1);
     }
 
     @Inject(method = "mayPickup", at = @At("HEAD"), cancellable = true)
@@ -103,6 +114,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu implements Extende
                 itemStack.set(DataComponents.CUSTOM_NAME, oldName.copy().withColor(dyeItem.getDyeColor().getTextColor()));
                 original.call(instance, i, itemStack);
                 onlyRenaming = false;
+                fixRename = true;
                 return;
             } else if (!gbw$getKnownPatterns().isEmpty() && isValidPatternIndex(gbw$getSelectedRecipeIndex()) && itemStack3.has(DataComponents.PROVIDES_TRIM_MATERIAL)) {
                 Player player = ((ExtendedScreenHandler) this).gbw$getPlayer();
@@ -117,6 +129,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu implements Extende
                 itemStack.set(DataComponents.TRIM, new ArmorTrim(materialRegistry.get(material).get(), patternRegistry.get(patternRegistry.getKey(pattern)).get()));
                 original.call(instance, i, itemStack);
                 onlyRenaming = false;
+                fixRename = true;
                 return;
             }
         }

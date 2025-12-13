@@ -1,0 +1,226 @@
+{
+    "model": {
+        "type": "minecraft:select",
+        "cases": [
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_brown_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:brown"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_red_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:red"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_orange_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:orange"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_yellow_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:yellow"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_lime_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:lime"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_green_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:green"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_cyan_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:cyan"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_blue_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:blue"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_light_blue_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:light_blue"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_pink_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:pink"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_magenta_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:magenta"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_purple_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:purple"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_black_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:black"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_gray_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:gray"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_gray_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:light_gray"
+        },
+        {
+            "model": {
+                "type": "minecraft:model",
+                "model": "great_big_world:item/leather_helmet_white_trim",
+                "tints": [
+                    {
+                        "type": "minecraft:dye",
+                        "default": -6265536
+                    }
+                ]
+            },
+            "when": "great_big_world:white"
+        }
+        ],
+        "fallback": {
+            "type": "minecraft:model",
+            "model": "minecraft:item/leather_helmet",
+            "tints": [
+                {
+                    "type": "minecraft:dye",
+                    "default": -6265536
+                }
+            ]
+        },
+        "property": "minecraft:trim_material"
+    }
+}
