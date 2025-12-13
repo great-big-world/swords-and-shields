@@ -15,12 +15,15 @@
     "entity.PlayerEntityMixin",
     "entity.ServerPlayerEntityMixin",
     "item.ItemStackMixin",
+    "screen.AnvilMenuMixin",
     "screen.EnchantmentScreenHandlerMixin",
+    "screen.ItemCombinerMenuMixin",
     "screen.LoomScreenHandlerMixin",
     "screen.ScreenHandlerMixin"
   ],
   "client": [
     "client.AbstractContainerScreenMixin",
+    "client.AnvilScreenMixin",
     "client.EnchantingTableBlockEntityRendererMixin",
     "client.EnchantmentScreenMixin",
     "client.LoomScreenMixin"
