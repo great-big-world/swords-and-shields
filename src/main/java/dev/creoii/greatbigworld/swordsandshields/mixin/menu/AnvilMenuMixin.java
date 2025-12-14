@@ -6,10 +6,12 @@ import com.llamalad7.mixinextras.sugar.Local;
 import dev.creoii.greatbigworld.client.GreatBigWorldClient;
 import dev.creoii.greatbigworld.knowledge.Knowledge;
 import dev.creoii.greatbigworld.knowledge.KnowledgeManager;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsTrimMaterials;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsTrimPatterns;
 import dev.creoii.greatbigworld.swordsandshields.util.ExtendedAnvilMenu;
 import dev.creoii.greatbigworld.swordsandshields.util.ExtendedScreenHandler;
 import dev.creoii.greatbigworld.swordsandshields.util.SwordsAndShieldsTags;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
@@ -18,6 +20,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
@@ -125,15 +128,15 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu implements Extende
 
             if (gbw$getSelectedRecipeIndex() == -1) {
                 if (hasTrim) {
-                    ResourceKey<TrimMaterial> material = itemStack3.get(DataComponents.PROVIDES_TRIM_MATERIAL).material().key().get();
-                    boolean specialTrim = hasTrim && materialRegistry.get(material).orElseThrow().is(SwordsAndShieldsTags.DECORATION);
-                    if (specialTrim) {
-                        itemStack.set(DataComponents.TRIM, new ArmorTrim(materialRegistry.get(material).get(), patternRegistry.getOrThrow(SwordsAndShieldsTrimPatterns.NONE)));
+                    Holder<TrimMaterial> material = materialRegistry.get(itemStack3.get(DataComponents.PROVIDES_TRIM_MATERIAL).material().key().get()).orElseThrow();
+                    boolean specialTrim = hasTrim && material.is(SwordsAndShieldsTags.DECORATION);
+                    if (specialTrim && canApply(material, itemStack)) {
+                        itemStack.set(DataComponents.TRIM, new ArmorTrim(material, patternRegistry.getOrThrow(SwordsAndShieldsTrimPatterns.NONE)));
                         original.call(instance, i, itemStack);
                         onlyRenaming = false;
                         fixRename = true;
-                        return;
                     }
+                    return;
                 }
                 Component oldName = itemStack.get(DataComponents.CUSTOM_NAME);
                 if (oldName == null) {
@@ -282,5 +285,10 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu implements Extende
     @Unique
     private static boolean isValidTrimMaterialItem(ItemStack stack) {
         return stack.getItem() instanceof DyeItem || stack.is(Items.GOAT_HORN);
+    }
+
+    @Unique
+    private boolean canApply(Holder<TrimMaterial> material, ItemStack itemStack) {
+        return material.is(SwordsAndShieldsTrimMaterials.GOAT_HORN) && itemStack.has(DataComponents.EQUIPPABLE) && itemStack.get(DataComponents.EQUIPPABLE).slot() == EquipmentSlot.HEAD;
     }
 }
