@@ -1,4 +1,4 @@
-package dev.creoii.greatbigworld.swordsandshields.mixin.screen;
+package dev.creoii.greatbigworld.swordsandshields.mixin.menu;
 
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

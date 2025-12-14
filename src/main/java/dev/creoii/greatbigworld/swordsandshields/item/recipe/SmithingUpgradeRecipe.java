@@ -28,14 +28,14 @@ public class SmithingUpgradeRecipe implements SmithingRecipe {
 
     @Override
     public boolean matches(SmithingRecipeInput smithingRecipeInput, Level level) {
-        if (EquipmentUpgrading.canUpgrade(smithingRecipeInput.base()))
+        if (EquipmentUpgrading.canUpgrade(smithingRecipeInput.template()))
             return SmithingRecipe.super.matches(smithingRecipeInput, level);
         return false;
     }
 
     @Override
     public ItemStack assemble(SmithingRecipeInput recipeInput, HolderLookup.Provider provider) {
-        ItemStack stack = EquipmentUpgrading.getUpgradeFor(recipeInput.base(), recipeInput.addition().getItem());
+        ItemStack stack = EquipmentUpgrading.getUpgradeFor(recipeInput.template(), recipeInput.base().getItem());
         if (stack.has(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES)) {
             int upgrade = stack.get(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES);
             stack.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, upgrade + 1);
@@ -78,10 +78,7 @@ public class SmithingUpgradeRecipe implements SmithingRecipe {
                     Ingredient.CODEC.fieldOf("addition").forGetter(recipe -> recipe.addition.orElseThrow())
             ).apply(instance, (base, addition) -> new SmithingUpgradeRecipe(base, Optional.of(addition)));
         });
-        public static final StreamCodec<RegistryFriendlyByteBuf, SmithingUpgradeRecipe> STREAM_CODEC = StreamCodec.composite(
-                Ingredient.CONTENTS_STREAM_CODEC, recipe -> recipe.base,
-                Ingredient.OPTIONAL_CONTENTS_STREAM_CODEC, recipe -> recipe.addition,
-                SmithingUpgradeRecipe::new);
+        public static final StreamCodec<RegistryFriendlyByteBuf, SmithingUpgradeRecipe> STREAM_CODEC = StreamCodec.composite(Ingredient.CONTENTS_STREAM_CODEC, recipe -> recipe.base, Ingredient.OPTIONAL_CONTENTS_STREAM_CODEC, recipe -> recipe.addition, SmithingUpgradeRecipe::new);
 
         public MapCodec<SmithingUpgradeRecipe> codec() {
             return CODEC;

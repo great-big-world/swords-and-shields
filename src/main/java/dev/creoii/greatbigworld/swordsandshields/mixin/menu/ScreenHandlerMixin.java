@@ -1,4 +1,4 @@
-package dev.creoii.greatbigworld.swordsandshields.mixin.screen;
+package dev.creoii.greatbigworld.swordsandshields.mixin.menu;
 
 import dev.creoii.greatbigworld.swordsandshields.util.ExtendedScreenHandler;
 import net.minecraft.world.entity.player.Player;

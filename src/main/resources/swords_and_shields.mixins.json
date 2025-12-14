@@ -16,18 +16,21 @@
     "entity.ServerPlayerEntityMixin",
     "item.ArmorTrimMixin",
     "item.ItemStackMixin",
-    "screen.AnvilMenuMixin",
-    "screen.EnchantmentScreenHandlerMixin",
-    "screen.ItemCombinerMenuMixin",
-    "screen.LoomScreenHandlerMixin",
-    "screen.ScreenHandlerMixin"
+    "item.recipe.SmithingRecipeMixin",
+    "menu.AnvilMenuMixin",
+    "menu.EnchantmentScreenHandlerMixin",
+    "menu.ItemCombinerMenuMixin",
+    "menu.LoomScreenHandlerMixin",
+    "menu.ScreenHandlerMixin",
+    "menu.SmithingMenuMixin"
   ],
   "client": [
     "client.EnchantingTableBlockEntityRendererMixin",
     "client.screen.AbstractContainerScreenMixin",
     "client.screen.AnvilScreenMixin",
     "client.screen.EnchantmentScreenMixin",
-    "client.screen.LoomScreenMixin"
+    "client.screen.LoomScreenMixin",
+    "client.screen.SmithingScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

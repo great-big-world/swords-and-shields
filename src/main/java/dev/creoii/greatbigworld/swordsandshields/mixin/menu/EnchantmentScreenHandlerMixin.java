@@ -1,4 +1,4 @@
-package dev.creoii.greatbigworld.swordsandshields.mixin.screen;
+package dev.creoii.greatbigworld.swordsandshields.mixin.menu;
 
 import dev.creoii.greatbigworld.element.Element;
 import dev.creoii.greatbigworld.knowledge.Knowledge;
