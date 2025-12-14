@@ -17,7 +17,7 @@ public final class EquipmentMaterialUtil {
     public static StreamCodec<RegistryFriendlyByteBuf, String> PACKET_CODEC = StreamCodec.ofMember((value, buf) -> buf.writeUtf(value), FriendlyByteBuf::readUtf);
 
     @Nullable
-    static ToolMaterial getToolMaterial(String id) {
+    public static ToolMaterial getToolMaterial(String id) {
         return switch (id) {
             case "wood" -> ToolMaterial.WOOD;
             case "stone" -> ToolMaterial.STONE;
@@ -31,7 +31,7 @@ public final class EquipmentMaterialUtil {
     }
 
     @Nullable
-    static ArmorMaterial getArmorMaterial(String id) {
+    public static ArmorMaterial getArmorMaterial(String id) {
         return switch (id) {
             case "leather" -> ArmorMaterials.LEATHER;
             case "chain" -> ArmorMaterials.CHAINMAIL;
@@ -46,14 +46,14 @@ public final class EquipmentMaterialUtil {
         };
     }
 
-    public static void register(ArmorMaterial armorMaterial, int maxEnchantmentLevel, int totalEnchantmentLevelCap) {
-        ARMOR_ENTRIES.put(armorMaterial, new Entry(maxEnchantmentLevel, totalEnchantmentLevelCap));
+    public static void register(ArmorMaterial armorMaterial, int maxEnchantmentLevel, int totalEnchantmentLevelCap, int maxUpgrades) {
+        ARMOR_ENTRIES.put(armorMaterial, new Entry(maxEnchantmentLevel, totalEnchantmentLevelCap, maxUpgrades));
     }
 
-    public static void register(ToolMaterial toolMaterial, int maxEnchantmentLevel, int totalEnchantmentLevelCap) {
-        TOOL_ENTRIES.put(toolMaterial, new Entry(maxEnchantmentLevel, totalEnchantmentLevelCap));
+    public static void register(ToolMaterial toolMaterial, int maxEnchantmentLevel, int totalEnchantmentLevelCap, int maxUpgrades) {
+        TOOL_ENTRIES.put(toolMaterial, new Entry(maxEnchantmentLevel, totalEnchantmentLevelCap, maxUpgrades));
     }
 
-    public record Entry(int maxEnchantmentLevel, int totalEnchantmentLevelCap) {
+    public record Entry(int maxEnchantmentLevel, int totalEnchantmentLevelCap, int maxUpgrades) {
     }
 }

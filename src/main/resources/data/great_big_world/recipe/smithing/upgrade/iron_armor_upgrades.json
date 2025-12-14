@@ -1,0 +1,5 @@
+{
+  "type": "great_big_world:smithing_upgrade",
+  "addition": "#great_big_world:iron_equipment_upgrades",
+  "base": "#great_big_world:upgradeable_armor"
+}

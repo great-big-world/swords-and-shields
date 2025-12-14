@@ -3,6 +3,7 @@
   "death.attack.bamboo.player": "%1$s skewered by bamboo while trying to escape %2$s",
 
   "tooltip.enchantment_power": "Enchantment Power: %s/%s",
+  "tooltip.equipment_upgrades": "Upgrades: %s/%s",
 
   "trim_material.great_big_world.brown": "Brown",
   "trim_material.great_big_world.red": "Red",

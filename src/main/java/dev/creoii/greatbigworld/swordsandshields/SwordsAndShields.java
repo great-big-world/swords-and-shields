@@ -6,8 +6,10 @@ import dev.creoii.greatbigworld.mixin.AbstractBlockStateAccessor;
 import dev.creoii.greatbigworld.swordsandshields.item.SwordsAndShieldsArmorMaterials;
 import dev.creoii.greatbigworld.swordsandshields.item.SwordsAndShieldsToolMaterials;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsDataComponentTypes;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsRecipes;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsTrimMaterials;
 import dev.creoii.greatbigworld.swordsandshields.util.ElementHolder;
+import dev.creoii.greatbigworld.swordsandshields.util.EquipmentUpgrading;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
 import net.minecraft.core.component.DataComponents;
@@ -125,6 +127,8 @@ public class SwordsAndShields implements ModInitializer {
         SwordsAndShieldsArmorMaterials.register();
         SwordsAndShieldsToolMaterials.register();
         SwordsAndShieldsDataComponentTypes.register();
+        SwordsAndShieldsRecipes.register();
+        EquipmentUpgrading.register();
 
         ((AbstractBlockStateAccessor) Blocks.ENCHANTING_TABLE.defaultBlockState()).setDestroySpeed(15f);
         ((AbstractBlockStateAccessor) Blocks.SPAWNER.defaultBlockState()).setLightEmission(4);
@@ -140,17 +144,50 @@ public class SwordsAndShields implements ModInitializer {
                 builder.set(DataComponents.MAX_STACK_SIZE, 1);
             });
 
-            modifyContext.modify(NETHERITE_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "netherite"));
-            modifyContext.modify(DIAMOND_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "diamond"));
-            modifyContext.modify(IRON_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "iron"));
-            modifyContext.modify(GOLD_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "gold"));
-            modifyContext.modify(COPPER_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "copper"));
-            modifyContext.modify(STONE_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "stone"));
-            modifyContext.modify(WOOD_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "wood"));
-            modifyContext.modify(LEATHER_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "leather"));
-            modifyContext.modify(CHAIN_EQUIPMENT::contains, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "chain"));
-            modifyContext.modify(item -> item == Items.TURTLE_HELMET, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "turtle_scute"));
-            modifyContext.modify(item -> item == Items.WOLF_ARMOR, (builder, item) -> builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "armadillo_scute"));
+            modifyContext.modify(NETHERITE_EQUIPMENT::contains, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "netherite");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
+            modifyContext.modify(DIAMOND_EQUIPMENT::contains, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "diamond");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
+            modifyContext.modify(IRON_EQUIPMENT::contains, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "iron");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
+            modifyContext.modify(GOLD_EQUIPMENT::contains, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "gold");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
+            modifyContext.modify(COPPER_EQUIPMENT::contains, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "copper");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
+            modifyContext.modify(STONE_EQUIPMENT::contains, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "stone");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
+            modifyContext.modify(WOOD_EQUIPMENT::contains, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "wood");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
+            modifyContext.modify(LEATHER_EQUIPMENT::contains, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "leather");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
+            modifyContext.modify(CHAIN_EQUIPMENT::contains, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "chain");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
+            modifyContext.modify(item -> item == Items.TURTLE_HELMET, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "turtle_scute");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
+            modifyContext.modify(item -> item == Items.WOLF_ARMOR, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "armadillo_scute");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
 
             modifyContext.modify(item -> item == Items.BROWN_DYE, (builder, item) -> builder.set(DataComponents.PROVIDES_TRIM_MATERIAL, new ProvidesTrimMaterial(SwordsAndShieldsTrimMaterials.BROWN)));
             modifyContext.modify(item -> item == Items.RED_DYE, (builder, item) -> builder.set(DataComponents.PROVIDES_TRIM_MATERIAL, new ProvidesTrimMaterial(SwordsAndShieldsTrimMaterials.RED)));
