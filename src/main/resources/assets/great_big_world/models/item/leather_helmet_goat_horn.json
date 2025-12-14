@@ -1,6 +1,8 @@
 {
     "parent": "minecraft:item/generated",
     "textures": {
-        "layer0": "great_big_world:item/leather_helmet_goat_horn"
+      "layer0": "minecraft:item/leather_helmet",
+      "layer1": "minecraft:item/leather_helmet_overlay",
+      "layer2": "great_big_world:item/goat_horn_overlay"
     }
 }

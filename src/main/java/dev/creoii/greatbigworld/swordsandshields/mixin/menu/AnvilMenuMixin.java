@@ -74,6 +74,9 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu implements Extende
 
     @WrapOperation(method = "onTake", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/Container;setItem(ILnet/minecraft/world/item/ItemStack;)V", ordinal = 2))
     private void gbw$fixDecrementDyes2(Container instance, int i, ItemStack stack, Operation<Void> original) {
+        if (this instanceof ExtendedScreenHandler extendedScreenHandler && extendedScreenHandler.gbw$getPlayer().hasInfiniteMaterials())
+            return;
+
         ItemStack stack1 = inputSlots.getItem(1);
         ItemStack temp = stack1.copy();
         if (fixRename && stack1.getCount() > 1) {
