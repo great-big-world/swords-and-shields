@@ -20,5 +20,8 @@
   "trim_material.great_big_world.black": "Black",
   "trim_material.great_big_world.gray": "Gray",
   "trim_material.great_big_world.light_gray": "Light Gray",
-  "trim_material.great_big_world.white": "White"
+  "trim_material.great_big_world.white": "White",
+  "trim_material.great_big_world.goat_horn": "Goat Horn",
+
+  "trim_pattern.great_big_world.none": ""
 }

@@ -23,4 +23,5 @@ public final class SwordsAndShieldsTrimMaterials {
     public static final ResourceKey<TrimMaterial> GRAY = ResourceKey.create(Registries.TRIM_MATERIAL, Identifier.fromNamespaceAndPath(GreatBigWorld.NAMESPACE, "gray"));
     public static final ResourceKey<TrimMaterial> LIGHT_GRAY = ResourceKey.create(Registries.TRIM_MATERIAL, Identifier.fromNamespaceAndPath(GreatBigWorld.NAMESPACE, "light_gray"));
     public static final ResourceKey<TrimMaterial> WHITE = ResourceKey.create(Registries.TRIM_MATERIAL, Identifier.fromNamespaceAndPath(GreatBigWorld.NAMESPACE, "white"));
+    public static final ResourceKey<TrimMaterial> GOAT_HORN = ResourceKey.create(Registries.TRIM_MATERIAL, Identifier.fromNamespaceAndPath(GreatBigWorld.NAMESPACE, "goat_horn"));
 }

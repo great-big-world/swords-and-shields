@@ -4,6 +4,8 @@ import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsDataCo
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentUtil;
 import dev.creoii.greatbigworld.swordsandshields.util.EquipmentMaterialUtil;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.item.equipment.ArmorMaterial;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -52,12 +54,23 @@ public abstract class ItemStackMixin implements DataComponentHolder {
     private void appendEquipmentUpgrades(Consumer<Component> textConsumer) {
         ItemStack stack = (ItemStack) (Object) this;
         String material = stack.get(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL);
-        int maxUpgrades = stack.has(DataComponents.TOOL) ? EquipmentMaterialUtil.TOOL_ENTRIES.get(EquipmentMaterialUtil.getToolMaterial(material)).maxUpgrades() : EquipmentMaterialUtil.ARMOR_ENTRIES.get(EquipmentMaterialUtil.getArmorMaterial(material)).maxUpgrades();
+        int maxUpgrades = 0;
+        if (material != null && stack.has(DataComponents.TOOL)) {
+            ToolMaterial toolMaterial = EquipmentMaterialUtil.getToolMaterial(material);
+            if (toolMaterial != null)
+                maxUpgrades = EquipmentMaterialUtil.TOOL_ENTRIES.get(toolMaterial).maxUpgrades();
+        } else if (material != null) {
+            ArmorMaterial armorMaterial = EquipmentMaterialUtil.getArmorMaterial(material);
+            if (armorMaterial != null)
+                maxUpgrades = EquipmentMaterialUtil.ARMOR_ENTRIES.get(armorMaterial).maxUpgrades();
+        }
 
         if (maxUpgrades <= 0)
             return;
 
-        int upgrades = stack.get(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES);
+        int upgrades = stack.getOrDefault(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, -1);
+        if (upgrades < 0)
+            return;
 
         ChatFormatting formatting = ChatFormatting.GRAY;
         if (upgrades >= maxUpgrades)

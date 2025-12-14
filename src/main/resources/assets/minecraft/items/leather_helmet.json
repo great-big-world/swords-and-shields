@@ -209,7 +209,14 @@
                 ]
             },
             "when": "great_big_world:white"
-        }
+        },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "great_big_world:item/leather_helmet_goat_horn"
+            },
+            "when": "great_big_world:goat_horn"
+          }
         ],
         "fallback": {
             "type": "minecraft:model",

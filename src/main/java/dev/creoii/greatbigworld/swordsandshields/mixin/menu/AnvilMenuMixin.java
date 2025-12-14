@@ -6,8 +6,10 @@ import com.llamalad7.mixinextras.sugar.Local;
 import dev.creoii.greatbigworld.client.GreatBigWorldClient;
 import dev.creoii.greatbigworld.knowledge.Knowledge;
 import dev.creoii.greatbigworld.knowledge.KnowledgeManager;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsTrimPatterns;
 import dev.creoii.greatbigworld.swordsandshields.util.ExtendedAnvilMenu;
 import dev.creoii.greatbigworld.swordsandshields.util.ExtendedScreenHandler;
+import dev.creoii.greatbigworld.swordsandshields.util.SwordsAndShieldsTags;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.component.DataComponents;
@@ -22,6 +24,7 @@ import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.DyeItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.equipment.trim.ArmorTrim;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import net.minecraft.world.item.equipment.trim.TrimPattern;
@@ -92,41 +95,59 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu implements Extende
         return original.call(string);
     }
 
-    @WrapOperation(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z"))
+    @WrapOperation(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/world/item/Item;)Z", ordinal = 0))
     private boolean gbw$allowDyeMatch(ItemStack instance, Item item, Operation<Boolean> original, @Local(ordinal = 2) ItemStack itemStack3) {
-        return original.call(instance, item) || itemStack3.getItem() instanceof DyeItem;
+        return original.call(instance, item) || isValidTrimMaterialItem(itemStack3);
     }
 
     @WrapOperation(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;has(Lnet/minecraft/core/component/DataComponentType;)Z", ordinal = 1))
     private boolean gbw$allowDyeNonRenamedItems(ItemStack instance, DataComponentType dataComponentType, Operation<Boolean> original, @Local(ordinal = 2) ItemStack itemStack3) {
-        return original.call(instance, dataComponentType) || itemStack3.getItem() instanceof DyeItem;
+        return original.call(instance, dataComponentType) || isValidTrimMaterialItem(itemStack3);
     }
 
     @WrapOperation(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/ResultContainer;setItem(ILnet/minecraft/world/item/ItemStack;)V", ordinal = 4))
     private void gbw$colorItem(ResultContainer instance, int i, ItemStack itemStack, Operation<Void> original) {
         ItemStack itemStack3 = inputSlots.getItem(1);
-        if (itemStack3.getItem() instanceof DyeItem dyeItem) {
+        if (isValidTrimMaterialItem(itemStack3)) {
+            Player player = ((ExtendedScreenHandler) this).gbw$getPlayer();
+            Level level = player.level();
+
+            Registry<TrimPattern> patternRegistry = level.registryAccess().lookupOrThrow(Registries.TRIM_PATTERN);
+            Registry<TrimMaterial> materialRegistry = level.registryAccess().lookupOrThrow(Registries.TRIM_MATERIAL);
+
+            boolean hasTrim = itemStack3.has(DataComponents.PROVIDES_TRIM_MATERIAL);
+
             if (gbw$getSelectedRecipeIndex() == -1) {
+                if (hasTrim) {
+                    ResourceKey<TrimMaterial> material = itemStack3.get(DataComponents.PROVIDES_TRIM_MATERIAL).material().key().get();
+                    boolean specialTrim = hasTrim && materialRegistry.get(material).orElseThrow().is(SwordsAndShieldsTags.DECORATION);
+                    if (specialTrim) {
+                        itemStack.set(DataComponents.TRIM, new ArmorTrim(materialRegistry.get(material).get(), patternRegistry.getOrThrow(SwordsAndShieldsTrimPatterns.NONE)));
+                        original.call(instance, i, itemStack);
+                        onlyRenaming = false;
+                        fixRename = true;
+                        return;
+                    }
+                }
                 Component oldName = itemStack.get(DataComponents.CUSTOM_NAME);
                 if (oldName == null) {
                     oldName = itemStack.getItemName().copy();
                 }
-                itemStack.set(DataComponents.CUSTOM_NAME, oldName.copy().withColor(dyeItem.getDyeColor().getTextColor()));
+                if (itemStack3.getItem() instanceof DyeItem dyeItem)
+                    itemStack.set(DataComponents.CUSTOM_NAME, oldName.copy().withColor(dyeItem.getDyeColor().getTextColor()));
                 original.call(instance, i, itemStack);
                 onlyRenaming = false;
                 fixRename = true;
                 return;
-            } else if (!gbw$getKnownPatterns().isEmpty() && isValidPatternIndex(gbw$getSelectedRecipeIndex()) && itemStack3.has(DataComponents.PROVIDES_TRIM_MATERIAL)) {
-                Player player = ((ExtendedScreenHandler) this).gbw$getPlayer();
-                Level level = player.level();
-
-                Registry<TrimPattern> patternRegistry = level.registryAccess().lookupOrThrow(Registries.TRIM_PATTERN);
-                Registry<TrimMaterial> materialRegistry = level.registryAccess().lookupOrThrow(Registries.TRIM_MATERIAL);
-
-                TrimPattern[] trimPatterns = gbw$getKnownPatterns().toArray(TrimPattern[]::new);
-                TrimPattern pattern = trimPatterns[gbw$getSelectedRecipeIndex()];
+            } else if (hasTrim) {
                 ResourceKey<TrimMaterial> material = itemStack3.get(DataComponents.PROVIDES_TRIM_MATERIAL).material().key().get();
-                itemStack.set(DataComponents.TRIM, new ArmorTrim(materialRegistry.get(material).get(), patternRegistry.get(patternRegistry.getKey(pattern)).get()));
+
+                if (!gbw$getKnownPatterns().isEmpty() && isValidPatternIndex(gbw$getSelectedRecipeIndex())) {
+                    TrimPattern[] trimPatterns = gbw$getKnownPatterns().toArray(TrimPattern[]::new);
+                    TrimPattern pattern = trimPatterns[gbw$getSelectedRecipeIndex()];
+                    itemStack.set(DataComponents.TRIM, new ArmorTrim(materialRegistry.get(material).get(), patternRegistry.getOrThrow(patternRegistry.getResourceKey(pattern).get())));
+                }
+
                 original.call(instance, i, itemStack);
                 onlyRenaming = false;
                 fixRename = true;
@@ -138,7 +159,7 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu implements Extende
 
     @WrapOperation(method = "createResult", at = @At(value = "INVOKE", target = "Ljava/lang/String;equals(Ljava/lang/Object;)Z"))
     private boolean gbw$allowDyeAlways(String instance, Object o, Operation<Boolean> original, @Local(ordinal = 2) ItemStack itemStack3) {
-        return original.call(instance, o) && !(itemStack3.getItem() instanceof DyeItem);
+        return original.call(instance, o) && !(isValidTrimMaterialItem(itemStack3));
     }
 
     @ModifyConstant(method = "createInputSlotDefinitions", constant = @Constant(intValue = 47, ordinal = 0))
@@ -250,5 +271,10 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu implements Extende
     @Unique
     private boolean isValidPatternIndex(int i) {
         return i >= 0 && i < knownPatterns.size();
+    }
+
+    @Unique
+    private static boolean isValidTrimMaterialItem(ItemStack stack) {
+        return stack.getItem() instanceof DyeItem || stack.is(Items.GOAT_HORN);
     }
 }

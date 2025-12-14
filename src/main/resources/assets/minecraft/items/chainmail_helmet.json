@@ -113,7 +113,14 @@
                 "model": "great_big_world:item/chainmail_helmet_white_trim"
             },
             "when": "great_big_world:white"
-        }
+        },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "great_big_world:item/chainmail_helmet_goat_horn"
+            },
+            "when": "great_big_world:goat_horn"
+          }
         ],
         "fallback": {
             "type": "minecraft:model",

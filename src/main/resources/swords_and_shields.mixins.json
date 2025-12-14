@@ -25,7 +25,15 @@
     "menu.SmithingMenuMixin"
   ],
   "client": [
-    "client.EnchantingTableBlockEntityRendererMixin",
+    "client.render.AbstractSkeletonRendererMixin",
+    "client.render.AbstractZombieRendererMixin",
+    "client.render.ArmorStandRendererMixin",
+    "client.render.AvatarRendererMixin",
+    "client.render.EnchantingTableBlockEntityRendererMixin",
+    "client.render.EquipmentLayerRendererMixin",
+    "client.render.PiglinRendererMixin",
+    "client.render.ZombieVillagerRendererMixin",
+    "client.render.ZombifiedPiglinRendererMixin",
     "client.screen.AbstractContainerScreenMixin",
     "client.screen.AnvilScreenMixin",
     "client.screen.EnchantmentScreenMixin",

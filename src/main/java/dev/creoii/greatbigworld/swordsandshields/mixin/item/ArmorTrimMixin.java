@@ -1,5 +1,7 @@
 package dev.creoii.greatbigworld.swordsandshields.mixin.item;
 
+import dev.creoii.greatbigworld.swordsandshields.util.SwordsAndShieldsTags;
+import net.minecraft.ChatFormatting;
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentGetter;
 import net.minecraft.network.chat.CommonComponents;
@@ -20,7 +22,9 @@ import java.util.function.Consumer;
 public record ArmorTrimMixin(Holder<TrimMaterial> material, Holder<TrimPattern> pattern) {
     @Inject(method = "addToTooltip", at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V", ordinal = 1), cancellable = true)
     private void gbw$reformatArmorTrimTooltip(Item.TooltipContext tooltipContext, Consumer<Component> consumer, TooltipFlag tooltipFlag, DataComponentGetter dataComponentGetter, CallbackInfo ci) {
-        consumer.accept(CommonComponents.space().append(material.value().description()).append(CommonComponents.space().append(pattern.value().copyWithStyle(material))));
+        if (material.is(SwordsAndShieldsTags.DECORATION)) {
+            consumer.accept(CommonComponents.space().append(material.value().description()).withStyle(ChatFormatting.GRAY));
+        } else consumer.accept(CommonComponents.space().append(material.value().description()).append(CommonComponents.space().append(pattern.value().copyWithStyle(material))));
         ci.cancel();
     }
 }
