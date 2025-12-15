@@ -38,7 +38,7 @@ public abstract class ItemStackMixin implements DataComponentHolder {
         ItemStack stack = (ItemStack) (Object) this;
         int totalEnchantmentLevelCap = EnchantmentUtil.getEnchantmentLevelCap(stack);
 
-        if (totalEnchantmentLevelCap < 0)
+        if (totalEnchantmentLevelCap <= 0)
             return;
 
         int enchantmentPower = EnchantmentUtil.getEnchantmentPower(stack);
