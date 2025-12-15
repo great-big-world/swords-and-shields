@@ -6,6 +6,7 @@ import dev.creoii.greatbigworld.mixin.AbstractBlockStateAccessor;
 import dev.creoii.greatbigworld.swordsandshields.item.SwordsAndShieldsArmorMaterials;
 import dev.creoii.greatbigworld.swordsandshields.item.SwordsAndShieldsToolMaterials;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsDataComponentTypes;
+import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsItems;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsRecipes;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsTrimMaterials;
 import dev.creoii.greatbigworld.swordsandshields.util.ElementHolder;
@@ -125,6 +126,7 @@ public class SwordsAndShields implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        SwordsAndShieldsItems.register();
         SwordsAndShieldsArmorMaterials.register();
         SwordsAndShieldsToolMaterials.register();
         SwordsAndShieldsDataComponentTypes.register();
