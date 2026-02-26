@@ -21,6 +21,10 @@ public interface ElementHolder {
     }
 
     static void register(ResourceKey<Enchantment> enchantment, Element element) {
+        if (ENCHANTMENT_ENTRIES.containsKey(enchantment)) {
+            System.out.println("Attempted to associate enchantment " + enchantment.identifier() + " with multiple elements");
+            return;
+        }
         ENCHANTMENT_ENTRIES.put(enchantment, element);
     }
 }

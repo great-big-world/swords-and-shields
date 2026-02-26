@@ -231,6 +231,7 @@ public class SwordsAndShields implements ModInitializer {
 
         ElementHolder.register(Enchantments.LOYALTY, Element.LIGHTNING);
         ElementHolder.register(Enchantments.CHANNELING, Element.LIGHTNING);
+        ElementHolder.register(Enchantments.LUNGE, Element.LIGHTNING);
 
         ElementHolder.register(Enchantments.DEPTH_STRIDER, Element.WATER);
         ElementHolder.register(Enchantments.AQUA_AFFINITY, Element.WATER);
@@ -250,6 +251,7 @@ public class SwordsAndShields implements ModInitializer {
         ElementHolder.register(Enchantments.FORTUNE, Element.LIGHT);
         ElementHolder.register(Enchantments.BINDING_CURSE, Element.LIGHT);
         ElementHolder.register(Enchantments.PROTECTION, Element.LIGHT);
+        ElementHolder.register(Enchantments.LOOTING, Element.AETHER);
 
         ElementHolder.register(Enchantments.SWIFT_SNEAK, Element.DARK);
         ElementHolder.register(Enchantments.SOUL_SPEED, Element.DARK);
@@ -261,7 +263,5 @@ public class SwordsAndShields implements ModInitializer {
         ElementHolder.register(Enchantments.INFINITY, Element.VOID);
 
         ElementHolder.register(Enchantments.MENDING, Element.AETHER);
-        ElementHolder.register(Enchantments.LOOTING, Element.AETHER);
-        ElementHolder.register(Enchantments.FORTUNE, Element.AETHER);
     }
 }
