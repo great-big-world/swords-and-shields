@@ -191,6 +191,18 @@ public class SwordsAndShields implements ModInitializer {
                 builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "armadillo_scute");
                 builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
             });
+            modifyContext.modify(item -> item == Items.MACE, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "mace");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
+            modifyContext.modify(item -> item == Items.TRIDENT, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "trident");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
+            modifyContext.modify(item -> item == Items.SHIELD, (builder, item) -> {
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_MATERIAL, "shield");
+                builder.set(SwordsAndShieldsDataComponentTypes.EQUIPMENT_UPGRADES, 0);
+            });
 
             modifyContext.modify(item -> item == Items.BROWN_DYE, (builder, item) -> builder.set(DataComponents.PROVIDES_TRIM_MATERIAL, new ProvidesTrimMaterial(new EitherHolder<>(SwordsAndShieldsTrimMaterials.BROWN))));
             modifyContext.modify(item -> item == Items.RED_DYE, (builder, item) -> builder.set(DataComponents.PROVIDES_TRIM_MATERIAL, new ProvidesTrimMaterial(new EitherHolder<>(SwordsAndShieldsTrimMaterials.RED))));

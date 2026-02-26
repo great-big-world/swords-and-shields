@@ -12,9 +12,12 @@ import net.minecraft.world.item.equipment.ArmorMaterial;
 import net.minecraft.world.item.equipment.ArmorMaterials;
 
 public final class EquipmentMaterialUtil {
-    public static Map<ArmorMaterial, Entry> ARMOR_ENTRIES = new HashMap<>();
-    public static Map<ToolMaterial, Entry> TOOL_ENTRIES = new HashMap<>();
-    public static StreamCodec<RegistryFriendlyByteBuf, String> PACKET_CODEC = StreamCodec.ofMember((value, buf) -> buf.writeUtf(value), FriendlyByteBuf::readUtf);
+    public static final Map<ArmorMaterial, Entry> ARMOR_ENTRIES = new HashMap<>();
+    public static final Map<ToolMaterial, Entry> TOOL_ENTRIES = new HashMap<>();
+    public static final StreamCodec<RegistryFriendlyByteBuf, String> PACKET_CODEC = StreamCodec.ofMember((value, buf) -> buf.writeUtf(value), FriendlyByteBuf::readUtf);
+    public static final ToolMaterial MACE = new ToolMaterial(null, 0, 0f, 0f, 0, null);
+    public static final ToolMaterial TRIDENT = new ToolMaterial(null, 0, 0f, 0f, 0, null);
+    public static final ToolMaterial SHIELD = new ToolMaterial(null, 0, 0f, 0f, 0, null);
 
     @Nullable
     public static ToolMaterial getToolMaterial(String id) {
@@ -26,6 +29,9 @@ public final class EquipmentMaterialUtil {
             case "diamond" -> ToolMaterial.DIAMOND;
             case "netherite" -> ToolMaterial.NETHERITE;
             case "copper" -> ToolMaterial.COPPER;
+            case "mace" -> MACE;
+            case "trident" -> TRIDENT;
+            case "shield" -> SHIELD;
             default -> null;
         };
     }

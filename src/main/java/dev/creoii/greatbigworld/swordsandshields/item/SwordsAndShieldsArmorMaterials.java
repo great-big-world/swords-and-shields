@@ -13,6 +13,6 @@ public final class SwordsAndShieldsArmorMaterials {
         EquipmentMaterialUtil.register(ArmorMaterials.DIAMOND, 7, 13, 3);
         EquipmentMaterialUtil.register(ArmorMaterials.NETHERITE, 6, 11, 4);
         EquipmentMaterialUtil.register(ArmorMaterials.ARMADILLO_SCUTE, 0, 0, 0);
-        EquipmentMaterialUtil.register(ArmorMaterials.TURTLE_SCUTE, 0, 0, 0);
+        EquipmentMaterialUtil.register(ArmorMaterials.TURTLE_SCUTE, 3, 10, 3);
     }
 }
