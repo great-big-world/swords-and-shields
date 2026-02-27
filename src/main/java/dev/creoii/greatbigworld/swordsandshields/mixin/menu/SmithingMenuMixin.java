@@ -7,19 +7,15 @@ import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipePropertySet;
-import net.minecraft.world.item.crafting.SmithingRecipe;
 import org.jspecify.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-import java.util.Optional;
 import java.util.function.Predicate;
 
 @Mixin(SmithingMenu.class)
@@ -38,11 +34,6 @@ public abstract class SmithingMenuMixin extends ItemCombinerMenu {
     @WrapOperation(method = "getRelevantItems", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/Container;getItem(I)Lnet/minecraft/world/item/ItemStack;", ordinal = 2))
     private ItemStack gbw$cancelSlot2Get1(Container instance, int i, Operation<ItemStack> original) {
         return ItemStack.EMPTY;
-    }
-
-    @Inject(method = "createResult", at = @At(value = "INVOKE", target = "Ljava/util/Optional;ifPresentOrElse(Ljava/util/function/Consumer;Ljava/lang/Runnable;)V"))
-    private void debug(CallbackInfo ci, @Local Optional<RecipeHolder<SmithingRecipe>> optional) {
-        optional.ifPresent(holder -> System.out.println("recipe type present: " + holder.id().identifier()));
     }
 
     @WrapOperation(method = "createRecipeInput", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/Container;getItem(I)Lnet/minecraft/world/item/ItemStack;", ordinal = 2))
