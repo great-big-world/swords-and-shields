@@ -25,6 +25,7 @@
     "menu.SmithingMenuMixin"
   ],
   "client": [
+    "client.SelectItemModelPropertiesMixin",
     "client.render.AbstractSkeletonRendererMixin",
     "client.render.AbstractZombieRendererMixin",
     "client.render.ArmorStandRendererMixin",

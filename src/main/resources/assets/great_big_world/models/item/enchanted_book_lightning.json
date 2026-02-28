@@ -1,0 +1,7 @@
+{
+    "parent": "minecraft:item/generated",
+    "textures": {
+        "layer0": "great_big_world:item/yellow_book",
+        "layer1": "great_big_world:item/enchanted_book_overlay"
+    }
+}

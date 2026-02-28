@@ -1,0 +1,82 @@
+{
+  "model": {
+    "type": "minecraft:select",
+    "property": "great_big_world:enchantment_element",
+    "cases": [
+      {
+        "when": "earth",
+        "model": {
+          "type": "minecraft:model",
+          "model": "great_big_world:item/enchanted_book_earth"
+        }
+      },
+      {
+        "when": "fire",
+        "model": {
+          "type": "minecraft:model",
+          "model": "great_big_world:item/enchanted_book_fire"
+        }
+      },
+      {
+        "when": "water",
+        "model": {
+          "type": "minecraft:model",
+          "model": "great_big_world:item/enchanted_book_water"
+        }
+      },
+      {
+        "when": "ice",
+        "model": {
+          "type": "minecraft:model",
+          "model": "great_big_world:item/enchanted_book_ice"
+        }
+      },
+      {
+        "when": "air",
+        "model": {
+          "type": "minecraft:model",
+          "model": "great_big_world:item/enchanted_book_air"
+        }
+      },
+      {
+        "when": "lightning",
+        "model": {
+          "type": "minecraft:model",
+          "model": "great_big_world:item/enchanted_book_lightning"
+        }
+      },
+      {
+        "when": "light",
+        "model": {
+          "type": "minecraft:model",
+          "model": "great_big_world:item/enchanted_book_light"
+        }
+      },
+      {
+        "when": "dark",
+        "model": {
+          "type": "minecraft:model",
+          "model": "great_big_world:item/enchanted_book_dark"
+        }
+      },
+      {
+        "when": "void",
+        "model": {
+          "type": "minecraft:model",
+          "model": "great_big_world:item/enchanted_book_void"
+        }
+      },
+      {
+        "when": "aether",
+        "model": {
+          "type": "minecraft:model",
+          "model": "great_big_world:item/enchanted_book_aether"
+        }
+      }
+    ],
+    "fallback": {
+      "type": "minecraft:model",
+      "model": "minecraft:item/enchanted_book"
+    }
+  }
+}
