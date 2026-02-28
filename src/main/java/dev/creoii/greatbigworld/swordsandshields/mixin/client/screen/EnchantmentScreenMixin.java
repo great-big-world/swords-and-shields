@@ -7,6 +7,7 @@ import dev.creoii.greatbigworld.element.Element;
 import dev.creoii.greatbigworld.knowledge.Knowledge;
 import dev.creoii.greatbigworld.swordsandshields.util.ElementHolder;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 import java.util.List;
@@ -20,6 +21,9 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 @Mixin(EnchantmentScreen.class)
 public class EnchantmentScreenMixin {
+    @Unique
+    private static final Component SPACE = Component.literal(" ");
+
     @WrapOperation(method = "renderBg", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/EnchantmentMenu;getGoldCount()I"))
     private int gbw$ignoreLapisCount(EnchantmentMenu instance, Operation<Integer> original) {
         Set<Knowledge> knowledge = GreatBigWorldClient.getKnowledge().getOrDefault(Knowledge.Type.ENCHANTMENT, null);
@@ -35,7 +39,7 @@ public class EnchantmentScreenMixin {
         Component name = original.call(enchantment, level);
         Element element = ElementHolder.gbw$getElement(enchantment.unwrapKey().orElseThrow());
         if (element != null)
-            return ComponentUtils.formatList(List.of(element.getSymbol(), name), Component.literal(" "));
+            return ComponentUtils.formatList(List.of(element.getSymbol(), name), SPACE);
         return name;
     }
 
