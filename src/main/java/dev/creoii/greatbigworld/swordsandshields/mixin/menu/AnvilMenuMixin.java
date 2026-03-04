@@ -114,6 +114,17 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu implements Extende
         return original.call(instance, dataComponentType) || isValidTrimMaterialItem(itemStack3);
     }
 
+    @WrapOperation(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;isDamageableItem()Z", ordinal = 2))
+    private boolean gbw$cancelDamageLogic(ItemStack instance, Operation<Boolean> original) {
+        return false;
+    }
+
+    @WrapOperation(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/ResultContainer;setItem(ILnet/minecraft/world/item/ItemStack;)V", ordinal = 4))
+    private void gbw$simpleDamageLogic(ResultContainer instance, int i, ItemStack stack, Operation<Void> original, @Local(ordinal = 0) ItemStack itemStack) {
+        stack.setDamageValue(itemStack.getDamageValue());
+        original.call(instance, i, stack);
+    }
+
     @WrapOperation(method = "createResult", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/ResultContainer;setItem(ILnet/minecraft/world/item/ItemStack;)V", ordinal = 4))
     private void gbw$colorItem(ResultContainer instance, int i, ItemStack itemStack, Operation<Void> original) {
         ItemStack itemStack3 = inputSlots.getItem(1);
