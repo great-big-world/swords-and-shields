@@ -128,7 +128,8 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
     @Inject(method = "method_17411", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;setSeed(J)V"))
     private void gbw$updateElementPower(ItemStack itemStack, Level world, BlockPos pos, CallbackInfo ci) {
         int[] add = new int[Element.values().length];
-        for (BlockPos blockPos : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
+        Arrays.fill(add, 1);
+        /*for (BlockPos blockPos : EnchantingTableBlock.BOOKSHELF_OFFSETS) {
             BlockPos up = pos.offset(blockPos.above());
 
             if (world.getBlockState(up).is(Blocks.COAL_BLOCK)) {
@@ -152,7 +153,7 @@ public abstract class EnchantmentScreenHandlerMixin extends ScreenHandlerMixin {
             } else if (world.getBlockState(up).is(Blocks.GLASS)) {
                 ++add[Element.AETHER.ordinal()];
             }
-        }
+        }*/
 
         System.arraycopy(add, 0, elementPower, 0, elementPower.length);
     }

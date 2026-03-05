@@ -31,7 +31,7 @@ public record EnchantmentElementProperty() implements SelectItemModelProperty<St
     public String get(ItemStack stack, @Nullable ClientLevel world, @Nullable LivingEntity entity, int seed, ItemDisplayContext displayContext) {
         ItemEnchantments itemEnchantments = stack.get(DataComponents.STORED_ENCHANTMENTS);
 
-        if (itemEnchantments != null) {
+        if (itemEnchantments != null && itemEnchantments.keySet().iterator().hasNext()) {
             Holder<Enchantment> holder = itemEnchantments.keySet().iterator().next();
             if (holder.unwrapKey().isPresent()) {
                 return ElementHolder.gbw$getElement(holder.unwrapKey().get()).name().toLowerCase(Locale.ROOT);
