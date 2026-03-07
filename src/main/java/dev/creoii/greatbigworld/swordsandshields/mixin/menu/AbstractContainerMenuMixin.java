@@ -7,7 +7,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 
 @Mixin(AbstractContainerMenu.class)
-public class ScreenHandlerMixin implements ExtendedScreenHandler {
+public class AbstractContainerMenuMixin implements ExtendedScreenHandler {
     @Unique
     private Player gbw$player;
 

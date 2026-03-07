@@ -21,8 +21,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 
 @Mixin(EnchantmentScreen.class)
 public class EnchantmentScreenMixin {
-    @Unique
-    private static final Component SPACE = Component.literal(" ");
+    /*@Unique
 
     @WrapOperation(method = "renderBg", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/inventory/EnchantmentMenu;getGoldCount()I"))
     private int gbw$ignoreLapisCount(EnchantmentMenu instance, Operation<Integer> original) {
@@ -41,6 +40,6 @@ public class EnchantmentScreenMixin {
         if (element != null)
             return ComponentUtils.formatList(List.of(element.getSymbol(), name), SPACE);
         return name;
-    }
+    }*/
 
 }

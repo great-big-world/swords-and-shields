@@ -9,6 +9,7 @@
     "block.BambooShootBlockMixin",
     "block.BlocksMixin",
     "block.EnchantingTableBlockEntityMixin",
+    "block.EnchantingTableBlockMixin",
     "component.ItemEnchantmentsComponentMixin",
     "entity.AbstractSkeletonEntityMixin",
     "entity.FireworkRocketEntityMixin",
@@ -18,10 +19,9 @@
     "item.ItemStackMixin",
     "item.recipe.SmithingRecipeMixin",
     "menu.AnvilMenuMixin",
-    "menu.EnchantmentScreenHandlerMixin",
     "menu.ItemCombinerMenuMixin",
     "menu.LoomScreenHandlerMixin",
-    "menu.ScreenHandlerMixin",
+    "menu.AbstractContainerMenuMixin",
     "menu.SmithingMenuMixin"
   ],
   "client": [

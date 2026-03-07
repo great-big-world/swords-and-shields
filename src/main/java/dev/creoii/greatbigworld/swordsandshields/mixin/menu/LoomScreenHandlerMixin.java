@@ -28,7 +28,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BannerPattern;
 
 @Mixin(LoomMenu.class)
-public abstract class LoomScreenHandlerMixin extends ScreenHandlerMixin {
+public abstract class LoomScreenHandlerMixin extends AbstractContainerMenuMixin {
     @Shadow
     @Final
     private HolderGetter<BannerPattern> patternGetter;
