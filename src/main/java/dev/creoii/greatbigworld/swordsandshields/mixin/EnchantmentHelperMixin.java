@@ -21,6 +21,7 @@ public class EnchantmentHelperMixin {
 
     @WrapOperation(method = "isEnchantmentCompatible", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/enchantment/Enchantment;areCompatible(Lnet/minecraft/core/Holder;Lnet/minecraft/core/Holder;)Z"))
     private static boolean gbw$modifyIsCompatible(Holder<Enchantment> first, Holder<Enchantment> second, Operation<Boolean> original) {
+
         return EnchantmentUtil.canBeCombined(first, second);
     }
 

@@ -2,7 +2,7 @@ package dev.creoii.greatbigworld.swordsandshields.mixin.item;
 
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsDataComponentTypes;
 import dev.creoii.greatbigworld.swordsandshields.util.EnchantmentUtil;
-import dev.creoii.greatbigworld.swordsandshields.util.EquipmentMaterialUtil;
+import dev.creoii.greatbigworld.util.EquipmentMaterialUtil;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.world.item.ToolMaterial;
 import net.minecraft.world.item.equipment.ArmorMaterial;

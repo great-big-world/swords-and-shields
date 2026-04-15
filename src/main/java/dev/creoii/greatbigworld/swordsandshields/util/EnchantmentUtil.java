@@ -51,12 +51,12 @@ public final class EnchantmentUtil {
             return 0;
 
         if (stack.has(DataComponents.TOOL)) {
-            ToolMaterial toolMaterial = EquipmentMaterialUtil.getToolMaterial(id);
-            EquipmentMaterialUtil.Entry entry = EquipmentMaterialUtil.TOOL_ENTRIES.get(toolMaterial);
+            ToolMaterial toolMaterial = dev.creoii.greatbigworld.util.EquipmentMaterialUtil.getToolMaterial(id);
+            dev.creoii.greatbigworld.util.EquipmentMaterialUtil.Entry entry = dev.creoii.greatbigworld.util.EquipmentMaterialUtil.TOOL_ENTRIES.get(toolMaterial);
             if (entry != null)
                 return entry.totalEnchantmentLevelCap();
         } else {
-            EquipmentMaterialUtil.Entry entry = EquipmentMaterialUtil.ARMOR_ENTRIES.get(EquipmentMaterialUtil.getArmorMaterial(id));
+            dev.creoii.greatbigworld.util.EquipmentMaterialUtil.Entry entry = dev.creoii.greatbigworld.util.EquipmentMaterialUtil.ARMOR_ENTRIES.get(dev.creoii.greatbigworld.util.EquipmentMaterialUtil.getArmorMaterial(id));
             if (entry != null)
                 return entry.totalEnchantmentLevelCap();
         }

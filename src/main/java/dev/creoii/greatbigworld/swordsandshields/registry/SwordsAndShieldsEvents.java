@@ -121,7 +121,7 @@ public final class SwordsAndShieldsEvents {
                 builder.set(DataComponents.MAX_STACK_SIZE, 16);
             });
             modifyContext.modify(PIES::contains, (builder, item) -> {
-                builder.set(DataComponents.MAX_STACK_SIZE, 1);
+                builder.set(DataComponents.MAX_STACK_SIZE, 16);
             });
 
             modifyContext.modify(NETHERITE_EQUIPMENT::contains, (builder, item) -> {

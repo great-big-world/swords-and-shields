@@ -2,7 +2,7 @@ package dev.creoii.greatbigworld.swordsandshields.registry;
 
 import com.mojang.serialization.Codec;
 import dev.creoii.greatbigworld.GreatBigWorld;
-import dev.creoii.greatbigworld.swordsandshields.util.EquipmentMaterialUtil;
+import dev.creoii.greatbigworld.util.EquipmentMaterialUtil;
 import dev.creoii.greatbigworld.swordsandshields.util.EquipmentUpgrading;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponentType;

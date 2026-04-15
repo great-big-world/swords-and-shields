@@ -1,6 +1,6 @@
 package dev.creoii.greatbigworld.swordsandshields.item;
 
-import dev.creoii.greatbigworld.swordsandshields.util.EquipmentMaterialUtil;
+import dev.creoii.greatbigworld.util.EquipmentMaterialUtil;
 import net.minecraft.world.item.equipment.ArmorMaterials;
 
 public final class SwordsAndShieldsArmorMaterials {

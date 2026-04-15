@@ -2,6 +2,7 @@ package dev.creoii.greatbigworld.swordsandshields.util;
 
 import dev.creoii.greatbigworld.GreatBigWorld;
 import dev.creoii.greatbigworld.swordsandshields.registry.SwordsAndShieldsDataComponentTypes;
+import dev.creoii.greatbigworld.util.EquipmentMaterialUtil;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
