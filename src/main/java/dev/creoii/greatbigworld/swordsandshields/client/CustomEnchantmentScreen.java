@@ -26,7 +26,6 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -180,8 +179,8 @@ public class CustomEnchantmentScreen extends AbstractContainerScreen<CustomEncha
             break;
         }
 
-        System.out.println("enchants: " + Arrays.toString(menu.enchantClue));
-        System.out.println("levels: " + Arrays.toString(menu.levelClue));
+        //System.out.println("enchants: " + Arrays.toString(menu.enchantClue));
+        //System.out.println("levels: " + Arrays.toString(menu.levelClue));
     }
 
     public void tickBook() {
