@@ -120,6 +120,13 @@
               "model": "great_big_world:item/golden_helmet_goat_horn"
             },
             "when": "great_big_world:goat_horn"
+          },
+          {
+            "model": {
+              "type": "minecraft:model",
+              "model": "great_big_world:item/golden_helmet_antler"
+            },
+            "when": "great_big_world:antler"
           }
         ],
         "fallback": {

@@ -295,11 +295,11 @@ public abstract class AnvilMenuMixin extends ItemCombinerMenu implements Extende
 
     @Unique
     private static boolean isValidTrimMaterialItem(ItemStack stack) {
-        return stack.getItem() instanceof DyeItem || stack.is(Items.GOAT_HORN);
+        return stack.getItem() instanceof DyeItem || stack.is(SwordsAndShieldsTags.ARMOR_DECORATION_ITEMS);
     }
 
     @Unique
     private boolean canApply(Holder<TrimMaterial> material, ItemStack itemStack) {
-        return material.is(SwordsAndShieldsTrimMaterials.GOAT_HORN) && itemStack.has(DataComponents.EQUIPPABLE) && itemStack.get(DataComponents.EQUIPPABLE).slot() == EquipmentSlot.HEAD;
+        return material.is(SwordsAndShieldsTags.DECORATION) && itemStack.has(DataComponents.EQUIPPABLE) && itemStack.get(DataComponents.EQUIPPABLE).slot() == EquipmentSlot.HEAD;
     }
 }

@@ -210,19 +210,32 @@
             },
             "when": "great_big_world:white"
         },
-          {
-            "model": {
-              "type": "minecraft:model",
-              "model": "great_big_world:item/leather_helmet_goat_horn",
-              "tints": [
-                {
-                  "type": "minecraft:dye",
-                  "default": -6265536
-                }
-              ]
+            {
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "great_big_world:item/leather_helmet_goat_horn",
+                    "tints": [
+                        {
+                            "type": "minecraft:dye",
+                            "default": -6265536
+                        }
+                    ]
+                },
+                "when": "great_big_world:goat_horn"
             },
-            "when": "great_big_world:goat_horn"
-          }
+            {
+                "model": {
+                    "type": "minecraft:model",
+                    "model": "great_big_world:item/leather_helmet_antler",
+                    "tints": [
+                        {
+                            "type": "minecraft:dye",
+                            "default": -6265536
+                        }
+                    ]
+                },
+                "when": "great_big_world:antler"
+            }
         ],
         "fallback": {
             "type": "minecraft:model",
