@@ -22,7 +22,7 @@ import net.minecraft.world.item.equipment.trim.ArmorTrim;
 
 @Environment(EnvType.CLIENT)
 public class GoatHornLayer<S extends HumanoidRenderState, M extends HumanoidModel<S>, A extends HumanoidModel<S>> extends RenderLayer<S, M> {
-    private static final Identifier GOAT_HORN_LOCATION = Identifier.fromNamespaceAndPath(GreatBigWorld.NAMESPACE, "textures/entity/helmet_decoration/goat_horn.png");
+    private static final Identifier GOAT_HORN_LOCATION = Identifier.fromNamespaceAndPath(GreatBigWorld.NAMESPACE, "textures/entity/armor_decoration/goat_horn.png");
     private final HumanoidModel<HumanoidRenderState> model;
 
     public GoatHornLayer(RenderLayerParent<S, M> renderLayerParent, EntityRendererProvider.Context context) {
